@@ -14,5 +14,4 @@ import java.util.List;
 public class Meal extends MenuItem {
   @OneToMany(mappedBy = "meal")
   List<Ingredient> ingredients;
-  private String extraName;
 }

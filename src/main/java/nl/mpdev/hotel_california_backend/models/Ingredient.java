@@ -10,11 +10,9 @@ public class Ingredient {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private String name;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "meal_id")
   private Meal meal;
-
-
-
 }

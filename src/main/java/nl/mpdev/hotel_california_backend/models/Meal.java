@@ -1,13 +1,16 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "meals")
+@Builder
+@Getter
 
 //public class Meal extends MenuItem {
 public class Meal {
@@ -24,4 +27,8 @@ public class Meal {
   private Order order;
   @OneToMany(mappedBy = "meal")
   List<Ingredient> ingredients;
+
+  public Meal() {
+
+  }
 }

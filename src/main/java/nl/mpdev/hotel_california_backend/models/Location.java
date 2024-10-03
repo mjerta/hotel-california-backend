@@ -13,5 +13,6 @@ public class Location {
   private Integer id;
   private Integer locationNumber;
   private Boolean isOccupied;
+  @Enumerated(EnumType.STRING)
   private LocationType locationType;
 }

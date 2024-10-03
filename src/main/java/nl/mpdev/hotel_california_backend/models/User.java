@@ -14,7 +14,7 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private String userName;
+  private String username;
   private String password;
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "remote_id", referencedColumnName = "id")

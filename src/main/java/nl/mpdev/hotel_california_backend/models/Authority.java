@@ -14,11 +14,11 @@ public class Authority  {
 //public class Authority implements GrantedAuthority {
   // Using both the username and authority as @id fields to create a composite primary key
   @Id
-//  @Column(nullable = false)
+  @Column(nullable = false)
 //  @NotBlank
   private String username;
   @Id
-//  @Column(nullable = false)
+  @Column(nullable = false)
 //  @NotBlank
   private String authority;
 

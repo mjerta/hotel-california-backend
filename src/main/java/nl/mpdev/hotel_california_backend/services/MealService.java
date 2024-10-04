@@ -83,6 +83,11 @@ public class MealService {
   }
 
 
+  public void deleteMeal(Integer id) {
+    mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    mealRepository.deleteById(id);
+  }
+
 
   private void setFieldsIfNotNUll(Object existingObject, Object incomingObject) {
     Field[] fields = incomingObject.getClass().getDeclaredFields();
@@ -121,4 +126,6 @@ public class MealService {
       }
     }
   }
+
+
 }

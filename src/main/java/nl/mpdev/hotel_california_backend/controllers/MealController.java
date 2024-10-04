@@ -15,13 +15,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/v1/meals")
 public class MealController {
-
 
   private final MealCompleteMapper mealCompleteMapper;
   private final MealService mealService;
@@ -59,18 +57,27 @@ public class MealController {
   // PUT
 
   @PutMapping("/{id}")
-  public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id, @Valid @RequestBody MealCompleteRequestDto requestDto) {
+  public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id,
+                                                            @Valid @RequestBody MealCompleteRequestDto requestDto) {
     Meal meal = mealService.updateMeal(id, mealCompleteMapper.toEntity(requestDto));
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
   }
 
   // PATCH
 
-  // PATCH
   @PatchMapping("/{id}")
-  public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id, @Valid @RequestBody MealCompleteRequestDto requestDto) {
+  public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id,
+                                                                  @Valid @RequestBody MealCompleteRequestDto requestDto) {
 
     Meal meal = mealService.updateMealFields(id, mealCompleteMapper.toEntity(requestDto));
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
+  }
+
+  // DELETE
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteMeal(@PathVariable Integer id) {
+    mealService.deleteMeal(id);
   }
 }

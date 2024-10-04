@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "meals")
 
-//public class Meal extends MenuItem {
 public class Meal {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +23,6 @@ public class Meal {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id")
   private Order order;
-  @OneToMany(mappedBy = "meal")
+  @OneToMany(mappedBy = "meal", cascade = CascadeType.REMOVE , orphanRemoval = true)
   List<Ingredient> ingredients;
-
-
-//   public MealBuilder toBuilder() {
-//     return Meal.builder()
-//       .id(this.id)
-//       .name(this.name)
-//       .description(this.description)
-//       .price(this.price)
-//       .image(this.image)
-//       .ingredients(this.ingredients);
-//   }
 }

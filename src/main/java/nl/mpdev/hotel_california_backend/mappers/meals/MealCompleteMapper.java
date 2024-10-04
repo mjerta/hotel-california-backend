@@ -3,9 +3,11 @@ package nl.mpdev.hotel_california_backend.mappers.meals;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.ingredients.IngredientCompleteMapper;
+import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,7 +24,6 @@ public class MealCompleteMapper {
       return null;
     }
     return Meal.builder()
-      .price(dto.getPrice())
       .name(dto.getName())
       .description(dto.getDescription())
       .price(dto.getPrice())

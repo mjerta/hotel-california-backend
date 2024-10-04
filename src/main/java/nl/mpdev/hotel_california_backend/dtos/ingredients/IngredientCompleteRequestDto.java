@@ -8,4 +8,5 @@ import lombok.Getter;
 public class IngredientCompleteRequestDto {
   private Integer id;
   private String name;
+  private Integer mealId;
 }

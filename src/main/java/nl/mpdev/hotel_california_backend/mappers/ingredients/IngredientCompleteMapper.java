@@ -3,6 +3,7 @@ package nl.mpdev.hotel_california_backend.mappers.ingredients;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.IngredientCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
+import nl.mpdev.hotel_california_backend.models.Meal;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +22,7 @@ public class IngredientCompleteMapper {
     return IngredientCompleteResponseDto.builder()
       .id(entity.getId())
       .name(entity.getName())
+      .mealId(entity.getMeal().getId())
       .build();
   }
 }

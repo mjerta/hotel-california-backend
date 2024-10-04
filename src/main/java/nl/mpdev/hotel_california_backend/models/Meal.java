@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +26,15 @@ public class Meal {
   private Order order;
   @OneToMany(mappedBy = "meal")
   List<Ingredient> ingredients;
+
+
+//   public MealBuilder toBuilder() {
+//     return Meal.builder()
+//       .id(this.id)
+//       .name(this.name)
+//       .description(this.description)
+//       .price(this.price)
+//       .image(this.image)
+//       .ingredients(this.ingredients);
+//   }
 }

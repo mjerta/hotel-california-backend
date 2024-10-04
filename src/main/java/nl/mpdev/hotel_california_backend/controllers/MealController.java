@@ -2,14 +2,17 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
+import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.services.MealService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -27,6 +30,12 @@ public class MealController {
 
   // GET
 
+  @GetMapping("/{id}")
+  public ResponseEntity<MealCompleteResponseDto> getMealById(@PathVariable Integer id) {
+    MealCompleteResponseDto mealCompleteResponseDto = mealCompleteMapper.toDto(mealService.getMealById(id));
+    return ResponseEntity.ok().body(mealCompleteResponseDto);
+  }
+
   @GetMapping("")
   public ResponseEntity<List<MealCompleteResponseDto>> getMeals() {
     List<MealCompleteResponseDto> meals = mealService.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList());
@@ -35,6 +44,7 @@ public class MealController {
   }
 
   // POST
+
 
 
   // PUT

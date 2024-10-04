@@ -21,7 +21,7 @@ public class Meal {
   private String description;
   private Double price;
   private byte[] image;
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id")
   private Order order;
   @OneToMany(mappedBy = "meal")

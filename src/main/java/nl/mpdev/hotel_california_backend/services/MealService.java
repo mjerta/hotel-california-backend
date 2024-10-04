@@ -24,4 +24,8 @@ public class MealService {
   public Meal getMealById(Integer id) {
     return mealRepository.findById(id).orElseThrow(() -> new RuntimeException("Meal not found"));
   }
+
+  public Meal addMeal(Meal entity) {
+    return mealRepository.save(entity);
+  }
 }

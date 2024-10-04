@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
@@ -7,10 +8,10 @@ import nl.mpdev.hotel_california_backend.services.MealService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,19 +33,25 @@ public class MealController {
 
   @GetMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> getMealById(@PathVariable Integer id) {
-    MealCompleteResponseDto mealCompleteResponseDto = mealCompleteMapper.toDto(mealService.getMealById(id));
-    return ResponseEntity.ok().body(mealCompleteResponseDto);
+    MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(mealService.getMealById(id));
+    return ResponseEntity.ok().body(responseDto);
   }
 
   @GetMapping("")
   public ResponseEntity<List<MealCompleteResponseDto>> getMeals() {
     List<MealCompleteResponseDto> meals = mealService.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList());
     return ResponseEntity.ok().body(meals);
-
   }
 
   // POST
 
+  @PostMapping("")
+  public ResponseEntity<MealCompleteResponseDto> addMeal(@RequestBody MealCompleteRequestDto requestDto) {
+    Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
+    MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(meal);
+    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+    return ResponseEntity.created(uri).body(responseDto);
+  }
 
 
   // PUT

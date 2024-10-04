@@ -14,6 +14,7 @@ public class IngredientCompleteMapper {
     }
 
     return Ingredient.builder()
+      .id(dto.getId())
       .name(dto.getName())
       .build();
   }
@@ -22,7 +23,6 @@ public class IngredientCompleteMapper {
     return IngredientCompleteResponseDto.builder()
       .id(entity.getId())
       .name(entity.getName())
-      .mealId(entity.getMeal().getId())
       .build();
   }
 }

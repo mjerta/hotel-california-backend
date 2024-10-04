@@ -3,7 +3,7 @@ package nl.mpdev.hotel_california_backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,8 +8,10 @@ import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MealService {
@@ -42,30 +44,32 @@ public class MealService {
       .toList();
 
     return savedMeal.toBuilder()
-      .ingredients(savedIngredients)  // Set the updated ingredients list
+      .ingredients(savedIngredients)
       .build();
   }
 
   public Meal updateMeal(Integer id, Meal entity) {
     Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    List<Ingredient> savedIngredients = entity.getIngredients().stream()
-      .map(ingredient -> {
-        Ingredient existingIngredient = ingredientRepository.findById(ingredient.getId()).orElseThrow(() -> new RecordNotFoundException());
-        Ingredient updatedIngredient = Ingredient.builder()
-          .id(existingIngredient.getId())
-          .name(ingredient.getName())
-          .build();
-        return ingredientRepository.save(updatedIngredient);
-      }).toList();
-
-    Meal updatedMeal = Meal.builder()
-      .id(existingMeal.getId())
+    List<Ingredient> existingIngredients = existingMeal.getIngredients().stream()
+      .map(ingredient -> ingredientRepository.findById(ingredient.getId())
+        .orElseThrow(() -> new RecordNotFoundException("Ingredient not found: " + ingredient.getId())))
+      .toList();
+    List<Ingredient> updatedIngredients = new ArrayList<>();
+    for (Ingredient existingIngredient : existingIngredients) {
+      for (Ingredient updtated : entity.getIngredients()) {
+        if(updtated.getId().equals(existingIngredient.getId()))
+          updatedIngredients.add(ingredientRepository.save(existingIngredient.toBuilder()
+            .name(updtated.getName())
+            .build()));
+      }
+    }
+    existingMeal = existingMeal.toBuilder()
       .name(entity.getName())
       .description(entity.getDescription())
       .price(entity.getPrice())
       .image(entity.getImage())
-      .ingredients(savedIngredients)
+      .ingredients(updatedIngredients)
       .build();
-    return mealRepository.save(updatedMeal);
+    return mealRepository.save(existingMeal);
   }
 }

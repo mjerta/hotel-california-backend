@@ -8,5 +8,4 @@ import lombok.Getter;
 public class IngredientCompleteResponseDto {
   private Integer id;
   private String name;
-  private Integer mealId;
 }

@@ -5,6 +5,7 @@ import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
+import nl.mpdev.hotel_california_backend.repositories.MealRepository;
 import nl.mpdev.hotel_california_backend.services.MealService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,12 @@ public class MealController {
 
   private final MealCompleteMapper mealCompleteMapper;
   private final MealService mealService;
+  private final MealRepository mealRepository;
 
-  public MealController(MealCompleteMapper mealCompleteMapper, MealService mealService) {
+  public MealController(MealCompleteMapper mealCompleteMapper, MealService mealService, MealRepository mealRepository) {
     this.mealCompleteMapper = mealCompleteMapper;
     this.mealService = mealService;
+    this.mealRepository = mealRepository;
   }
 
   // GET
@@ -61,6 +64,13 @@ public class MealController {
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
   }
 
+  // PATCH
 
   // PATCH
+  @PatchMapping("/{id}")
+  public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id, @Valid @RequestBody MealCompleteRequestDto requestDto) {
+
+    Meal meal = mealService.updateMealFields(id, mealCompleteMapper.toEntity(requestDto));
+    return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
+  }
 }

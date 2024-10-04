@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.services;
 
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
@@ -8,6 +9,7 @@ import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,5 +73,55 @@ public class MealService {
       .ingredients(updatedIngredients)
       .build();
     return mealRepository.save(existingMeal);
+  }
+
+  public Meal updateMealFields(Integer id, Meal entity) {
+    Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    setFieldsIfNotNUll(existingMeal, entity);
+    updateIngredients(existingMeal, entity.getIngredients());
+    return mealRepository.save(existingMeal);
+  }
+
+
+
+  private void setFieldsIfNotNUll(Object existingObject, Object incomingObject) {
+    Field[] fields = incomingObject.getClass().getDeclaredFields();
+    for (Field dtoField : fields) {
+      dtoField.setAccessible(true);
+      try {
+        Object newValue = dtoField.get(incomingObject);
+        if (newValue != null && !List.class.isAssignableFrom(dtoField.getType())) {
+          Field existingField = existingObject.getClass().getDeclaredField(dtoField.getName());
+          existingField.setAccessible(true);
+          existingField.set(existingObject, newValue);
+        }
+      } catch (IllegalAccessException e) {
+        throw new GeneralException("Cannot access fields: " + dtoField.getName());
+      } catch (NoSuchFieldException e) {
+        throw new GeneralException("Field not found: " + dtoField.getName());
+      }
+    }
+  }
+
+  private void updateIngredients(Meal existingMeal, List<Ingredient> incomingIngredients) {
+    List<Ingredient> existingIngredients = existingMeal.getIngredients();
+    for (Ingredient incoming : incomingIngredients) {
+      Optional<Ingredient> existingIngredientOpt = existingIngredients.stream()
+        .filter(existing -> existing.getId().equals(incoming.getId()))
+        .findFirst();
+
+      if (existingIngredientOpt.isPresent()) {
+        // Update existing ingredient
+        Ingredient existingIngredient = existingIngredientOpt.get();
+        existingIngredient = existingIngredient.toBuilder()
+          // Add other fields if needed
+          .name(incoming.getName())
+          .build();
+        ingredientRepository.save(existingIngredient);
+      } else {
+        // Optionally handle adding new ingredients if necessary
+        existingIngredients.add(incoming);
+      }
+    }
   }
 }

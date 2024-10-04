@@ -1,20 +1,19 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
-@Entity
-@Table(name = "meals")
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "meals")
 
 //public class Meal extends MenuItem {
 public class Meal {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -27,8 +26,4 @@ public class Meal {
   private Order order;
   @OneToMany(mappedBy = "meal")
   List<Ingredient> ingredients;
-
-  public Meal() {
-
-  }
 }

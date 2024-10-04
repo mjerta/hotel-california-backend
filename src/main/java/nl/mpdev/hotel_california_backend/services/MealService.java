@@ -118,9 +118,6 @@ public class MealService {
           .name(incoming.getName())
           .build();
         ingredientRepository.save(existingIngredient);
-      } else {
-        // Optionally handle adding new ingredients if necessary
-        existingIngredients.add(incoming);
       }
     }
   }

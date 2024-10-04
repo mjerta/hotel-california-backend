@@ -53,9 +53,13 @@ public class MealController {
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
     return ResponseEntity.created(uri).body(responseDto);
   }
-
-
   // PUT
+
+  @PutMapping("/{id}")
+  public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id, @Valid @RequestBody MealCompleteRequestDto requestDto) {
+    Meal meal = mealService.updateMeal(id, mealCompleteMapper.toEntity(requestDto));
+    return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
+  }
 
 
   // PATCH

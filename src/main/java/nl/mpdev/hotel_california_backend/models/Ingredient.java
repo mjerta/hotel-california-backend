@@ -1,9 +1,12 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Ingredients")
 public class Ingredient {
@@ -12,7 +15,7 @@ public class Ingredient {
   private Integer id;
   private String name;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "meal_id")
   private Meal meal;
 }

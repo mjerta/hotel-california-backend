@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
@@ -46,7 +47,7 @@ public class MealController {
   // POST
 
   @PostMapping("")
-  public ResponseEntity<MealCompleteResponseDto> addMeal(@RequestBody MealCompleteRequestDto requestDto) {
+  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealCompleteRequestDto requestDto) {
     Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
     MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(meal);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());

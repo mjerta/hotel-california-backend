@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class UserLimitedMapper {
 
   public User toEntity(UserIdRequestDto requestDto) {
+    if(requestDto == null) return null;
     return User.builder()
       .id(requestDto.getId())
       .build();

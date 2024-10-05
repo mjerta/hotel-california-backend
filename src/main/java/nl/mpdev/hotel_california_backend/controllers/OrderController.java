@@ -1,14 +1,17 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import jakarta.validation.Valid;
+import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
+import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,16 @@ public class OrderController {
   public ResponseEntity<List<OrderCompleteResponseDto>> getOrders() {
     List<OrderCompleteResponseDto> orders = orderService.getOrders().stream().map(orderCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(orders);
+  }
+
+  // POST
+
+  @PostMapping("")
+  public ResponseEntity<OrderCompleteResponseDto> addOrder(@Valid @RequestBody OrderCompleteRequestDto requestDto) {
+    Order order = orderService.addOrder(orderCompleteMapper.toEntity(requestDto));
+    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(order);
+    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+    return ResponseEntity.created(uri).body(responseDto);
   }
 
 }

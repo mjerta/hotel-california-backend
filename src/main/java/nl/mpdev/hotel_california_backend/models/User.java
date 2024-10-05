@@ -20,7 +20,7 @@ public class User {
   private String username;
   private String password;
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "remote_id", referencedColumnName = "id")
+  @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(
     targetEntity = Authority.class,

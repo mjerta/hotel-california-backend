@@ -23,4 +23,8 @@ public class OrderService {
     return orderRepository.findAll();
   }
 
+  public Order addOrder(Order entity) {
+    Order order = orderRepository.save(entity);
+    return order;
+  }
 }

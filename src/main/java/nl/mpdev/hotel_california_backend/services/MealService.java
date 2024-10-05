@@ -80,10 +80,10 @@ public class MealService {
     return mealRepository.save(existingMeal);
   }
 
-  public Meal updateMealFields(Integer id, Meal entity) {
+  public Meal updateMealFields(Integer id, MealCompleteRequestDto requestDto) {
     Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    serviceHelper.setFieldsIfNotNUll(existingMeal, entity);
-    updateIngredients(existingMeal, entity.getIngredients());
+    serviceHelper.setFieldsIfNotNUll(existingMeal, requestDto);
+    updateIngredients(existingMeal, requestDto.getIngredients());
     return mealRepository.save(existingMeal);
   }
 
@@ -92,9 +92,9 @@ public class MealService {
     mealRepository.deleteById(id);
   }
 
-  private void updateIngredients(Meal existingMeal, List<Ingredient> incomingIngredients) {
+  private void updateIngredients(Meal existingMeal, List<IngredientCompleteRequestDto> incomingIngredients) {
     List<Ingredient> existingIngredients = existingMeal.getIngredients();
-    for (Ingredient incoming : incomingIngredients) {
+    for (IngredientCompleteRequestDto incoming : incomingIngredients) {
       Optional<Ingredient> existingIngredientOpt = existingIngredients.stream()
         .filter(existing -> existing.getId().equals(incoming.getId()))
         .findFirst();

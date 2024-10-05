@@ -69,7 +69,7 @@ public class MealController {
   public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id,
                                                                   @Valid @RequestBody MealCompleteRequestDto requestDto) {
 
-    Meal meal = mealService.updateMealFields(id, mealCompleteMapper.toEntity(requestDto));
+    Meal meal = mealService.updateMealFields(id, requestDto);
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
   }
 

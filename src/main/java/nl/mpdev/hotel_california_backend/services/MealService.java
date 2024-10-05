@@ -3,6 +3,7 @@ package nl.mpdev.hotel_california_backend.services;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
+import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
@@ -18,10 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class MealService {
 
+  private final ServiceHelper serviceHelper;
   private final MealRepository mealRepository;
   private final IngredientRepository ingredientRepository;
 
-  public MealService(MealRepository mealRepository, IngredientRepository ingredientRepository) {
+  public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository) {
+    this.serviceHelper = serviceHelper;
     this.mealRepository = mealRepository;
     this.ingredientRepository = ingredientRepository;
   }
@@ -59,7 +62,7 @@ public class MealService {
     List<Ingredient> updatedIngredients = new ArrayList<>();
     for (Ingredient existingIngredient : existingIngredients) {
       for (Ingredient updtated : entity.getIngredients()) {
-        if(updtated.getId().equals(existingIngredient.getId()))
+        if (updtated.getId().equals(existingIngredient.getId()))
           updatedIngredients.add(ingredientRepository.save(existingIngredient.toBuilder()
             .name(updtated.getName())
             .build()));
@@ -77,35 +80,14 @@ public class MealService {
 
   public Meal updateMealFields(Integer id, Meal entity) {
     Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    setFieldsIfNotNUll(existingMeal, entity);
+    serviceHelper.setFieldsIfNotNUll(existingMeal, entity);
     updateIngredients(existingMeal, entity.getIngredients());
     return mealRepository.save(existingMeal);
   }
 
-
   public void deleteMeal(Integer id) {
     mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
     mealRepository.deleteById(id);
-  }
-
-
-  private void setFieldsIfNotNUll(Object existingObject, Object incomingObject) {
-    Field[] fields = incomingObject.getClass().getDeclaredFields();
-    for (Field dtoField : fields) {
-      dtoField.setAccessible(true);
-      try {
-        Object newValue = dtoField.get(incomingObject);
-        if (newValue != null && !List.class.isAssignableFrom(dtoField.getType())) {
-          Field existingField = existingObject.getClass().getDeclaredField(dtoField.getName());
-          existingField.setAccessible(true);
-          existingField.set(existingObject, newValue);
-        }
-      } catch (IllegalAccessException e) {
-        throw new GeneralException("Cannot access fields: " + dtoField.getName());
-      } catch (NoSuchFieldException e) {
-        throw new GeneralException("Field not found: " + dtoField.getName());
-      }
-    }
   }
 
   private void updateIngredients(Meal existingMeal, List<Ingredient> incomingIngredients) {
@@ -126,6 +108,4 @@ public class MealService {
       }
     }
   }
-
-
 }

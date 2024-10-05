@@ -1,19 +1,3 @@
--- Meal
-INSERT INTO Meals (name, description, price)
-VALUES ('Pizza', 'Pizza met veel smaak', 19.99);
-
--- Ingredient with menu
-INSERT INTO Ingredients (meal_id, name)
-VALUES (1, 'Pizzadeeg');
-INSERT INTO Ingredients (meal_id, name)
-VALUES (1, 'Tomatensaus');
-INSERT INTO Ingredients (meal_id, name)
-VALUES (1, 'Mozzarella');
-INSERT INTO Ingredients (meal_id, name)
-VALUES (1, 'Olijfolie');
-INSERT INTO Ingredients (meal_id, name)
-VALUES (1, 'Pepperoni');
-
 -- Locations
 -- Insert 5 Hotel Rooms
 INSERT INTO Locations (location_number, is_occupied, location_type)
@@ -75,3 +59,19 @@ VALUES ('Spa Blauw', 'Heerlijk zuiver bronwater', 2.00, FALSE, 500, 'ml');
 
 INSERT INTO Drinks (name, description, price, is_alcoholic, size, measurement)
 VALUES ('Whisky', 'Pittige en rokerige smaak', 7.00, TRUE, 50, 'ml');
+
+-- Meal
+INSERT INTO Meals (name, description, price, order_id)
+VALUES ('Pizza', 'Pizza met veel smaak', 19.99, 1);
+
+-- Ingredient with menu
+INSERT INTO Ingredients (meal_id, name)
+VALUES (1, 'Pizzadeeg');
+INSERT INTO Ingredients (meal_id, name)
+VALUES (1, 'Tomatensaus');
+INSERT INTO Ingredients (meal_id, name)
+VALUES (1, 'Mozzarella');
+INSERT INTO Ingredients (meal_id, name)
+VALUES (1, 'Olijfolie');
+INSERT INTO Ingredients (meal_id, name)
+VALUES (1, 'Pepperoni');

@@ -59,7 +59,7 @@ public class MealController {
   @PutMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id,
                                                             @Valid @RequestBody MealCompleteRequestDto requestDto) {
-    Meal meal = mealService.updateMeal(id, mealCompleteMapper.toEntity(requestDto));
+    Meal meal = mealService.updateMeal(id, requestDto);
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
   }
 

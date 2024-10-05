@@ -1,5 +1,7 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import nl.mpdev.hotel_california_backend.dtos.ingredients.IngredientCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
@@ -53,7 +55,7 @@ public class MealService {
       .build();
   }
 
-  public Meal updateMeal(Integer id, Meal entity) {
+  public Meal updateMeal(Integer id, MealCompleteRequestDto requestDto) {
     Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
     List<Ingredient> existingIngredients = existingMeal.getIngredients().stream()
       .map(ingredient -> ingredientRepository.findById(ingredient.getId())
@@ -61,7 +63,7 @@ public class MealService {
       .toList();
     List<Ingredient> updatedIngredients = new ArrayList<>();
     for (Ingredient existingIngredient : existingIngredients) {
-      for (Ingredient updtated : entity.getIngredients()) {
+      for (IngredientCompleteRequestDto updtated : requestDto.getIngredients()) {
         if (updtated.getId().equals(existingIngredient.getId()))
           updatedIngredients.add(ingredientRepository.save(existingIngredient.toBuilder()
             .name(updtated.getName())
@@ -69,19 +71,19 @@ public class MealService {
       }
     }
     existingMeal = existingMeal.toBuilder()
-      .name(entity.getName())
-      .description(entity.getDescription())
-      .price(entity.getPrice())
-      .image(entity.getImage())
+      .name(requestDto.getName())
+      .description(requestDto.getDescription())
+      .price(requestDto.getPrice())
+      .image(requestDto.getImage())
       .ingredients(updatedIngredients)
       .build();
     return mealRepository.save(existingMeal);
   }
 
-  public Meal updateMealFields(Integer id, Meal entity) {
+  public Meal updateMealFields(Integer id, MealCompleteRequestDto requestDto) {
     Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    serviceHelper.setFieldsIfNotNUll(existingMeal, entity);
-    updateIngredients(existingMeal, entity.getIngredients());
+    serviceHelper.setFieldsIfNotNUll(existingMeal, requestDto);
+    updateIngredients(existingMeal, requestDto.getIngredients());
     return mealRepository.save(existingMeal);
   }
 
@@ -90,9 +92,9 @@ public class MealService {
     mealRepository.deleteById(id);
   }
 
-  private void updateIngredients(Meal existingMeal, List<Ingredient> incomingIngredients) {
+  private void updateIngredients(Meal existingMeal, List<IngredientCompleteRequestDto> incomingIngredients) {
     List<Ingredient> existingIngredients = existingMeal.getIngredients();
-    for (Ingredient incoming : incomingIngredients) {
+    for (IngredientCompleteRequestDto incoming : incomingIngredients) {
       Optional<Ingredient> existingIngredientOpt = existingIngredients.stream()
         .filter(existing -> existing.getId().equals(incoming.getId()))
         .findFirst();

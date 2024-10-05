@@ -2,11 +2,11 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
-import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.services.DrinkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -24,6 +24,12 @@ public class DrinkController {
   }
 
   // GET
+
+  @GetMapping("/{id}")
+  public ResponseEntity<DrinkCompleteResponseDto> getDrinkById(@PathVariable Integer id) {
+    DrinkCompleteResponseDto responseDto = drinkCompleteMapper.toDto(drinkService.getDrinkById(id));
+    return ResponseEntity.ok().body(responseDto);
+  }
 
   @GetMapping("")
   public ResponseEntity<List<DrinkCompleteResponseDto>> getDrinks() {

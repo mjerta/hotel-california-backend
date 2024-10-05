@@ -52,4 +52,9 @@ public class DrinkService {
     serviceHelper.setFieldsIfNotNUll(existingDrink, requestDto);
     return drinkRepository.save(existingDrink);
   }
+
+  public void deleteMeal(Integer id) {
+    drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    drinkRepository.deleteById(id);
+  }
 }

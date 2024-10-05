@@ -6,6 +6,7 @@ import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.services.DrinkService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -66,4 +67,11 @@ public class DrinkController {
     return ResponseEntity.ok().body(drinkCompleteMapper.toDto(drink));
   }
 
+  // DELETE
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteDrink(@PathVariable Integer id) {
+    drinkService.deleteMeal(id);
+  }
 }

@@ -18,13 +18,14 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private LocalDateTime orderDate;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private User user;
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "user_id", referencedColumnName = "id")
+//  private User user;
   @OneToMany(mappedBy = "order")
   private List<Meal> meals;
   @OneToMany(mappedBy = "order")
   private List<Drink> drinks;
+  @Enumerated(EnumType.STRING)
   private Status status;
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "destination_id", referencedColumnName = "id")

@@ -30,6 +30,6 @@ public class User {
     fetch = FetchType.EAGER
   )
   private Set<Authority> authorities = new HashSet<>();
-  @OneToMany(mappedBy = "user")
-  private List<Order> orders;
+//  @OneToMany(mappedBy = "user")
+//  private List<Order> orders;
 }

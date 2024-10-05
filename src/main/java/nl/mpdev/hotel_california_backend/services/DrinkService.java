@@ -24,4 +24,7 @@ public class DrinkService {
     return drinkRepository.findAll();
   }
 
+  public Drink addDrink(Drink entity) {
+   return drinkRepository.save(entity);
+  }
 }

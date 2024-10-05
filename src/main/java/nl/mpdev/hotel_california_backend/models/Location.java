@@ -1,10 +1,13 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import nl.mpdev.hotel_california_backend.models.enums.LocationType;
 
-@Data
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Locations")
 public class Location {
@@ -15,4 +18,6 @@ public class Location {
   private Boolean isOccupied;
   @Enumerated(EnumType.STRING)
   private LocationType locationType;
+  @OneToOne(mappedBy = "destination")
+  private Order order;
 }

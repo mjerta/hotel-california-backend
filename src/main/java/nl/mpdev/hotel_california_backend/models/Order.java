@@ -1,14 +1,16 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
 
-import javax.xml.stream.Location;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Builder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Orders")
 public class Order {
@@ -24,6 +26,7 @@ public class Order {
   @OneToMany(mappedBy = "order")
   private List<Drink> drinks;
   private Status status;
-//  private Location destination;
-
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "destination_id", referencedColumnName = "id")
+  private Location destination;
 }

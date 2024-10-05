@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.mappers.drinks;
 
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkIdRequestDto;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,15 @@ public class DrinkCompleteMapper {
       .isAlcoholic(dto.getIsAlcoholic())
       .size(dto.getSize())
       .measurement(dto.getMeasurement())
+      .build();
+  }
+
+  public Drink toEntity(DrinkIdRequestDto dto) {
+    if(dto == null){
+      return null;
+    }
+    return Drink.builder()
+      .id(dto.getId())
       .build();
   }
 

@@ -58,4 +58,12 @@ public class DrinkController {
     return ResponseEntity.ok().body(drinkCompleteMapper.toDto(drink));
   }
 
+  // Patch
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<DrinkCompleteResponseDto> updateDrinkFields(@PathVariable Integer id, @Valid @RequestBody DrinkCompleteRequestDto requestDto) {
+    Drink drink = drinkService.updateDrinkFields(id, requestDto);
+    return ResponseEntity.ok().body(drinkCompleteMapper.toDto(drink));
+  }
+
 }

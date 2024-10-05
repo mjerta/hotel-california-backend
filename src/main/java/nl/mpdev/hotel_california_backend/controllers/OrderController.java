@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/api/v1/orders")
 public class OrderController {
@@ -29,4 +32,11 @@ public class OrderController {
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(test);
     return ResponseEntity.ok().body(responseDto);
   }
+
+  @GetMapping("")
+  public ResponseEntity<List<OrderCompleteResponseDto>> getOrders() {
+    List<OrderCompleteResponseDto> orders = orderService.getOrders().stream().map(orderCompleteMapper::toDto).toList();
+    return ResponseEntity.ok().body(orders);
+  }
+
 }

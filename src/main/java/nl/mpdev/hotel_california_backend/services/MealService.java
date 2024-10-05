@@ -31,12 +31,13 @@ public class MealService {
     this.ingredientRepository = ingredientRepository;
   }
 
-  public List<Meal> getMeals() {
-    return mealRepository.findAll();
-  }
 
   public Meal getMealById(Integer id) {
     return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+  }
+
+  public List<Meal> getMeals() {
+    return mealRepository.findAll();
   }
 
   public Meal addMeal(Meal entity) {

@@ -5,6 +5,8 @@ import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService {
   private final OrderRepository orderRepository;
@@ -16,4 +18,9 @@ public class OrderService {
   public Order getOrderById(Integer id) {
     return orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
   }
+
+  public List<Order> getOrders() {
+    return orderRepository.findAll();
+  }
+
 }

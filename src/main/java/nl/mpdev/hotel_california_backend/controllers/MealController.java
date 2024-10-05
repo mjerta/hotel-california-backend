@@ -41,7 +41,7 @@ public class MealController {
 
   @GetMapping("")
   public ResponseEntity<List<MealCompleteResponseDto>> getMeals() {
-    List<MealCompleteResponseDto> meals = mealService.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList());
+    List<MealCompleteResponseDto> meals = mealService.getMeals().stream().map(mealCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(meals);
   }
 

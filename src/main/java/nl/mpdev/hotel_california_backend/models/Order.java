@@ -16,14 +16,13 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private LocalDateTime orderDate;
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
   @OneToMany(mappedBy = "order")
   private List<Meal> meals;
   @OneToMany(mappedBy = "order")
   private List<Drink> drinks;
-//  private List<MenuItem> menuItems;
   private Status status;
 //  private Location destination;
 

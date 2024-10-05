@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import nl.mpdev.hotel_california_backend.models.enums.LocationType;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -28,8 +28,11 @@ public class OrderCompleteMapper {
   }
 
   public Order toEntity(OrderCompleteRequestDto dto) {
+    if(dto == null) {
+      return null;
+    }
     return Order.builder()
-//      .user(userLimitedMapper.toEntity(dto.getUser()))
+      .user(userLimitedMapper.toEntity(dto.getUser()))
       .meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()))
       .drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()))
       .status(dto.getStatus())
@@ -38,10 +41,13 @@ public class OrderCompleteMapper {
   }
 
   public OrderCompleteResponseDto toDto(Order entity) {
+    if(entity == null) {
+      return null;
+    }
     return OrderCompleteResponseDto.builder()
       .id(entity.getId())
       .orderDate(entity.getOrderDate())
-//      .user(userLimitedMapper.toDto(entity.getUser()))
+      .user(userLimitedMapper.toDto(entity.getUser()))
       .meals(entity.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList()))
       .drinks(entity.getDrinks().stream().map(drinkCompleteMapper::toDto).collect(Collectors.toList()))
       .status(entity.getStatus())

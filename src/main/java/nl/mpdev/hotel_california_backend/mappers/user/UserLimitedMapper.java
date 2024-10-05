@@ -15,7 +15,9 @@ public class UserLimitedMapper {
   }
 
   public UserCompleteResponseDto toDto(User entity) {
+    if(entity == null) return null;
     return UserCompleteResponseDto.builder()
+
       .id(entity.getId())
       .username(entity.getUsername())
       .build();

@@ -50,5 +50,12 @@ public class DrinkController {
     return ResponseEntity.created(uri).body(responseDto);
   }
 
+  // PUT
+
+  @PutMapping("/{id}")
+  public ResponseEntity<DrinkCompleteResponseDto> updateDrink(@PathVariable Integer id, @Valid @RequestBody DrinkCompleteRequestDto requestDto) {
+    Drink drink = drinkService.updateDrink(id, requestDto);
+    return ResponseEntity.ok().body(drinkCompleteMapper.toDto(drink));
+  }
 
 }

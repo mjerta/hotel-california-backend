@@ -1,3 +1,14 @@
+-- Profiles
+INSERT INTO profiles (points, address, first_name, last_name, phone_number)
+VALUES
+    (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
+    (200, 'Laan van Meerdervoort 456, Den Haag', 'Piet', 'de Vries', '06-23456789'),
+    (300, 'Hoofdstraat 789, Rotterdam', 'Sophie', 'Bakker', '06-34567890'),
+    (100, 'Wilhelminastraat 101, Utrecht', 'Emma', 'Smit', '06-45678901'),
+    (250, 'Zeeweg 202, Haarlem', 'Luca', 'Vermeulen', '06-56789012');
+
+
+
 -- Locations
 -- Insert 5 Hotel Rooms
 INSERT INTO Locations (location_number, is_occupied, location_type)
@@ -68,10 +79,10 @@ INSERT INTO Ingredients (meal_id, name)
 VALUES (1, 'Pepperoni');
 
 INSERT INTO Orders_Meals (meal_id, order_id)
-values (1,1);
+values (1, 1);
 
 
 INSERT INTO Orders_Drinks (drink_id, order_id)
-values (1,1);
+values (1, 1);
 INSERT INTO Orders_Drinks (drink_id, order_id)
-values (2,1);
+values (2, 1);

@@ -164,6 +164,7 @@ public class OrderService {
     return orderRepository.save(existingOrder);
   }
 
+  // Perhaps I could be using something like this later as a helper method
   private <T, R> List<R> updateListOrKeepExisting(List<T> dtoList, List<R> existingList, Integer findId, JpaRepository<R, Integer> repository) {
     if (dtoList != null) {
       return dtoList.stream()

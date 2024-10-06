@@ -59,7 +59,7 @@ public class OrderCompleteMapper {
     builder.id(entity.getId());
     builder.orderDate(entity.getOrderDate());
     if (entity.getUser() != null) {
-      builder.user(userLimitedMapper.toDto(entity.getUser()));
+      builder.user(userLimitedMapper.toUserLimitedResponse(entity.getUser()));
     }
     if (entity.getMeals() != null) {
       builder.meals(entity.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList()));

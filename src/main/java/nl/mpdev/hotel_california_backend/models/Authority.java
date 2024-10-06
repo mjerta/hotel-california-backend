@@ -22,4 +22,5 @@ public class Authority  {
 //  @NotBlank
   private String authority;
 
+
 }

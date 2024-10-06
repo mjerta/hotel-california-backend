@@ -55,9 +55,7 @@ public class OrderCompleteMapper {
     if (entity == null) {
       return null;
     }
-
     OrderCompleteResponseDto.OrderCompleteResponseDtoBuilder builder = OrderCompleteResponseDto.builder();
-
     builder.id(entity.getId());
     builder.orderDate(entity.getOrderDate());
     if (entity.getUser() != null) {
@@ -74,17 +72,6 @@ public class OrderCompleteMapper {
       Location location = entity.getDestination().toBuilder().build();
       builder.destination(locationCompleteMapper.toDto(entity.getDestination()));
     }
-
     return builder.build();
-
-//    return OrderCompleteResponseDto.builder()
-//      .id(entity.getId())
-//      .orderDate(entity.getOrderDate())
-//      .user(userLimitedMapper.toDto(entity.getUser()))
-//      .meals(entity.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList()))
-//      .drinks(entity.getDrinks().stream().map(drinkCompleteMapper::toDto).collect(Collectors.toList()))
-//      .status(entity.getStatus())
-//      .destination(locationCompleteMapper.toDto(entity.getDestination()))
-//      .build();
   }
 }

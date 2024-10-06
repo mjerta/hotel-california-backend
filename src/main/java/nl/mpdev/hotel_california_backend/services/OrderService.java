@@ -174,5 +174,9 @@ public class OrderService {
     }
   }
 
+  public void deleteOrder(Integer id) {
+    orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    orderRepository.deleteById(id);
+  }
 }
 

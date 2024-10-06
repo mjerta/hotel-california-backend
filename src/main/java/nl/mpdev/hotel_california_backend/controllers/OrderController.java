@@ -9,6 +9,7 @@ import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -68,10 +69,16 @@ public class OrderController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFields(@PathVariable Integer id,
-                                                                   @Valid @RequestBody OrderCompleteRequestDto requestDto) {
-
+                                                                    @Valid @RequestBody OrderCompleteRequestDto requestDto) {
     Order order = orderService.updateOrderFields(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
+  // DELETE
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteOrder(@PathVariable Integer id) {
+    orderService.deleteOrder(id);
+  }
 }

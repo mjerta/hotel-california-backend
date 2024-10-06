@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
@@ -57,6 +58,14 @@ public class ProfileController {
   @PutMapping("/{id}")
   public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
     Profile profile = profileService.updateProfile(id, requestDto);
+    return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
+  }
+
+  // PATCH
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfileFields(id, requestDto);
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 

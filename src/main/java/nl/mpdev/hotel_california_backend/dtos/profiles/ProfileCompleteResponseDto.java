@@ -6,4 +6,10 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @Getter
 public class ProfileCompleteResponseDto {
+  private String firstName;
+  private String lastName;
+  private String phoneNumber;
+  private String address;
+  private Integer points;
+
 }

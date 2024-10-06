@@ -1,9 +1,12 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
+import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
+import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +58,19 @@ public class OrderController {
   // PUT
 
   @PutMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrder(@PathVariable Integer id ,@Valid @RequestBody OrderCompleteRequestDto requestDto) {
+  public ResponseEntity<OrderCompleteResponseDto> updateOrder(@PathVariable Integer id,
+                                                              @Valid @RequestBody OrderCompleteRequestDto requestDto) {
     Order order = orderService.updateOrder(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
+
+  // PATCH
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderFields(@PathVariable Integer id,
+                                                                   @Valid @RequestBody OrderCompleteRequestDto requestDto) {
+
+    Order order = orderService.updateOrderFields(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 

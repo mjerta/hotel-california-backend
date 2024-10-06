@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {
@@ -30,5 +32,10 @@ public class ProfileController {
     return ResponseEntity.ok().body(responseDto);
   }
 
+  @GetMapping("")
+  public ResponseEntity<List<ProfileCompleteResponseDto>> getProfiles() {
+    List<ProfileCompleteResponseDto> profiles = profileService.getProfiles().stream().map(profileCompleteMapper::toDto).toList();
+    return ResponseEntity.ok().body(profiles);
+  }
 
 }

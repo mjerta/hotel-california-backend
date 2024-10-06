@@ -20,6 +20,7 @@ public class ProfileCompleteMapper {
 
   public ProfileCompleteResponseDto toDto(Profile entity) {
     return ProfileCompleteResponseDto.builder()
+      .id(entity.getId())
       .firstName(entity.getFirstName())
       .lastName(entity.getLastName())
       .phoneNumber(entity.getPhoneNumber())

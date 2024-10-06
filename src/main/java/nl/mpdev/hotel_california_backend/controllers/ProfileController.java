@@ -1,15 +1,21 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import jakarta.validation.Valid;
+import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
+import nl.mpdev.hotel_california_backend.models.Drink;
+import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.services.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -37,5 +43,15 @@ public class ProfileController {
     List<ProfileCompleteResponseDto> profiles = profileService.getProfiles().stream().map(profileCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(profiles);
   }
+
+  // POST
+  @PostMapping("")
+  public ResponseEntity<ProfileCompleteResponseDto> addDrink(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.addDrink(profileCompleteMapper.toEntity(requestDto));
+    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
+    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+    return ResponseEntity.created(uri).body(responseDto);
+  }
+
 
 }

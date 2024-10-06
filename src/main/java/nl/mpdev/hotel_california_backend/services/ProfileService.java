@@ -24,4 +24,8 @@ public class ProfileService {
   public List<Profile> getProfiles() {
     return profileRepository.findAll();
   }
+
+  public Profile addDrink(Profile entity) {
+    return profileRepository.save(entity);
+  }
 }

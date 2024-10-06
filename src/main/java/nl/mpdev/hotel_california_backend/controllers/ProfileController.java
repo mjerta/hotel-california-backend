@@ -1,6 +1,8 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
 import nl.mpdev.hotel_california_backend.services.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProfileController {
 
   private final ProfileService profileService;
+  private final ProfileCompleteMapper profileCompleteMapper;
 
-  public ProfileController(ProfileService profileService) {
+  public ProfileController(ProfileService profileService, ProfileCompleteMapper profileCompleteMapper) {
     this.profileService = profileService;
+    this.profileCompleteMapper = profileCompleteMapper;
   }
 
-  // GET
+  //  GET
 
-//  @GetMapping("{id")
-//  public ResponseEntity<ProfileCompleteResponseDto> getProfileById(@PathVariable Integer id) {
-//
-//    return ResponseEntity.ok().body(Object);
-//  }
+  @GetMapping("{id}")
+  public ResponseEntity<ProfileCompleteResponseDto> getProfileById(@PathVariable Integer id) {
+    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileById(id));
+    return ResponseEntity.ok().body(responseDto);
+  }
+
 
 }

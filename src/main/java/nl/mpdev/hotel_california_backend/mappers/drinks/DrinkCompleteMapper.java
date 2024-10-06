@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.mappers.drinks;
 
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkIdRequestDto;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import org.springframework.stereotype.Component;
 
@@ -22,16 +23,28 @@ public class DrinkCompleteMapper {
       .build();
   }
 
-  public DrinkCompleteResponseDto toDto(Drink drink) {
+  public Drink toEntity(DrinkIdRequestDto dto) {
+    if(dto == null){
+      return null;
+    }
+    return Drink.builder()
+      .id(dto.getId())
+      .build();
+  }
+
+  public DrinkCompleteResponseDto toDto(Drink entity) {
+    if(entity == null) {
+      return null;
+    }
     return DrinkCompleteResponseDto.builder()
-      .id(drink.getId())
-      .name(drink.getName())
-      .description(drink.getDescription())
-      .price(drink.getPrice())
-      .image(drink.getImage())
-      .isAlcoholic(drink.getIsAlcoholic())
-      .size(drink.getSize())
-      .measurement(drink.getMeasurement())
+      .id(entity.getId())
+      .name(entity.getName())
+      .description(entity.getDescription())
+      .price(entity.getPrice())
+      .image(entity.getImage())
+      .isAlcoholic(entity.getIsAlcoholic())
+      .size(entity.getSize())
+      .measurement(entity.getMeasurement())
       .build();
   }
 }

@@ -11,7 +11,7 @@ public enum LocationType {
     this.locationType = locationType;
   }
 
-  public String getDisplayName() {
+  public String getType() {
     return locationType;
   }
 }

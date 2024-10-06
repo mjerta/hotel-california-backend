@@ -1,13 +1,16 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Builder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Users")
 public class User {
@@ -17,14 +20,14 @@ public class User {
   private String username;
   private String password;
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "remote_id", referencedColumnName = "id")
+  @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(
     targetEntity = Authority.class,
     mappedBy = "username",
     cascade = CascadeType.ALL,
     orphanRemoval = true,
-    fetch = FetchType.EAGER
+    fetch = FetchType.LAZY
   )
   private Set<Authority> authorities = new HashSet<>();
   @OneToMany(mappedBy = "user")

@@ -3,6 +3,9 @@ package nl.mpdev.hotel_california_backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor
@@ -21,7 +24,6 @@ public class Drink {
   private Boolean isAlcoholic;
   private Integer size;
   private String measurement;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "order_id")
-  private Order order;
+  @ManyToMany(mappedBy = "drinks")
+  private List<Order> orders = new ArrayList<>();
 }

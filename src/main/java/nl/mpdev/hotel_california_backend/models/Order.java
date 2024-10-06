@@ -1,14 +1,17 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
 
-import javax.xml.stream.Location;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Builder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Orders")
 public class Order {
@@ -16,15 +19,31 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private LocalDateTime orderDate;
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
-  @OneToMany(mappedBy = "order")
-  private List<Meal> meals;
-  @OneToMany(mappedBy = "order")
+  //  @OneToMany(mappedBy = "order")
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+    name = "orders_meals",
+    // By default the name gets the of the owners class name + _id
+    joinColumns = @JoinColumn(name = "order_id"),
+    // Also this column name ar by default the name of Field name + _id
+    inverseJoinColumns = @JoinColumn(name = "meal_id")
+  )
+  private List<Meal> meals = new ArrayList<>();
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+    name = "orders_drinks",
+    // By default the name gets the of the owners class name + _id
+    joinColumns = @JoinColumn(name = "order_id"),
+    // Also this column name ar by default the name of Field name + _id
+    inverseJoinColumns = @JoinColumn(name = "drink_id")
+  )
   private List<Drink> drinks;
-//  private List<MenuItem> menuItems;
+  @Enumerated(EnumType.STRING)
   private Status status;
-//  private Location destination;
-
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "destination_id", referencedColumnName = "id")
+  private Location destination;
 }

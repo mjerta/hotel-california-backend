@@ -11,7 +11,6 @@ public class IngredientCompleteMapper {
     if(dto == null) {
       return null;
     }
-
     return Ingredient.builder()
       .id(dto.getId())
       .name(dto.getName())
@@ -19,6 +18,9 @@ public class IngredientCompleteMapper {
   }
 
   public IngredientCompleteResponseDto toDto(Ingredient entity) {
+    if(entity == null) {
+      return null;
+    }
     return IngredientCompleteResponseDto.builder()
       .id(entity.getId())
       .name(entity.getName())

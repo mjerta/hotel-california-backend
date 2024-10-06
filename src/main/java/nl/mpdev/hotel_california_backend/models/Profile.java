@@ -15,7 +15,6 @@ public class Profile {
   private String phoneNumber;
   private String address;
   private Integer points;
-//  @OneToOne(mappedBy = "profile")
-//  private User user;
-
+  @OneToOne(mappedBy = "profile")
+  private User user;
 }

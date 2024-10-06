@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.dtos.authority.request;
+package nl.mpdev.hotel_california_backend.dtos.authorities.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

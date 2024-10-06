@@ -5,7 +5,7 @@ import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
-import nl.mpdev.hotel_california_backend.mappers.user.UserCompleteMapper;
+import nl.mpdev.hotel_california_backend.mappers.users.UserCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Location;
 import nl.mpdev.hotel_california_backend.models.Order;
 import org.springframework.stereotype.Component;

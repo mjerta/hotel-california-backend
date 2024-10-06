@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.mappers.user;
+package nl.mpdev.hotel_california_backend.mappers.users;
 
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;

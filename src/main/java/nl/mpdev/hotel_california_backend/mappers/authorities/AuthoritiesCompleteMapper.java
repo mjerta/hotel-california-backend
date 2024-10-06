@@ -1,7 +1,7 @@
 package nl.mpdev.hotel_california_backend.mappers.authorities;
 
-import nl.mpdev.hotel_california_backend.dtos.authority.request.AuthorityCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.authority.response.AuthorityCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.authorities.request.AuthorityCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.authorities.response.AuthorityCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.models.Authority;
 import org.springframework.stereotype.Component;
 

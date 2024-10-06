@@ -2,7 +2,8 @@ package nl.mpdev.hotel_california_backend.dtos.users.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import nl.mpdev.hotel_california_backend.dtos.authority.AuthorityCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.authority.request.AuthorityCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.authority.response.AuthorityCompleteResponseDto;
 
 import java.util.Set;
 
@@ -11,5 +12,6 @@ import java.util.Set;
 public class UserCompleteRequestDto {
   private Integer id;
   private String username;
-  private Set<AuthorityCompleteResponseDto> authority;
+  private String password;
+  private Set<AuthorityCompleteRequestDto> authority;
 }

@@ -5,7 +5,7 @@ import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
-import nl.mpdev.hotel_california_backend.mappers.user.UserLimitedMapper;
+import nl.mpdev.hotel_california_backend.mappers.user.UserCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Location;
 import nl.mpdev.hotel_california_backend.models.Order;
 import org.springframework.stereotype.Component;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 @Component
 public class OrderCompleteMapper {
 
-  private final UserLimitedMapper userLimitedMapper;
+  private final UserCompleteMapper userCompleteMapper;
   private final MealCompleteMapper mealCompleteMapper;
   private final DrinkCompleteMapper drinkCompleteMapper;
   private final LocationCompleteMapper locationCompleteMapper;
 
-  public OrderCompleteMapper(UserLimitedMapper userLimitedMapper, MealCompleteMapper mealCompleteMapper,
+  public OrderCompleteMapper(UserCompleteMapper userCompleteMapper, MealCompleteMapper mealCompleteMapper,
                              DrinkCompleteMapper drinkCompleteMapper, LocationCompleteMapper locationCompleteMapper) {
-    this.userLimitedMapper = userLimitedMapper;
+    this.userCompleteMapper = userCompleteMapper;
     this.mealCompleteMapper = mealCompleteMapper;
     this.drinkCompleteMapper = drinkCompleteMapper;
     this.locationCompleteMapper = locationCompleteMapper;
@@ -34,7 +34,7 @@ public class OrderCompleteMapper {
     }
     Order.OrderBuilder orderBuilder = Order.builder();
     if (dto.getUser() != null) {
-      orderBuilder.user(userLimitedMapper.toEntity(dto.getUser()));
+      orderBuilder.user(userCompleteMapper.toEntity(dto.getUser()));
     }
     if (dto.getMeals() != null) {
       orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
@@ -55,13 +55,11 @@ public class OrderCompleteMapper {
     if (entity == null) {
       return null;
     }
-
     OrderCompleteResponseDto.OrderCompleteResponseDtoBuilder builder = OrderCompleteResponseDto.builder();
-
     builder.id(entity.getId());
     builder.orderDate(entity.getOrderDate());
     if (entity.getUser() != null) {
-      builder.user(userLimitedMapper.toDto(entity.getUser()));
+      builder.user(userCompleteMapper.toUserLimitedResponse(entity.getUser()));
     }
     if (entity.getMeals() != null) {
       builder.meals(entity.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList()));
@@ -74,17 +72,6 @@ public class OrderCompleteMapper {
       Location location = entity.getDestination().toBuilder().build();
       builder.destination(locationCompleteMapper.toDto(entity.getDestination()));
     }
-
     return builder.build();
-
-//    return OrderCompleteResponseDto.builder()
-//      .id(entity.getId())
-//      .orderDate(entity.getOrderDate())
-//      .user(userLimitedMapper.toDto(entity.getUser()))
-//      .meals(entity.getMeals().stream().map(mealCompleteMapper::toDto).collect(Collectors.toList()))
-//      .drinks(entity.getDrinks().stream().map(drinkCompleteMapper::toDto).collect(Collectors.toList()))
-//      .status(entity.getStatus())
-//      .destination(locationCompleteMapper.toDto(entity.getDestination()))
-//      .build();
   }
 }

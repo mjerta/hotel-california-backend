@@ -33,7 +33,7 @@ public class OrderController {
 
   // GET
 
-  @GetMapping("{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> getOrderById(@PathVariable Integer id) {
     var test = orderService.getOrderById(id);
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(test);

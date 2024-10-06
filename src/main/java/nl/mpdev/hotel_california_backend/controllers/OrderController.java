@@ -52,4 +52,12 @@ public class OrderController {
     return ResponseEntity.created(uri).body(responseDto);
   }
 
+  // PUT
+
+  @PutMapping("/{id}")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrder(@PathVariable Integer id ,@Valid @RequestBody OrderCompleteRequestDto requestDto) {
+    Order order = orderService.updateOrder(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
+
 }

@@ -19,14 +19,25 @@ public class UserService {
 
   public User registerNewUser(User entity) {
     Set<Authority> authorities = new HashSet<>();
-    Authority authority = new Authority();
-    authority.setUsername(entity.getUsername());
-    authority.setAuthority("ROLE_USER");
-    authorities.add(authority);
+    Authority.AuthorityBuilder authorityBuilder = Authority.builder();
+    authorityBuilder.username(entity.getUsername());
+    authorityBuilder.authority("ROLE_USER");
+    authorities.add(authorityBuilder.build());
     entity = entity.toBuilder()
       .authorities(authorities)
       .build();
+    return userRepository.save(entity);
+  }
 
+  public User registerNewCustomUser(User entity) {
+    Set<Authority> authorities = new HashSet<>();
+    Authority.AuthorityBuilder authorityBuilder = Authority.builder();
+    authorityBuilder.username(entity.getUsername());
+    authorityBuilder.authority("ROLE_USER");
+    authorities.add(authorityBuilder.build());
+    entity = entity.toBuilder()
+      .authorities(authorities)
+      .build();
     return userRepository.save(entity);
   }
 }

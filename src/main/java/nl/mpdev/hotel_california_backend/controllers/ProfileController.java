@@ -1,14 +1,12 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
-import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.services.ProfileService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +67,12 @@ public class ProfileController {
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 
+  // DELETE
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteProfile(@PathVariable Integer id) {
+    profileService.deleteProfile(id);
+  }
 
 }

@@ -1,11 +1,11 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -25,7 +25,19 @@ public class ProfileService {
     return profileRepository.findAll();
   }
 
-  public Profile addDrink(Profile entity) {
+  public Profile addProfile(Profile entity) {
     return profileRepository.save(entity);
+  }
+
+  public Profile updateProfile(Integer id, ProfileCompleteRequestDto requestDto) {
+    Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    existingProfile = existingProfile.toBuilder()
+      .firstName(requestDto.getFirstName())
+      .lastName(requestDto.getLastName())
+      .phoneNumber(requestDto.getPhoneNumber())
+      .address(requestDto.getAddress())
+      .points((requestDto.getPoints()))
+      .build();
+    return profileRepository.save(existingProfile);
   }
 }

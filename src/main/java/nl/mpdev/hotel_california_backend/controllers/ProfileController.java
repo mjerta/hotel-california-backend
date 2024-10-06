@@ -2,8 +2,6 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
@@ -45,12 +43,21 @@ public class ProfileController {
   }
 
   // POST
+
   @PostMapping("")
-  public ResponseEntity<ProfileCompleteResponseDto> addDrink(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.addDrink(profileCompleteMapper.toEntity(requestDto));
+  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
     ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
     return ResponseEntity.created(uri).body(responseDto);
+  }
+
+  // PUT
+
+  @PutMapping("/{id}")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfile(id, requestDto);
+    return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 
 

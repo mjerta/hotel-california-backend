@@ -1,8 +1,8 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.profiles.request.ProfileCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.profiles.response.ProfileCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.services.ProfileService;

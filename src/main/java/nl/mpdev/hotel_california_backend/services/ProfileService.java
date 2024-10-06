@@ -1,9 +1,8 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import nl.mpdev.hotel_california_backend.dtos.profiles.ProfileCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.profiles.request.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
-import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.repositories.DrinkRepository;
 import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;

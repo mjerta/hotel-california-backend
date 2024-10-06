@@ -1,14 +1,16 @@
-package nl.mpdev.hotel_california_backend.dtos.profiles;
+package nl.mpdev.hotel_california_backend.dtos.profiles.response;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder(toBuilder = true)
 @Getter
-public class ProfileCompleteRequestDto {
+public class ProfileCompleteResponseDto {
+  private Integer id;
   private String firstName;
   private String lastName;
   private String phoneNumber;
   private String address;
   private Integer points;
+
 }

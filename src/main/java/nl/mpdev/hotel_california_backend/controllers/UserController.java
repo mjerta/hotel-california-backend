@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserRegisterLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.response.UserProfileResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.users.UserCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.models.User;
@@ -46,11 +48,11 @@ public class UserController {
 
   // PATCH
 
-//  @PatchMapping("/{id}")
-//  public ResponseEntity<OrderCompleteResponseDto> updateOrderFields(@PathVariable Integer id,
-//                                                                    @Valid @RequestBody OrderCompleteRequestDto requestDto) {
-//    Order order = orderService.updateOrderFields(id, requestDto);
-//    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
-//  }
+  @PatchMapping("/userprofiles/{id}")
+  public ResponseEntity<UserProfileResponseDto> updateProfileFields(@PathVariable Integer id,
+                                                       @Valid @RequestBody UserProfileRequestDto requestDto) {
+    User order = userService.updateProfileFields(id, requestDto);
+    return ResponseEntity.ok().body(userCompleteMapper.toUserProfileResponse(order));
+  }
 
 }

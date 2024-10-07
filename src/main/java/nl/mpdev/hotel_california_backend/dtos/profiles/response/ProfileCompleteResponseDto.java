@@ -12,5 +12,4 @@ public class ProfileCompleteResponseDto {
   private String phoneNumber;
   private String address;
   private Integer points;
-
 }

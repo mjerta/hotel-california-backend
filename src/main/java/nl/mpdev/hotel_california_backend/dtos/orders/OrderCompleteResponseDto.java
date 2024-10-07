@@ -3,7 +3,7 @@ package nl.mpdev.hotel_california_backend.dtos.orders;
 import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.locations.LocationCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.locations.response.LocationCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserLimitedResponseDto;
 import nl.mpdev.hotel_california_backend.models.enums.Status;

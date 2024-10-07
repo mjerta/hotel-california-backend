@@ -1,7 +1,7 @@
 package nl.mpdev.hotel_california_backend.mappers.locations;
 
-import nl.mpdev.hotel_california_backend.dtos.locations.LocationCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.locations.LocationIdRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.locations.response.LocationCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.locations.request.LocationIdRequestDto;
 import nl.mpdev.hotel_california_backend.models.Location;
 import org.springframework.stereotype.Component;
 

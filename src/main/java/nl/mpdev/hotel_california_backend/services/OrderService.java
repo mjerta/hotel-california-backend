@@ -118,7 +118,7 @@ public class OrderService {
   public Order updateOrderFields(Integer id, OrderCompleteRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
-    if (requestDto.getMeals() != null) {
+    if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
       orderBuilder.meals(requestDto.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId()).orElseThrow(RecordNotFoundException::new))
         .toList());

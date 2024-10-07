@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -29,9 +30,18 @@ public class ExceptionController {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
   }
 
+  @ExceptionHandler(value = DataIntegrityViolationException.class)
+  public ResponseEntity<Object> handleException(DataIntegrityViolationException ex) {
+    Map<String, String> error = new LinkedHashMap<>();
+    error.put("error", "Constrain error in database");
+    // extra details about error
+    error.put("error-message", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
   @ExceptionHandler(value = IndexOutOfBoundsException.class)
   public ResponseEntity<Object> handleException(IndexOutOfBoundsException ex) {
-    Map<String, String> error = new HashMap<>();
+    Map<String, String> error = new LinkedHashMap<>();
     error.put("error", "Index out of bounds");
     // extra details about error
     error.put("error-message", ex.getMessage());
@@ -46,6 +56,15 @@ public class ExceptionController {
     error.put("error-message", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
+
+//  @ExceptionHandler(value = UsernameNotFoundException.class)
+//  public ResponseEntity<Object> handleException(UsernameNotFoundException ex) {
+//    Map<String, String> error = new LinkedHashMap<>();
+//    error.put("error", "Username not found");
+//    // extra details about error
+//    error.put("error-message", ex.getMessage());
+//    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+//  }
 
   //custom exceptions
 

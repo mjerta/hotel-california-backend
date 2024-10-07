@@ -54,7 +54,7 @@ public class OrderService {
       .toList();
 
     Location existingLocation = locationRepository.findById(entity.getDestination().getId())
-      .orElseThrow(() -> new RecordNotFoundException());
+      .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
     User existinUser = userRepository.findById(entity.getUser().getId()).orElseThrow(() -> new RecordNotFoundException());
 
     entity = entity.toBuilder()

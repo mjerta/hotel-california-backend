@@ -2,7 +2,7 @@ package nl.mpdev.hotel_california_backend.dtos.orders;
 
 import lombok.Builder;
 import lombok.Getter;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.locations.LocationCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserLimitedResponseDto;

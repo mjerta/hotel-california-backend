@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.dtos.drinks;
+package nl.mpdev.hotel_california_backend.dtos.drinks.response;
 
 import lombok.Builder;
 import lombok.Getter;

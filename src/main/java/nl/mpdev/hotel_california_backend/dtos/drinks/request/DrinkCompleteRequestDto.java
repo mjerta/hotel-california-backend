@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.dtos.drinks;
+package nl.mpdev.hotel_california_backend.dtos.drinks.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @Getter
 public class DrinkCompleteRequestDto {
-  private Integer id;
   private String name;
   private String description;
   private Double price;

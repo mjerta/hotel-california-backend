@@ -1,8 +1,8 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.services.DrinkService;

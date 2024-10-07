@@ -1,7 +1,6 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Drink;

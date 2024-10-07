@@ -1,8 +1,8 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;

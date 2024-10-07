@@ -1,6 +1,5 @@
-package nl.mpdev.hotel_california_backend.dtos.orders;
+package nl.mpdev.hotel_california_backend.dtos.orders.request;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +14,11 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Getter
 public class OrderCompleteRequestDto {
+  @NotNull(message = "User must not be null")
   private UserIdRequestDto user;
+//  @NotNull(message = "Meals can not be null")
   private List<MealIdRequestDto> meals;
+//  @NotNull(message = "Ingredient can not be null")
   private List<DrinkIdRequestDto> drinks;
   private Status status;
   @NotNull(message = "Destination can not be bull")

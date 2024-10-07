@@ -16,7 +16,7 @@ public class MealLimitedRequestDto {
   private String description;
   private Double price;
   private byte[] image;
-//  @Valid
-//  @NotNull(message = "Ingredient can not be null")
+  @Valid
+  @NotNull(message = "Ingredient can not be null")
   private List<IngredientLimitedRequestDto> ingredients;
 }

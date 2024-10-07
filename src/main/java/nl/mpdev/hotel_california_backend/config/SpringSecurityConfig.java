@@ -65,14 +65,14 @@ public class SpringSecurityConfig {
     return http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/login").permitAll()
-        .requestMatchers("/register").permitAll()
-        .requestMatchers("/logout").permitAll()
-        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
-        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
-        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")
-        .requestMatchers("/api/csrf-token").hasAnyRole("ADMIN", "USER")
-        .anyRequest().denyAll())
+//        .requestMatchers("/login").permitAll()
+//        .requestMatchers("/register").permitAll()
+//        .requestMatchers("/logout").permitAll()
+//        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
+//        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
+//        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")
+//        .requestMatchers("/api/csrf-token").hasAnyRole("ADMIN", "USER")
+        .anyRequest().permitAll())
 //      .httpBasic(Customizer.withDefaults())
 //      .formLogin(Customizer.withDefaults())
       .sessionManagement(session -> session

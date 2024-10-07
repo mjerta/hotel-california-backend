@@ -40,9 +40,6 @@ public class UserService {
   }
 
   public User registerNewUser(User entity) {
-    if (entity.getAuthorities() == null || entity.getAuthorities().isEmpty()) {
-      throw new GeneralException("User must have at least one authority.");
-    }
     Set<Authority> authorities = new HashSet<>();
     Authority.AuthorityBuilder authorityBuilder = Authority.builder();
     authorityBuilder.username(entity.getUsername());
@@ -56,6 +53,9 @@ public class UserService {
   }
 
   public User registerNewCustomUser(User entity) {
+    if (entity.getAuthorities() == null || entity.getAuthorities().isEmpty()) {
+      throw new GeneralException("User must have at least one authority.");
+    }
     Set<Authority> updatedAuthorities = new HashSet<>();
     if (!entity.getAuthorities().isEmpty()) {
       User finalEntity = entity;

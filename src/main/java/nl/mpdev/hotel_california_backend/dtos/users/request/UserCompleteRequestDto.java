@@ -2,7 +2,7 @@ package nl.mpdev.hotel_california_backend.dtos.users.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import nl.mpdev.hotel_california_backend.dtos.authority.request.AuthorityCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.authorities.request.AuthorityCompleteRequestDto;
 import java.util.Set;
 
 @Builder(toBuilder = true)

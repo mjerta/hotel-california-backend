@@ -19,7 +19,7 @@ public class User {
   private Integer id;
   private String username;
   private String password;
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(

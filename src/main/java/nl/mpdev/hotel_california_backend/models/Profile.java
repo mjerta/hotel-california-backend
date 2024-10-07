@@ -1,9 +1,12 @@
 package nl.mpdev.hotel_california_backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder(toBuilder = true)
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Profiles")
 public class Profile {
@@ -15,7 +18,6 @@ public class Profile {
   private String phoneNumber;
   private String address;
   private Integer points;
-//  @OneToOne(mappedBy = "profile")
-//  private User user;
-
+  @OneToOne(mappedBy = "profile")
+  private User user;
 }

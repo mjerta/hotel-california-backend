@@ -1,7 +1,11 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
+import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Authority;
+import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.models.User;
+import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +17,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final ProfileRepository profileRepository;
 
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, ProfileRepository profileRepository) {
     this.userRepository = userRepository;
+    this.profileRepository = profileRepository;
   }
 
   public User registerNewUser(User entity) {
@@ -36,12 +42,10 @@ public class UserService {
     if (!entity.getAuthorities().isEmpty()) {
       User finalEntity = entity;
       updatedAuthorities = entity.getAuthorities().stream()
-        .map(existingAuthority -> {
-          return Authority.builder()
-            .username(finalEntity.getUsername())
-            .authority(existingAuthority.getAuthority())
-            .build();
-        })
+        .map(existingAuthority -> Authority.builder()
+          .username(finalEntity.getUsername())
+          .authority(existingAuthority.getAuthority())
+          .build())
         .collect(Collectors.toSet());
     }
     entity = entity.toBuilder()
@@ -49,5 +53,19 @@ public class UserService {
       .authorities(updatedAuthorities)
       .build();
     return userRepository.save(entity);
+  }
+
+  public User updateProfileFields(Integer id, UserProfileRequestDto requestDto) {
+    User existingUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Profile newOrExistingProfile;
+    if(requestDto.getProfile() != null) {
+      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException());
+    } else {
+      newOrExistingProfile = existingUser.getProfile();
+    }
+    existingUser = existingUser.toBuilder()
+      .profile(newOrExistingProfile)
+      .build();
+    return userRepository.save(existingUser);
   }
 }

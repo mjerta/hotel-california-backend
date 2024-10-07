@@ -15,7 +15,7 @@ public class MealUpdateRequestDto {
   private String description;
   private Double price;
   private byte[] image;
-  @Valid
-  @NotNull(message = "Ingredient can not be null")
+//  @Valid
+//  @NotNull(message = "Ingredient can not be null")
   private List<IngredientCompleteRequestDto> ingredients;
 }

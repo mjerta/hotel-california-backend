@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,7 +28,6 @@ public class MealService {
     this.ingredientRepository = ingredientRepository;
   }
 
-
   public Meal getMealById(Integer id) {
     return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
   }
@@ -38,15 +38,17 @@ public class MealService {
 
   public Meal addMeal(Meal entity) {
     Meal savedMeal = mealRepository.save(entity);
-
-    List<Ingredient> savedIngredients = savedMeal.getIngredients().stream()
-      .map(ingredient -> Ingredient.builder()
-        .meal(savedMeal)
-        .name(ingredient.getName())
-        .build())
-      .map(ingredientRepository::save)
-      .toList();
-
+    List<Ingredient> savedIngredients = null;
+    if (savedMeal.getIngredients() != null) {
+      savedIngredients = savedMeal.getIngredients().stream()
+        .filter(Objects::nonNull)
+        .map(ingredient -> Ingredient.builder()
+          .meal(savedMeal)
+          .name(ingredient.getName())
+          .build())
+        .map(ingredientRepository::save)
+        .toList();
+    }
     return savedMeal.toBuilder()
       .ingredients(savedIngredients)
       .build();

@@ -22,17 +22,19 @@ public class MealCompleteMapper {
     if (dto == null) {
       return null;
     }
-    return Meal.builder()
-      .name(dto.getName())
-      .description(dto.getDescription())
-      .price(dto.getPrice())
-      .image(dto.getImage())
-      .ingredients(dto.getIngredients().stream().map(ingredientCompleteMapper::toEntity).collect(Collectors.toList()))
-      .build();
+    Meal.MealBuilder mealBuilder = Meal.builder();
+    mealBuilder.name(dto.getName());
+    mealBuilder.description(dto.getDescription());
+    mealBuilder.price(dto.getPrice());
+    mealBuilder.image(dto.getImage());
+    if (dto.getIngredients() != null) {
+      mealBuilder.ingredients(dto.getIngredients().stream().map(ingredientCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    return mealBuilder.build();
   }
 
   public Meal toEntity(MealIdRequestDto dto) {
-    if(dto == null) {
+    if (dto == null) {
       return null;
     }
     return Meal.builder()
@@ -41,14 +43,17 @@ public class MealCompleteMapper {
   }
 
   public MealCompleteResponseDto toDto(Meal entity) {
-    return MealCompleteResponseDto.builder()
-      .id(entity.getId())
-      .price(entity.getPrice())
-      .name(entity.getName())
-      .description(entity.getDescription())
-      .price(entity.getPrice())
-      .image(entity.getImage())
-      .ingredients(entity.getIngredients().stream().map(ingredientCompleteMapper::toDto).collect(Collectors.toList()))
-      .build();
+
+    MealCompleteResponseDto.MealCompleteResponseDtoBuilder builder = MealCompleteResponseDto.builder();
+    builder.id(entity.getId());
+    builder.price(entity.getPrice());
+    builder.name(entity.getName());
+    builder.description(entity.getDescription());
+    builder.price(entity.getPrice());
+    builder.image(entity.getImage());
+    if (entity.getIngredients() != null) {
+      builder.ingredients(entity.getIngredients().stream().map(ingredientCompleteMapper::toDto).collect(Collectors.toList()));
+    }
+    return builder.build();
   }
 }

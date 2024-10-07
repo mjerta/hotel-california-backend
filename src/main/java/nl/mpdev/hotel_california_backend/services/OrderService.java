@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
@@ -10,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,18 +43,25 @@ public class OrderService {
 
   public Order addOrder(Order entity) {
 
-    List<Meal> existinMeals = entity.getMeals().stream()
-      .map(meal -> mealRepository.findById(meal.getId())
-        .orElseThrow(() -> new RecordNotFoundException()))
-      .toList();
-
-    List<Drink> existingDrinks = entity.getDrinks().stream()
-      .map(drink -> drinkRepository.findById(drink.getId())
-        .orElseThrow(() -> new RecordNotFoundException()))
-      .toList();
-
+    if (entity.getMeals() == null && entity.getDrinks() == null) {
+      throw new GeneralException("At least a drink or meal needs to be filled");
+    }
+    List<Meal> existinMeals = null;
+    if (entity.getMeals() != null) {
+      existinMeals = entity.getMeals().stream()
+        .map(meal -> mealRepository.findById(meal.getId())
+          .orElseThrow(() -> new RecordNotFoundException()))
+        .toList();
+    }
+    List<Drink> existingDrinks = null;
+    if (entity.getDrinks() != null) {
+      existingDrinks = entity.getDrinks().stream()
+        .map(drink -> drinkRepository.findById(drink.getId())
+          .orElseThrow(() -> new RecordNotFoundException()))
+        .toList();
+    }
     Location existingLocation = locationRepository.findById(entity.getDestination().getId())
-      .orElseThrow(() -> new RecordNotFoundException());
+      .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
     User existinUser = userRepository.findById(entity.getUser().getId()).orElseThrow(() -> new RecordNotFoundException());
 
     entity = entity.toBuilder()
@@ -69,108 +76,82 @@ public class OrderService {
   }
 
   public Order updateOrder(Integer id, OrderCompleteRequestDto requestDto) {
-    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
-    List<Meal> existinMeals = null;
+    if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
+      throw new GeneralException("At least a drink or meal needs to be filled");
+    }
     if (requestDto.getMeals() != null) {
-      existinMeals = requestDto.getMeals().stream()
+      orderBuilder.meals(requestDto.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId())
-          .orElseThrow(() -> new RecordNotFoundException()))
-        .toList();
+          .orElseThrow(() -> new RecordNotFoundException("Meal not found")))
+        .toList());
     }
+    else orderBuilder.meals(null);
 
-    List<Drink> existingDrinks = null;
     if (requestDto.getDrinks() != null) {
-      existingDrinks = requestDto.getDrinks().stream()
+      orderBuilder.drinks(requestDto.getDrinks().stream()
         .map(drink -> drinkRepository.findById(drink.getId())
-          .orElseThrow(() -> new RecordNotFoundException()))
-        .toList();
+          .orElseThrow(() -> new RecordNotFoundException("Drink not found")))
+        .toList());
     }
-    Location existingLocation = null;
+    else orderBuilder.drinks(null);
+
     if (requestDto.getDestination() != null) {
-      existingLocation = locationRepository.findById(requestDto.getDestination().getId())
-        .orElseThrow(() -> new RecordNotFoundException());
+      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
+        .orElseThrow(() -> new RecordNotFoundException("Destination not found")));
     }
-    User existinUser = null;
+    else orderBuilder.destination(null);
+
     if (requestDto.getUser() != null) {
-      existinUser = userRepository.findById(requestDto.getUser().getId()).orElseThrow(() -> new RecordNotFoundException());
+      orderBuilder.user(
+        userRepository.findById(requestDto.getUser().getId()).orElseThrow(() -> new RecordNotFoundException("User not found")));
     }
+    else orderBuilder.user(null);
 
-    existingOrder = existingOrder.toBuilder()
-      .user(existinUser)
-      .orderDate(LocalDateTime.now())
-      .meals(existinMeals)
-      .drinks(existingDrinks)
-      .destination(existingLocation)
-      .build();
+    orderBuilder.orderDate(LocalDateTime.now());
 
-    return orderRepository.save(existingOrder);
+    return orderRepository.save(orderBuilder.build());
   }
 
   public Order updateOrderFields(Integer id, OrderCompleteRequestDto requestDto) {
-    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    // Handling meals
-    List<Meal> newOrExistingMeal;
-    if (requestDto.getMeals() != null) {
-      newOrExistingMeal = requestDto.getMeals().stream()
+    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
+    if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
+      orderBuilder.meals(requestDto.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId()).orElseThrow(RecordNotFoundException::new))
-        .toList();
-    } else {
-      newOrExistingMeal = existingOrder.getMeals();
+        .toList());
     }
-    // Handling drinks
-    List<Drink> newOrExistingDrink;
     if (requestDto.getDrinks() != null) {
-      newOrExistingDrink = requestDto.getDrinks().stream()
+      orderBuilder.drinks(requestDto.getDrinks().stream()
         .map(drink -> drinkRepository.findById(drink.getId())
           .orElseThrow(RecordNotFoundException::new))
-        .toList();
-    } else {
-      newOrExistingDrink = existingOrder.getDrinks();
+        .toList());
     }
-    // Handling status
-    Status newOrExistingStatus;
-    if(requestDto.getStatus() != null) {
-      newOrExistingStatus = requestDto.getStatus();
-    } else {
-      newOrExistingStatus = existingOrder.getStatus();
+    if (requestDto.getStatus() != null) {
+      orderBuilder.status(requestDto.getStatus());
     }
-    // Handling destination
-    Location newOrExistingLocation;
     if (requestDto.getDestination() != null) {
-      newOrExistingLocation = locationRepository.findById(requestDto.getDestination().getId())
-        .orElseThrow(RecordNotFoundException::new);
-    } else {
-      newOrExistingLocation = existingOrder.getDestination();
+      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
+        .orElseThrow(RecordNotFoundException::new));
     }
-    // Handling user
-    User newOrExistingUser;
     if (requestDto.getUser() != null) {
-      newOrExistingUser = userRepository.findById(requestDto.getUser().getId())
-        .orElseThrow(RecordNotFoundException::new);
-    } else {
-      newOrExistingUser = existingOrder.getUser();
+      orderBuilder.user(userRepository.findById(requestDto.getUser().getId())
+        .orElseThrow(RecordNotFoundException::new));
     }
-
-    // Updating the existing order with the new fields
-    existingOrder = existingOrder.toBuilder()
-      .user(newOrExistingUser)
-      .meals(newOrExistingMeal)
-      .drinks(newOrExistingDrink)
-      .status(newOrExistingStatus)
-      .destination(newOrExistingLocation)
-      .build();
-
-    return orderRepository.save(existingOrder);
+    return orderRepository.save(orderBuilder.build());
   }
 
   // Perhaps I could be using something like this later as a helper method
-  private <T, R> List<R> updateListOrKeepExisting(List<T> dtoList, List<R> existingList, Integer findId, JpaRepository<R, Integer> repository) {
+  private <T, R> List<R> updateListOrKeepExisting(List<T> dtoList, List<R> existingList, Integer findId,
+                                                  JpaRepository<R, Integer> repository) {
     if (dtoList != null) {
       return dtoList.stream()
         .map(dto -> repository.findById(findId).orElseThrow(RecordNotFoundException::new))
         .collect(Collectors.toList());
-    } else {
+    }
+    else {
       return existingList;
     }
   }

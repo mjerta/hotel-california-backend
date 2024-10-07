@@ -1,7 +1,7 @@
 package nl.mpdev.hotel_california_backend.mappers.orders;
 
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;

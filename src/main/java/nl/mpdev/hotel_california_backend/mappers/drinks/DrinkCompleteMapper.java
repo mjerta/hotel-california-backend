@@ -1,8 +1,8 @@
 package nl.mpdev.hotel_california_backend.mappers.drinks;
 
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkIdRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkIdRequestDto;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import org.springframework.stereotype.Component;
 

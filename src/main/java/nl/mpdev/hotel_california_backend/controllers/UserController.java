@@ -1,15 +1,12 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserRegisterLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserProfileResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.users.UserCompleteMapper;
-import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.services.UserService;
 import org.springframework.http.HttpStatus;

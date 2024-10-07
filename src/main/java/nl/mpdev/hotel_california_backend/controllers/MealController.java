@@ -1,8 +1,9 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.request.MealLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api/v1/meals")
@@ -48,7 +48,7 @@ public class MealController {
   // POST
 
   @PostMapping("")
-  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealCompleteRequestDto requestDto) {
+  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealLimitedRequestDto requestDto) {
     Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
     MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(meal);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
@@ -58,7 +58,7 @@ public class MealController {
 
   @PutMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id,
-                                                            @Valid @RequestBody MealCompleteRequestDto requestDto) {
+                                                            @Valid @RequestBody MealUpdateRequestDto requestDto) {
     Meal meal = mealService.updateMeal(id, requestDto);
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));
   }
@@ -67,7 +67,7 @@ public class MealController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id,
-                                                                  @Valid @RequestBody MealCompleteRequestDto requestDto) {
+                                                                  @Valid @RequestBody MealUpdateRequestDto requestDto) {
 
     Meal meal = mealService.updateMealFields(id, requestDto);
     return ResponseEntity.ok().body(mealCompleteMapper.toDto(meal));

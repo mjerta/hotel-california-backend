@@ -1,10 +1,10 @@
-package nl.mpdev.hotel_california_backend.dtos.orders;
+package nl.mpdev.hotel_california_backend.dtos.orders.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import nl.mpdev.hotel_california_backend.dtos.drinks.DrinkCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.locations.LocationCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.locations.response.LocationCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserLimitedResponseDto;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
 

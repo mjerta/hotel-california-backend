@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.locations.LocationIdRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealIdRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.request.MealIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserIdRequestDto;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
 

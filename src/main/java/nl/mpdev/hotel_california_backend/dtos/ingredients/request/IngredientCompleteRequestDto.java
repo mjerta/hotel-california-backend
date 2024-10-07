@@ -1,9 +1,9 @@
-package nl.mpdev.hotel_california_backend.dtos.ingredients;
+package nl.mpdev.hotel_california_backend.dtos.ingredients.request;
 
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class IngredientCompleteRequestDto {
   private Integer id;

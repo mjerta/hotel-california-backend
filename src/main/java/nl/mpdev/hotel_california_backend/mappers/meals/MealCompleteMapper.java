@@ -1,8 +1,8 @@
 package nl.mpdev.hotel_california_backend.mappers.meals;
 
-import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.MealIdRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.request.MealLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.dtos.meals.request.MealIdRequestDto;
 import nl.mpdev.hotel_california_backend.mappers.ingredients.IngredientCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class MealCompleteMapper {
     this.ingredientCompleteMapper = ingredientCompleteMapper;
   }
 
-  public Meal toEntity(MealCompleteRequestDto dto) {
+  public Meal toEntity(MealLimitedRequestDto dto) {
     if (dto == null) {
       return null;
     }

@@ -47,7 +47,7 @@ public class UserCompleteMapper {
   public User toEntity(UserProfileRequestDto requestDto) {
     if (requestDto == null) return null;
     return User.builder()
-//      .profile(profileCompleteMapper.toEntity(requestDto.getProfile()))
+      .profile(profileCompleteMapper.toEntity(requestDto.getProfile()))
       .build();
   }
 
@@ -70,9 +70,9 @@ public class UserCompleteMapper {
     if (entity == null) return null;
     UserProfileResponseDto.UserProfileResponseDtoBuilder userProfileResponseDtoBuilder = UserProfileResponseDto.builder();
     userProfileResponseDtoBuilder.username(entity.getUsername());
-//    if (entity.getProfile() != null) {
-//      userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
-//    }
+    if (entity.getProfile() != null) {
+      userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
+    }
     return userProfileResponseDtoBuilder.build();
   }
 

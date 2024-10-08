@@ -84,10 +84,10 @@ public class UserService {
     if(requestDto.getProfile() != null) {
       newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
     } else {
-//      newOrExistingProfile = existingUser.getProfile();
+      newOrExistingProfile = existingUser.getProfile();
     }
     existingUser = existingUser.toBuilder()
-//      .profile(newOrExistingProfile)
+      .profile(newOrExistingProfile)
       .build();
     return userRepository.save(existingUser);
   }

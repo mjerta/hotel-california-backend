@@ -54,7 +54,7 @@ public class ProfileService {
   }
 
   public void deleteProfile(Integer id) {
-    profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(""));
     profileRepository.deleteById(id);
   }
 }

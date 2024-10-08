@@ -22,9 +22,9 @@ public class User {
   private String password;
   @Column(nullable = false)
   private boolean enabled = true;
-//  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//  @JoinColumn(name = "profile_id", referencedColumnName = "id")
-//  private Profile profile;
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "profile_id", referencedColumnName = "id")
+  private Profile profile;
   @OneToMany(
     targetEntity = Authority.class,
     mappedBy = "username",

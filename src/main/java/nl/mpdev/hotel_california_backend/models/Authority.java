@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+@Data
 @Builder(toBuilder = true)
 @Getter
 @NoArgsConstructor

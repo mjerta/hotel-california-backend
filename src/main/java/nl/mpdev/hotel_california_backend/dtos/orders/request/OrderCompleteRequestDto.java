@@ -7,7 +7,7 @@ import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.locations.request.LocationIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealIdRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserIdRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.request.UserNameRequestDto;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 public class OrderCompleteRequestDto {
   @NotNull(message = "User must not be null")
-  private UserIdRequestDto user;
+  private UserNameRequestDto user;
   //The valition of meals and drinks are being set in the service layer
   private List<MealIdRequestDto> meals;
   private List<DrinkIdRequestDto> drinks;

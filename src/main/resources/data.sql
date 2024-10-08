@@ -44,7 +44,7 @@ VALUES ('admin', '$2a$10$EixZaA5I3Q4sR71V9A3bKeIuwG.WpX5I6Xxf20MB9TTDxdYDB8Q4u',
 
 -- Orders
 INSERT INTO Orders (order_date, status, destination_id, user_id)
-VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1, 1);
+VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1, 'admin');
 
 -- Drinks
 INSERT INTO Drinks (name, description, price, is_alcoholic, size, measurement)

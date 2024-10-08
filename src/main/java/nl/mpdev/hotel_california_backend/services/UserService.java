@@ -75,16 +75,16 @@ public class UserService {
     return userRepository.save(entity);
   }
 
-  public User updateProfileFields(Integer id, UserProfileRequestDto requestDto) {
-    User existingUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User with id " + id + " not found."));
+  public User updateProfileFields(String username, UserProfileRequestDto requestDto) {
+    User existingUser = userRepository.findByUsername(username).orElseThrow(() -> new RecordNotFoundException("User with name " + username + " not found."));
     Profile newOrExistingProfile;
     if(requestDto.getProfile() != null) {
       newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
     } else {
-      newOrExistingProfile = existingUser.getProfile();
+//      newOrExistingProfile = existingUser.getProfile();
     }
     existingUser = existingUser.toBuilder()
-      .profile(newOrExistingProfile)
+//      .profile(newOrExistingProfile)
       .build();
     return userRepository.save(existingUser);
   }
@@ -99,6 +99,5 @@ public class UserService {
     }
     return "User is not logged in.";
   }
-
 
 }

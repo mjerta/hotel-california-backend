@@ -5,7 +5,6 @@ import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
-import nl.mpdev.hotel_california_backend.models.enums.Status;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -50,19 +49,19 @@ public class OrderService {
     if (entity.getMeals() != null) {
       existinMeals = entity.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId())
-          .orElseThrow(() -> new RecordNotFoundException()))
+          .orElseThrow(() -> new RecordNotFoundException("Meal not found")))
         .toList();
     }
     List<Drink> existingDrinks = null;
     if (entity.getDrinks() != null) {
       existingDrinks = entity.getDrinks().stream()
         .map(drink -> drinkRepository.findById(drink.getId())
-          .orElseThrow(() -> new RecordNotFoundException()))
+          .orElseThrow(() -> new RecordNotFoundException("Drink not found")))
         .toList();
     }
     Location existingLocation = locationRepository.findById(entity.getDestination().getId())
       .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
-    User existinUser = userRepository.findById(entity.getUser().getId()).orElseThrow(() -> new RecordNotFoundException());
+    User existinUser = userRepository.findByUsername(entity.getUser().getUsername()).orElseThrow(() -> new RecordNotFoundException("User not found"));
 
     entity = entity.toBuilder()
       .user(existinUser)
@@ -106,7 +105,7 @@ public class OrderService {
 
     if (requestDto.getUser() != null) {
       orderBuilder.user(
-        userRepository.findById(requestDto.getUser().getId()).orElseThrow(() -> new RecordNotFoundException("User not found")));
+        userRepository.findByUsername(requestDto.getUser().getUsername()).orElseThrow(() -> new RecordNotFoundException("User not found")));
     }
     else orderBuilder.user(null);
 
@@ -137,7 +136,7 @@ public class OrderService {
         .orElseThrow(RecordNotFoundException::new));
     }
     if (requestDto.getUser() != null) {
-      orderBuilder.user(userRepository.findById(requestDto.getUser().getId())
+      orderBuilder.user(userRepository.findByUsername(requestDto.getUser().getUsername())
         .orElseThrow(RecordNotFoundException::new));
     }
     return orderRepository.save(orderBuilder.build());
@@ -157,7 +156,7 @@ public class OrderService {
   }
 
   public void deleteOrder(Integer id) {
-    orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     orderRepository.deleteById(id);
   }
 }

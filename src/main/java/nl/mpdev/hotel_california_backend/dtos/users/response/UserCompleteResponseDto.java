@@ -9,7 +9,6 @@ import java.util.Set;
 @Builder
 @Getter
 public class UserCompleteResponseDto {
-  private Integer id;
   private String username;
   private Set<AuthorityCompleteResponseDto> authority;
 }

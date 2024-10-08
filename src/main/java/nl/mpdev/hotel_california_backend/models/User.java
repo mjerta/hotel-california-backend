@@ -15,15 +15,15 @@ import java.util.Set;
 @Table(name = "Users")
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  @Column(nullable = false, unique = true)
   private String username;
+  @Column(nullable = false)
   private String password;
   @Column(nullable = false)
   private boolean enabled = true;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "profile_id", referencedColumnName = "id")
-  private Profile profile;
+//  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//  @JoinColumn(name = "profile_id", referencedColumnName = "id")
+//  private Profile profile;
   @OneToMany(
     targetEntity = Authority.class,
     mappedBy = "username",

@@ -63,10 +63,10 @@ public class UserController {
 
   // PATCH
 
-  @PatchMapping("/userprofiles/{id}")
-  public ResponseEntity<UserProfileResponseDto> updateProfileFields(@PathVariable Integer id,
+  @PatchMapping("/userprofiles")
+  public ResponseEntity<UserProfileResponseDto> updateProfileFields(@RequestParam String username,
                                                        @Valid @RequestBody UserProfileRequestDto requestDto) {
-    User order = userService.updateProfileFields(id, requestDto);
+    User order = userService.updateProfileFields(username, requestDto);
     return ResponseEntity.ok().body(userCompleteMapper.toUserProfileResponse(order));
   }
 

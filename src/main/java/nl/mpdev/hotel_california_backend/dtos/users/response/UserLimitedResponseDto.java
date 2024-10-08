@@ -6,6 +6,5 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @Getter
 public class UserLimitedResponseDto {
-  private Integer id;
   private String username;
 }

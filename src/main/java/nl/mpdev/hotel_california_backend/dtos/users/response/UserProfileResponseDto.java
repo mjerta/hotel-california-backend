@@ -7,7 +7,6 @@ import nl.mpdev.hotel_california_backend.dtos.profiles.response.ProfileCompleteR
 @Builder(toBuilder = true)
 @Getter
 public class UserProfileResponseDto {
-  private Integer id;
   private String username;
   private ProfileCompleteResponseDto profile;
 }

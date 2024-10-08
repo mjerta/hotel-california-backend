@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -56,14 +57,12 @@ public class ExceptionController {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 
-//  @ExceptionHandler(value = UsernameNotFoundException.class)
-//  public ResponseEntity<Object> handleException(UsernameNotFoundException ex) {
-//    Map<String, String> error = new LinkedHashMap<>();
-//    error.put("error", "Username not found");
-//    // extra details about error
-//    error.put("error-message", ex.getMessage());
-//    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-//  }
+  @ExceptionHandler(value = BadCredentialsException.class)
+  public ResponseEntity<Object> handleException(BadCredentialsException ex) {
+    Map<String, String> error = new LinkedHashMap<>();
+    error.put("error", "Bad credentials");
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
 
   //custom exceptions
 

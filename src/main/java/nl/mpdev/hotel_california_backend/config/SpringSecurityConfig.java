@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.config;
 
+import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,8 @@ import javax.sql.DataSource;
 // Spring Boot automatically enables Spring Security.
 public class SpringSecurityConfig {
 
+  private String test;
+
   private final DataSource dataSource;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   @Autowired
@@ -40,7 +43,7 @@ public class SpringSecurityConfig {
   // Bean for the password encoder to encode the password
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(10);
   }
 
   // The userDetailsService is custom and is autowired als a field in this class, i could however use constructor injection
@@ -65,7 +68,7 @@ public class SpringSecurityConfig {
     return http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
-//        .requestMatchers("/api/v1/login").permitAll()
+        .requestMatchers("/api/v1/login").permitAll()
 //        .requestMatchers("/register").permitAll()
 //        .requestMatchers("/logout").permitAll()
 //        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")

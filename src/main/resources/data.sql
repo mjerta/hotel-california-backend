@@ -1,11 +1,11 @@
 -- Profiles
 INSERT INTO profiles (points, address, first_name, last_name, phone_number)
-VALUES
-    (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
-    (200, 'Laan van Meerdervoort 456, Den Haag', 'Piet', 'de Vries', '06-23456789'),
-    (300, 'Hoofdstraat 789, Rotterdam', 'Sophie', 'Bakker', '06-34567890'),
-    (100, 'Wilhelminastraat 101, Utrecht', 'Emma', 'Smit', '06-45678901'),
-    (250, 'Zeeweg 202, Haarlem', 'Luca', 'Vermeulen', '06-56789012');
+VALUES (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
+       (200, 'Laan van Meerdervoort 456, Den Haag', 'Piet', 'de Vries',
+        '06-23456789'),
+       (300, 'Hoofdstraat 789, Rotterdam', 'Sophie', 'Bakker', '06-34567890'),
+       (100, 'Wilhelminastraat 101, Utrecht', 'Emma', 'Smit', '06-45678901'),
+       (250, 'Zeeweg 202, Haarlem', 'Luca', 'Vermeulen', '06-56789012');
 
 
 
@@ -39,12 +39,16 @@ INSERT INTO Authorities (username, authority)
 VALUES ('admin', 'ROLE_ADMIN');
 
 -- Users
+-- INSERT INTO Users (username, password, enabled)
+-- VALUES ('admin', '$2a$10$EixZaA5I3Q4sR71V9A3bKeIuwG.WpX5I6Xxf20MB9TTDxdYDB8Q4u', true);
 INSERT INTO Users (username, password, enabled)
-VALUES ('admin', '$2a$10$EixZaA5I3Q4sR71V9A3bKeIuwG.WpX5I6Xxf20MB9TTDxdYDB8Q4u', true);
+VALUES ('admin', '$2a$10$dpLoD2Pxd.pL7Sab.RaSZezLuGo4oXfiQ6i6uydciCBddM553er26',
+        true);
+
 
 -- Orders
-INSERT INTO Orders (order_date, status, destination_id, user_id)
-VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1, 'admin');
+INSERT INTO Orders (order_date, status, destination_id)
+VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1);
 
 -- Drinks
 INSERT INTO Drinks (name, description, price, is_alcoholic, size, measurement)

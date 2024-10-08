@@ -34,10 +34,10 @@ public class UserController {
   // GET
 
   @GetMapping("/users")
-  public ResponseEntity<List<User>> getUsers() {
+  public ResponseEntity<List<UserCompleteResponseDto>> getUsers() {
 
     var test = userService.getUsers();
-    return ResponseEntity.ok().body(userService.getUsers());
+    return ResponseEntity.ok().body(userService.getUsers().stream().map(userCompleteMapper::toDto).toList());
   }
 
   //POST

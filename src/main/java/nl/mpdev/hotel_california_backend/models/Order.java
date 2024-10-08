@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import nl.mpdev.hotel_california_backend.models.enums.Status;
@@ -21,6 +22,7 @@ public class Order {
   private LocalDateTime orderDate;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", referencedColumnName = "username")
+  @JsonBackReference
   private User user;
   //  @OneToMany(mappedBy = "order")
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

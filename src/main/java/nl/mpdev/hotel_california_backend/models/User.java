@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,7 @@ public class User {
     fetch = FetchType.LAZY
   )
   private Set<Authority> authorities = new HashSet<>();
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<Order> orders;
 }

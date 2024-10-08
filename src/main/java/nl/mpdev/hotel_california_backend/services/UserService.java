@@ -41,6 +41,7 @@ public class UserService {
   }
 
   public User registerNewUser(User entity) {
+    checkIfUserExist(entity);
     Set<Authority> authorities = new HashSet<>();
     Authority.AuthorityBuilder authorityBuilder = Authority.builder();
     authorityBuilder.username(entity.getUsername());
@@ -53,7 +54,9 @@ public class UserService {
     return userRepository.save(entity);
   }
 
+
   public User registerNewCustomUser(User entity) {
+    checkIfUserExist(entity);
     if (entity.getAuthorities() == null || entity.getAuthorities().isEmpty()) {
       throw new GeneralException("User must have at least one authority.");
     }
@@ -100,4 +103,9 @@ public class UserService {
     return "User is not logged in.";
   }
 
+  private void checkIfUserExist(User entity) {
+    if (userRepository.findByUsername(entity.getUsername()).isPresent()) {
+      throw new GeneralException("User with username " + entity.getUsername() + " already exists");
+    }
+  }
 }

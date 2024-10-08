@@ -38,13 +38,6 @@ VALUES (301, false, 'SUN_LOUNGER'),
 INSERT INTO Authorities (username, authority)
 VALUES ('admin', 'ROLE_ADMIN');
 
--- Users
--- INSERT INTO Users (username, password, enabled)
--- VALUES ('admin', '$2a$10$EixZaA5I3Q4sR71V9A3bKeIuwG.WpX5I6Xxf20MB9TTDxdYDB8Q4u', true);
-INSERT INTO Users (username, password, enabled)
-VALUES ('admin', '$2a$10$dpLoD2Pxd.pL7Sab.RaSZezLuGo4oXfiQ6i6uydciCBddM553er26',
-        true);
-
 
 -- Orders
 INSERT INTO Orders (order_date, status, destination_id)

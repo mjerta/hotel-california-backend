@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.request.UserLoginRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.dtos.users.request.UserRegisterLimitedRequestDto;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -28,6 +31,13 @@ public class UserController {
 
   // controller rest-end-points
 
+  // GET
+
+  @GetMapping("/users")
+  public ResponseEntity<List<User>> getUsers() {
+    return ResponseEntity.ok().body(userService.getUsers());
+  }
+
   //POST
 
   @PostMapping("/register")
@@ -42,6 +52,12 @@ public class UserController {
     UserCompleteResponseDto responseDto = userCompleteMapper.toDto(user);
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
   }
+
+  @PostMapping(value = "/login")
+  public ResponseEntity<String> login(@Valid @RequestBody User user) {
+    return ResponseEntity.ok().body(userService.verify(user));
+  }
+
 
   // PATCH
 

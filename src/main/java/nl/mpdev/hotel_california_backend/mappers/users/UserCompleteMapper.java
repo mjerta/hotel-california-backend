@@ -1,11 +1,8 @@
 package nl.mpdev.hotel_california_backend.mappers.users;
 
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.request.*;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserLimitedResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserRegisterLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserProfileResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.authorities.AuthoritiesCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
@@ -50,7 +47,15 @@ public class UserCompleteMapper {
   public User toEntity(UserProfileRequestDto requestDto) {
     if (requestDto == null) return null;
     return User.builder()
-      .profile(profileCompleteMapper.toEntity(requestDto.getProfile()))
+//      .profile(profileCompleteMapper.toEntity(requestDto.getProfile()))
+      .build();
+  }
+
+  public User toEntity(UserLoginRequestDto requestDto) {
+    if (requestDto == null) return null;
+    return User.builder()
+      .username(requestDto.getUsername())
+      .password(requestDto.getPassword())
       .build();
   }
 
@@ -67,9 +72,9 @@ public class UserCompleteMapper {
     UserProfileResponseDto.UserProfileResponseDtoBuilder userProfileResponseDtoBuilder = UserProfileResponseDto.builder();
     userProfileResponseDtoBuilder.id(entity.getId());
     userProfileResponseDtoBuilder.username(entity.getUsername());
-    if (entity.getProfile() != null) {
-      userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
-    }
+//    if (entity.getProfile() != null) {
+//      userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
+//    }
     return userProfileResponseDtoBuilder.build();
   }
 

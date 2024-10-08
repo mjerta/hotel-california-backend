@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +34,10 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
     this.authenticationManager = authenticationManager;
     this.jwtService = jwtService;
+  }
+
+  public List<User> getUsers() {
+    return userRepository.findAll();
   }
 
   public User registerNewUser(User entity) {
@@ -78,7 +79,7 @@ public class UserService {
     User existingUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User with id " + id + " not found."));
     Profile newOrExistingProfile;
     if(requestDto.getProfile() != null) {
-      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException());
+      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
     } else {
       newOrExistingProfile = existingUser.getProfile();
     }
@@ -90,7 +91,6 @@ public class UserService {
 
   public String verify(User user) {
     Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-
     if (authentication.isAuthenticated()) {
       Map<String, Object> extraClaims = new HashMap<>();
       extraClaims.put("authorities", authentication.getAuthorities());
@@ -99,4 +99,6 @@ public class UserService {
     }
     return "User is not logged in.";
   }
+
+
 }

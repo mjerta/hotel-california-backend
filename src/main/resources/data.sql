@@ -39,8 +39,8 @@ INSERT INTO Authorities (username, authority)
 VALUES ('admin', 'ROLE_ADMIN');
 
 -- Users
-INSERT INTO Users (username, password)
-VALUES ('admin', 'password');
+INSERT INTO Users (username, password, enabled)
+VALUES ('admin', '$2a$10$EixZaA5I3Q4sR71V9A3bKeIuwG.WpX5I6Xxf20MB9TTDxdYDB8Q4u', true);
 
 -- Orders
 INSERT INTO Orders (order_date, status, destination_id, user_id)

@@ -19,17 +19,14 @@ public class User {
   private Integer id;
   private String username;
   private String password;
+  @Column(nullable = false)
+  private boolean enabled = true;
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(
-    targetEntity = Authority.class,
-    mappedBy = "username",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true,
-    fetch = FetchType.LAZY
   )
   private Set<Authority> authorities = new HashSet<>();
-  @OneToMany(mappedBy = "user")
-  private List<Order> orders;
+//  @OneToMany(mappedBy = "user")
+//  private List<Order> orders;
 }

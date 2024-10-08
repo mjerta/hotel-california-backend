@@ -27,14 +27,14 @@ public class SpringSecurityConfig {
 
   private final DataSource dataSource;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final UserDetailsService userDetailsService;
+  @Autowired
+  UserDetailsService userDetailsService;
 
   @Autowired
   public SpringSecurityConfig(DataSource dataSource, @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
                               UserDetailsService userDetailsService) {
     this.dataSource = dataSource;
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    this.userDetailsService = userDetailsService;
   }
 
   // Bean for the password encoder to encode the password
@@ -65,7 +65,7 @@ public class SpringSecurityConfig {
     return http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
-//        .requestMatchers("/login").permitAll()
+//        .requestMatchers("/api/v1/login").permitAll()
 //        .requestMatchers("/register").permitAll()
 //        .requestMatchers("/logout").permitAll()
 //        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")

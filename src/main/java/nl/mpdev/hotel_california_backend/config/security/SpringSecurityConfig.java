@@ -67,8 +67,7 @@ public class SpringSecurityConfig {
     return http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/v1/login").permitAll()
-        .requestMatchers("/api/v1/register").permitAll()
+
         // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
@@ -79,8 +78,10 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
         // Ingredients
+
         .requestMatchers(HttpMethod.DELETE, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
         // Drinks
+
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/drinks").hasAuthority("ROLE_MANAGER")
@@ -88,6 +89,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PATCH, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         // Orders
+
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").permitAll()
         // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table is occupied
@@ -98,6 +100,19 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").permitAll()
         // Only a staff member cna close the order. After being payed off course.
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
+
+        // Users
+
+        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ROLE_STAFF")
+        .requestMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/v1/customregister").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+        // also make sure here that only the user is logged in can be changed make this decision
+        .requestMatchers(HttpMethod.POST, "/api/v1/login").hasAuthority("ROLE_USER")
+
+
+
+
 
 
 

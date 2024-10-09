@@ -34,11 +34,6 @@ VALUES (301, false, 'SUN_LOUNGER'),
        (304, false, 'SUN_LOUNGER'),
        (305, false, 'SUN_LOUNGER');
 
--- Authorities
-INSERT INTO Authorities (username, authority)
-VALUES ('admin', 'ROLE_ADMIN');
-
-
 -- Orders
 INSERT INTO Orders (order_date, status, destination_id)
 VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1);

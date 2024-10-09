@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.config;
+package nl.mpdev.hotel_california_backend.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

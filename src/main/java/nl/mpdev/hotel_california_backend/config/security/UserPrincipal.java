@@ -1,4 +1,4 @@
-package nl.mpdev.hotel_california_backend.config;
+package nl.mpdev.hotel_california_backend.config.security;
 
 import nl.mpdev.hotel_california_backend.models.User;
 import org.springframework.security.core.GrantedAuthority;

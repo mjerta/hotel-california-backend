@@ -1,6 +1,6 @@
 package nl.mpdev.hotel_california_backend.services.security;
 
-import nl.mpdev.hotel_california_backend.config.UserPrincipal;
+import nl.mpdev.hotel_california_backend.config.security.UserPrincipal;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;

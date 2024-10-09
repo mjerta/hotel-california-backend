@@ -1,6 +1,5 @@
-package nl.mpdev.hotel_california_backend.config;
+package nl.mpdev.hotel_california_backend.config.security;
 
-import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,12 +69,35 @@ public class SpringSecurityConfig {
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/v1/login").permitAll()
         .requestMatchers("/api/v1/register").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
-        .requestMatchers(HttpMethod.POST, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
-        .requestMatchers(HttpMethod.PUT, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
-        .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
-        .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
+        .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
+        //has rol and hasauthority they do effectively the same
+        .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
+
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
+
+
+
+
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
+
+
+        .requestMatchers(HttpMethod.GET, "/api/v1/drinks/*").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/drinks").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/v1/drinks").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
+
+
+
+
+
+
+
 //        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
 //        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
 //        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")

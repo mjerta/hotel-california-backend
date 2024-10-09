@@ -70,6 +70,16 @@ public class UserService {
           .build())
         .collect(Collectors.toSet());
     }
+
+    // Check if at least one authority is valid
+    List<String> validRoles = List.of("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_STAFF", "ROLE_USER");
+    boolean hasValidRole = updatedAuthorities.stream()
+      .map(Authority::getAuthority) // Assuming Authority has a getAuthority method
+      .anyMatch(validRoles::contains);
+
+    if (!hasValidRole) {
+      throw new GeneralException("User must have at least one valid role: ROLE_ADMIN, ROLE_MANAGER, ROLE_STAFF, or ROLE_USER.");
+    }
     entity = entity.toBuilder()
       // Later i have to decode the password here with a password decoder
       .password(passwordEncoder.encode(entity.getPassword()))

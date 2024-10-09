@@ -70,9 +70,12 @@ public class SpringSecurityConfig {
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/v1/login").permitAll()
         .requestMatchers("/api/v1/register").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
         .requestMatchers(HttpMethod.PUT, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
 //        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
 //        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
 //        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")

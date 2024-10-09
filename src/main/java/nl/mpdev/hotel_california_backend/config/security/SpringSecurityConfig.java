@@ -69,6 +69,7 @@ public class SpringSecurityConfig {
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/v1/login").permitAll()
         .requestMatchers("/api/v1/register").permitAll()
+        // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
         //has rol and hasauthority they do effectively the same
@@ -76,21 +77,28 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
-
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
-
-
-
-
+        // Ingredients
         .requestMatchers(HttpMethod.DELETE, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
-
-
+        // Drinks
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/drinks").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
+        // Orders
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders").permitAll()
+        // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table is occupied
+        // Also need to change the dto
+        // Need to assign this value based on the user that is logged in
+        .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").permitAll()
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").permitAll()
+        // Only a staff member cna close the order. After being payed off course.
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
+
 
 
 

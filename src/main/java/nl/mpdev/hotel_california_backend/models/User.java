@@ -30,7 +30,7 @@ public class User {
     mappedBy = "username",
     cascade = CascadeType.ALL,
     orphanRemoval = true,
-    fetch = FetchType.LAZY
+    fetch = FetchType.EAGER
   )
   private Set<Authority> authorities = new HashSet<>();
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

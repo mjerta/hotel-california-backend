@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import io.jsonwebtoken.security.SignatureException;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,6 +62,16 @@ public class ExceptionController {
   public ResponseEntity<Object> handleException(BadCredentialsException ex) {
     Map<String, String> error = new LinkedHashMap<>();
     error.put("error", "Bad credentials");
+    // check if this status is correct
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
+
+  @ExceptionHandler(value = SignatureException.class)
+  public ResponseEntity<Object> handleException(SignatureException ex) {
+    Map<String, String> error = new LinkedHashMap<>();
+    error.put("error", "Not authorized for this endpoint");
+    // extra details about error
+    error.put("error-message", ex.getMessage());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
   }
 

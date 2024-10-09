@@ -69,15 +69,15 @@ public class SpringSecurityConfig {
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/v1/login").permitAll()
-//        .requestMatchers("/register").permitAll()
-//        .requestMatchers("/logout").permitAll()
+        .requestMatchers("/api/v1/register").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/**").hasAuthority("ROLE_ADMIN")
 //        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
 //        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
 //        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")
 //        .requestMatchers("/api/csrf-token").hasAnyRole("ADMIN", "USER")
-        .anyRequest().permitAll())
-//      .httpBasic(Customizer.withDefaults())
-//      .formLogin(Customizer.withDefaults())
+        .anyRequest().denyAll())
       .sessionManagement(session -> session
         .sessionCreationPolicy(
           SessionCreationPolicy.STATELESS)) // This is needed to make the application stateless , so no session is created , this is

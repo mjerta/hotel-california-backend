@@ -12,6 +12,8 @@ import nl.mpdev.hotel_california_backend.services.security.JWTService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -87,21 +89,29 @@ public class UserService {
     return userRepository.save(entity);
   }
 
-  public User updateProfileFields(String username, UserProfileRequestDto requestDto) {
-    User existingUser = userRepository.findByUsername(username)
-      .orElseThrow(() -> new RecordNotFoundException("User with name " + username + " not found."));
-    Profile newOrExistingProfile;
+  public User updateProfileFields(UserProfileRequestDto requestDto) {
+
+    User existingUser = getloggedInUser();
+
+    User.UserBuilder userBuilder = existingUser.toBuilder();
+
     if (requestDto.getProfile() != null) {
-      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId())
-        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
+      userBuilder.profile(profileRepository.findById(requestDto.getProfile().getId())
+        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."))
+      );
     }
-    else {
-      newOrExistingProfile = existingUser.getProfile();
+    return userRepository.save(userBuilder.build());
+  }
+
+  private User getloggedInUser() {
+    User exisitingUser = null;
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      exisitingUser = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new RecordNotFoundException("No user found"));
     }
-    existingUser = existingUser.toBuilder()
-      .profile(newOrExistingProfile)
-      .build();
-    return userRepository.save(existingUser);
+    return exisitingUser;
   }
 
   public String verify(User user) {
@@ -121,4 +131,5 @@ public class UserService {
       throw new GeneralException("User with username " + entity.getUsername() + " already exists");
     }
   }
+
 }

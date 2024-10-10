@@ -106,6 +106,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.POST, "/api/v1/customregister").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
         // also make sure here that only the user is logged in can be changed make this decision trough userdetails
+//        .requestMatchers(HttpMethod.PATCH, "/api/v1/userprofiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/userprofiles").hasAuthority("ROLE_USER")
 
         // also make sure here that only the user is logged in can be changed make this decision trough userdetails

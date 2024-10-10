@@ -92,7 +92,8 @@ public class SpringSecurityConfig {
 
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").permitAll()
-        // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table is occupied
+        // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table
+        // is occupied
         // Also need to change the dto
         // Need to assign this value based on the user that is logged in
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
@@ -107,24 +108,19 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/customregister").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
-        // also make sure here that only the user is logged in can be changed make this decision
-        .requestMatchers(HttpMethod.POST, "/api/v1/login").hasAuthority("ROLE_USER")
+        // also make sure here that only the user is logged in can be changed make this decision trough userdetails
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/userprofiles").hasAuthority("ROLE_USER")
 
+        // also make sure here that only the user is logged in can be changed make this decision trough userdetails
+        // and that the id should be retrieved based   on the jwt token is coming back
 
+        .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.POST, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
 
-
-
-
-
-
-
-
-
-
-//        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
-//        .requestMatchers("/info").hasAuthority("WRITE_PRIVILEGE")
-//        .requestMatchers(HttpMethod.POST, "/register").hasAnyRole("ADMIN", "USER")
-//        .requestMatchers("/api/csrf-token").hasAnyRole("ADMIN", "USER")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/profiles/*").hasAuthority("ROLE_MANAGER")
         .anyRequest().denyAll())
       .sessionManagement(session -> session
         .sessionCreationPolicy(

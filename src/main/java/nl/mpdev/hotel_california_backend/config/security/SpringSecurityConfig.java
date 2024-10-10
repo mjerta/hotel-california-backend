@@ -93,10 +93,6 @@ public class SpringSecurityConfig {
 
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
-        // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table
-        // is occupied
-        // Also need to change the dto
-        // Need to assign this value based on the user that is logged in
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").permitAll()
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").permitAll()
@@ -116,7 +112,7 @@ public class SpringSecurityConfig {
         // and that the id should be retrieved based   on the jwt token is coming back
 
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
-        .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.POST, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles/*").hasAuthority("ROLE_USER")

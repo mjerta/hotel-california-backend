@@ -24,7 +24,10 @@ public class ProfileService {
   }
 
   public Profile getProfileById(Integer id) {
-    return profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No profile is found"));
+
+
+    return existingProfile;
   }
 
   public List<Profile> getProfiles() {

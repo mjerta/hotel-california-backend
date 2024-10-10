@@ -38,8 +38,7 @@ public class OrderService {
 
   public Order getOrderById(Integer id, String orderReference) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Order validatedOrder = getOrderByUserOrOrderReference(orderReference, authentication, existingOrder);
+    Order validatedOrder = getOrderByUserOrOrderReference(orderReference, existingOrder);
     if (validatedOrder != null) return validatedOrder;
     throw new GeneralException("No order found with this user or reference: ");
   }
@@ -194,7 +193,8 @@ public class OrderService {
     }
   }
 
-  private Order getOrderByUserOrOrderReference(String orderReference, Authentication authentication, Order existingOrder) {
+  private Order getOrderByUserOrOrderReference(String orderReference, Order existingOrder) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);

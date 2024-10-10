@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import jakarta.annotation.PostConstruct;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
@@ -7,10 +8,15 @@ import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,8 +38,24 @@ public class OrderService {
     this.serviceHelper = serviceHelper;
   }
 
-  public Order getOrderById(Integer id) {
-    return orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+  public Order getOrderById(String username, Integer id, String orderReference) {
+    if (username == null) {
+      throw new GeneralException("You are not logged in, and that's okay.");
+
+    }
+    Order order;
+    if (username != null) {
+      var test = userRepository.findByUsername(username).orElseThrow(RecordNotFoundException::new);
+       order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
+      if(!order.getUser().getUsername().equals(test.getUsername())){
+        throw new GeneralException("This username does not belong for this order.");
+      }
+    }
+    else {
+      throw new GeneralException("you are not logged in and that okay");
+    }
+
+    return order;
   }
 
   public List<Order> getOrders() {
@@ -61,7 +83,8 @@ public class OrderService {
     }
     Location existingLocation = locationRepository.findById(entity.getDestination().getId())
       .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
-    User existinUser = userRepository.findByUsername(entity.getUser().getUsername()).orElseThrow(() -> new RecordNotFoundException("User not found"));
+    User existinUser = userRepository.findByUsername(entity.getUser().getUsername())
+      .orElseThrow(() -> new RecordNotFoundException("User not found"));
 
     entity = entity.toBuilder()
       .user(existinUser)

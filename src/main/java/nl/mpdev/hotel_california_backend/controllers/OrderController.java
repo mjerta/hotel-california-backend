@@ -6,8 +6,11 @@ import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteRespo
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
+import nl.mpdev.hotel_california_backend.services.security.CustomUserDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,9 +33,12 @@ public class OrderController {
   // GET
 
   @GetMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> getOrderById(@PathVariable Integer id) {
-    var test = orderService.getOrderById(id);
-    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(test);
+  public ResponseEntity<OrderCompleteResponseDto> getOrderById(
+    @AuthenticationPrincipal UserDetails userDetails,
+    @PathVariable Integer id,
+    @RequestParam(required = false) String orderReference) {
+    String username = (userDetails != null) ? userDetails.getUsername() : null;
+    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderById(username, id, orderReference));
     return ResponseEntity.ok().body(responseDto);
   }
 

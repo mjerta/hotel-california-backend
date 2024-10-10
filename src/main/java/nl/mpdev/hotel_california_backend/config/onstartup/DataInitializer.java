@@ -3,12 +3,10 @@ package nl.mpdev.hotel_california_backend.config.onstartup;
 import nl.mpdev.hotel_california_backend.models.Authority;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;

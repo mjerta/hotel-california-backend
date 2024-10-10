@@ -54,7 +54,6 @@ public class UserService {
     return userRepository.save(entity);
   }
 
-
   public User registerNewCustomUser(User entity) {
     checkIfUserExist(entity);
     if (entity.getAuthorities() == null || entity.getAuthorities().isEmpty()) {
@@ -89,11 +88,14 @@ public class UserService {
   }
 
   public User updateProfileFields(String username, UserProfileRequestDto requestDto) {
-    User existingUser = userRepository.findByUsername(username).orElseThrow(() -> new RecordNotFoundException("User with name " + username + " not found."));
+    User existingUser = userRepository.findByUsername(username)
+      .orElseThrow(() -> new RecordNotFoundException("User with name " + username + " not found."));
     Profile newOrExistingProfile;
-    if(requestDto.getProfile() != null) {
-      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId()).orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
-    } else {
+    if (requestDto.getProfile() != null) {
+      newOrExistingProfile = profileRepository.findById(requestDto.getProfile().getId())
+        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."));
+    }
+    else {
       newOrExistingProfile = existingUser.getProfile();
     }
     existingUser = existingUser.toBuilder()
@@ -103,7 +105,8 @@ public class UserService {
   }
 
   public String verify(User user) {
-    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    Authentication authentication = authenticationManager.authenticate(
+      new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
     if (authentication.isAuthenticated()) {
       Map<String, Object> extraClaims = new HashMap<>();
       extraClaims.put("authorities", authentication.getAuthorities());

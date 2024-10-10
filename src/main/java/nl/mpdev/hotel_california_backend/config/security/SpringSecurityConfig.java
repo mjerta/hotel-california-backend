@@ -91,7 +91,7 @@ public class SpringSecurityConfig {
         // Orders
 
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         // he following is permitted for all however in the service layer there should be some kind of check to see uif one of the table
         // is occupied
         // Also need to change the dto

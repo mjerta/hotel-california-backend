@@ -48,4 +48,6 @@ public class Order {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "destination_id", referencedColumnName = "id")
   private Location destination;
+  private String orderReference;
+
 }

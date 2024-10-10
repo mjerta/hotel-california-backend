@@ -5,6 +5,7 @@ import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
+import nl.mpdev.hotel_california_backend.models.enums.Status;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
@@ -78,6 +79,9 @@ public class OrderService {
         .orElseThrow(() -> new RecordNotFoundException("User not found"))
       );
     }
+    if (entity.getStatus() != null) {
+      orderBuilder.status(entity.getStatus());
+    }
     orderBuilder.orderDate(LocalDateTime.now());
     orderBuilder.orderReference(serviceHelper.generateOrderReference());
 
@@ -115,6 +119,10 @@ public class OrderService {
         .orElseThrow(() -> new RecordNotFoundException("Destination not found")));
     }
     else orderBuilder.destination(null);
+
+    if(requestDto.getStatus() != null) {
+      orderBuilder.status(requestDto.getStatus());
+    }
     orderBuilder.orderDate(LocalDateTime.now());
 
     return orderRepository.save(orderBuilder.build());
@@ -190,7 +198,7 @@ public class OrderService {
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
-      if(existingOrder.getUser() == null) {
+      if (existingOrder.getUser() == null) {
         throw new GeneralException("The order belongs to  a anomynous user");
       }
       if (existingOrder.getUser().getUsername().equals(userToCheck.getUsername())) {

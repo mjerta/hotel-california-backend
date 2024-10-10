@@ -15,8 +15,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Getter
 public class OrderCompleteRequestDto {
-//  @NotNull(message = "User must not be null")
-  private UserNameRequestDto user;
   //The valition of meals and drinks are being set in the service layer
   private List<MealIdRequestDto> meals;
   private List<DrinkIdRequestDto> drinks;

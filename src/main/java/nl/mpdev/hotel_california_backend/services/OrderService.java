@@ -91,6 +91,7 @@ public class OrderService {
         .orElseThrow(() -> new RecordNotFoundException("User not found"))
       );
     }
+    orderBuilder.orderDate(LocalDateTime.now());
     orderBuilder.orderReference(serviceHelper.generateOrderReference());
 
     entity = orderBuilder.build();

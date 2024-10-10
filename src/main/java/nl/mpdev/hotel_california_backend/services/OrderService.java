@@ -36,18 +36,10 @@ public class OrderService {
   }
 
   public Order getOrderById(Integer id, String orderReference) {
+    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Order order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
-    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
-      if (order.getUser().getUsername().equals(userToCheck.getUsername())) {
-        return order;
-      }
-    }
-    if (orderReference.equals(order.getOrderReference())) {
-      return order;
-    }
+    Order validatedOrder = getOrderByUserOrOrderReference(orderReference, authentication, existingOrder);
+    if (validatedOrder != null) return validatedOrder;
     throw new GeneralException("No order found with this user or reference: ");
   }
 
@@ -130,6 +122,7 @@ public class OrderService {
 
   public Order updateOrderFields(Integer id, OrderCompleteRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    verifyUserOrReference(existingOrder);
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
     if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
       orderBuilder.meals(requestDto.getMeals().stream()
@@ -170,7 +163,7 @@ public class OrderService {
     orderRepository.deleteById(id);
   }
 
-  // Helper function
+  // Helper functions
   private void verifyUserOrReference(Order existingOrder) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
@@ -192,5 +185,23 @@ public class OrderService {
         userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RecordNotFoundException("No user is found")));
     }
   }
+
+  private Order getOrderByUserOrOrderReference(String orderReference, Authentication authentication, Order existingOrder) {
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
+      if(existingOrder.getUser() == null) {
+        throw new GeneralException("The order belongs to  a anomynous user");
+      }
+      if (existingOrder.getUser().getUsername().equals(userToCheck.getUsername())) {
+        return existingOrder;
+      }
+    }
+    if (orderReference.equals(existingOrder.getOrderReference())) {
+      return existingOrder;
+    }
+    return null;
+  }
+
 }
 

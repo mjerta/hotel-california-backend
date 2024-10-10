@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,18 +44,11 @@ public class OrderService {
       throw new GeneralException("You are not logged in, and that's okay.");
 
     }
-    Order order;
-    if (username != null) {
-      var test = userRepository.findByUsername(username).orElseThrow(RecordNotFoundException::new);
-       order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
-      if(!order.getUser().getUsername().equals(test.getUsername())){
-        throw new GeneralException("This username does not belong for this order.");
-      }
+    var test = userRepository.findByUsername(username).orElseThrow(RecordNotFoundException::new);
+    Order order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
+    if (!order.getUser().getUsername().equals(test.getUsername())) {
+      throw new GeneralException("This username does not belong for this order.");
     }
-    else {
-      throw new GeneralException("you are not logged in and that okay");
-    }
-
     return order;
   }
 
@@ -67,32 +61,35 @@ public class OrderService {
     if (entity.getMeals() == null && entity.getDrinks() == null) {
       throw new GeneralException("At least a drink or meal needs to be filled");
     }
-    List<Meal> existinMeals = null;
+    Order.OrderBuilder orderBuilder = Order.builder();
     if (entity.getMeals() != null) {
-      existinMeals = entity.getMeals().stream()
+      orderBuilder.meals(entity.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId())
           .orElseThrow(() -> new RecordNotFoundException("Meal not found")))
-        .toList();
+        .toList()
+      );
     }
-    List<Drink> existingDrinks = null;
     if (entity.getDrinks() != null) {
-      existingDrinks = entity.getDrinks().stream()
+      orderBuilder.drinks(entity.getDrinks().stream()
         .map(drink -> drinkRepository.findById(drink.getId())
           .orElseThrow(() -> new RecordNotFoundException("Drink not found")))
-        .toList();
+        .toList()
+      );
     }
-    Location existingLocation = locationRepository.findById(entity.getDestination().getId())
-      .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
-    User existinUser = userRepository.findByUsername(entity.getUser().getUsername())
-      .orElseThrow(() -> new RecordNotFoundException("User not found"));
+    if (entity.getDestination() != null) {
+      orderBuilder.destination(locationRepository.findById(entity.getDestination().getId())
+        .orElseThrow(() -> new RecordNotFoundException("Destination not found"))
+      );
+    }
 
-    entity = entity.toBuilder()
-      .user(existinUser)
-      .orderDate(LocalDateTime.now())
-      .meals(existinMeals)
-      .drinks(existingDrinks)
-      .destination(existingLocation)
-      .build();
+    if (entity.getUser() != null) {
+      orderBuilder.user(userRepository.findByUsername(entity.getUser().getUsername())
+        .orElseThrow(() -> new RecordNotFoundException("User not found"))
+      );
+    }
+    orderBuilder.orderReference(serviceHelper.generateOrderReference());
+
+    entity = orderBuilder.build();
 
     return orderRepository.save(entity);
   }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class ServiceHelper {
@@ -25,5 +26,11 @@ public class ServiceHelper {
         throw new GeneralException("Field not found: " + dtoField.getName());
       }
     }
+  }
+
+  public String generateOrderReference() {
+    long timestamp = System.currentTimeMillis();
+    int randomNum = new Random().nextInt(10000);  // Random number between 0 and 9999
+    return timestamp + "-" + randomNum;
   }
 }

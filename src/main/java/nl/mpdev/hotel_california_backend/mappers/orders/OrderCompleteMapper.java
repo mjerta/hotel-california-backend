@@ -72,6 +72,9 @@ public class OrderCompleteMapper {
       Location location = entity.getDestination().toBuilder().build();
       builder.destination(locationCompleteMapper.toDto(entity.getDestination()));
     }
+    if (entity.getOrderReference() != null) {
+      builder.orderReference(entity.getOrderReference());
+    }
     return builder.build();
   }
 }

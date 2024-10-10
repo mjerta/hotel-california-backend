@@ -34,11 +34,9 @@ public class OrderController {
 
   @GetMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> getOrderById(
-    @AuthenticationPrincipal UserDetails userDetails,
     @PathVariable Integer id,
     @RequestParam(required = false) String orderReference) {
-    String username = (userDetails != null) ? userDetails.getUsername() : null;
-    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderById(username, id, orderReference));
+    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderById(id, orderReference));
     return ResponseEntity.ok().body(responseDto);
   }
 

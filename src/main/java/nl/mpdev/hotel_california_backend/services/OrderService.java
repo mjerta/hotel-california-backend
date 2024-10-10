@@ -1,6 +1,5 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import jakarta.annotation.PostConstruct;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
@@ -9,15 +8,12 @@ import nl.mpdev.hotel_california_backend.models.*;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,17 +35,20 @@ public class OrderService {
     this.serviceHelper = serviceHelper;
   }
 
-  public Order getOrderById(String username, Integer id, String orderReference) {
-    if (username == null) {
-      throw new GeneralException("You are not logged in, and that's okay.");
-
-    }
-    var test = userRepository.findByUsername(username).orElseThrow(RecordNotFoundException::new);
+  public Order getOrderById(Integer id, String orderReference) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Order order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
-    if (!order.getUser().getUsername().equals(test.getUsername())) {
-      throw new GeneralException("This username does not belong for this order.");
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
+      if (order.getUser().getUsername().equals(userToCheck.getUsername())) {
+        return order;
+      }
     }
-    return order;
+    if (orderReference.equals(order.getOrderReference())) {
+      return order;
+    }
+    throw new GeneralException("No order found with this user or reference: ");
   }
 
   public List<Order> getOrders() {
@@ -57,15 +56,11 @@ public class OrderService {
   }
 
   public Order addOrder(Order entity) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (entity.getMeals() == null && entity.getDrinks() == null) {
       throw new GeneralException("At least a drink or meal needs to be filled");
     }
     Order.OrderBuilder orderBuilder = Order.builder();
-    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      orderBuilder.user(userRepository.findByUsername(userDetails.getUsername()).orElseThrow(()-> new RecordNotFoundException("No user is found")));
-    }
+    createOrderIfUserLoggedIn(orderBuilder);
     if (entity.getMeals() != null) {
       orderBuilder.meals(entity.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId())
@@ -101,6 +96,7 @@ public class OrderService {
 
   public Order updateOrder(Integer id, OrderCompleteRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    verifyUserOrReference(existingOrder);
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
     if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
@@ -127,13 +123,6 @@ public class OrderService {
         .orElseThrow(() -> new RecordNotFoundException("Destination not found")));
     }
     else orderBuilder.destination(null);
-
-    if (requestDto.getUser() != null) {
-      orderBuilder.user(
-        userRepository.findByUsername(requestDto.getUser().getUsername()).orElseThrow(() -> new RecordNotFoundException("User not found")));
-    }
-    else orderBuilder.user(null);
-
     orderBuilder.orderDate(LocalDateTime.now());
 
     return orderRepository.save(orderBuilder.build());
@@ -160,10 +149,6 @@ public class OrderService {
       orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
         .orElseThrow(RecordNotFoundException::new));
     }
-    if (requestDto.getUser() != null) {
-      orderBuilder.user(userRepository.findByUsername(requestDto.getUser().getUsername())
-        .orElseThrow(RecordNotFoundException::new));
-    }
     return orderRepository.save(orderBuilder.build());
   }
 
@@ -183,6 +168,29 @@ public class OrderService {
   public void deleteOrder(Integer id) {
     orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     orderRepository.deleteById(id);
+  }
+
+  // Helper function
+  private void verifyUserOrReference(Order existingOrder) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      if (existingOrder.getUser() == null) {
+        throw new RecordNotFoundException("The order belongs to anomynous user");
+      }
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      if (!existingOrder.getUser().getUsername().equals(userDetails.getUsername())) {
+        throw new GeneralException("This order does not belong to the user");
+      }
+    }
+  }
+
+  private void createOrderIfUserLoggedIn(Order.OrderBuilder orderBuilder) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      orderBuilder.user(
+        userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RecordNotFoundException("No user is found")));
+    }
   }
 }
 

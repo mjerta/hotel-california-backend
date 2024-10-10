@@ -33,9 +33,6 @@ public class OrderCompleteMapper {
       return null;
     }
     Order.OrderBuilder orderBuilder = Order.builder();
-    if (dto.getUser() != null) {
-      orderBuilder.user(userCompleteMapper.toEntity(dto.getUser()));
-    }
     if (dto.getMeals() != null) {
       orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
     }

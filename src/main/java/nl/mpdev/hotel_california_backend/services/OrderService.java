@@ -57,11 +57,15 @@ public class OrderService {
   }
 
   public Order addOrder(Order entity) {
-
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (entity.getMeals() == null && entity.getDrinks() == null) {
       throw new GeneralException("At least a drink or meal needs to be filled");
     }
     Order.OrderBuilder orderBuilder = Order.builder();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      orderBuilder.user(userRepository.findByUsername(userDetails.getUsername()).orElseThrow(()-> new RecordNotFoundException("No user is found")));
+    }
     if (entity.getMeals() != null) {
       orderBuilder.meals(entity.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId())

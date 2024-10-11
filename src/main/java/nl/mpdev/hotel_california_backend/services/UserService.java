@@ -93,30 +93,30 @@ public class UserService {
     return userRepository.save(entity);
   }
 
-  public User updateProfileFields(UserProfileRequestDto requestDto) {
+//  public User updateProfileFields(UserProfileRequestDto requestDto) {
+//
+//    User existingUser = getloggedInUser();
+//
+//    User.UserBuilder userBuilder = existingUser.toBuilder();
+//
+//    if (requestDto.getProfile() != null) {
+//      userBuilder.profile(profileRepository.findById(requestDto.getProfile().getId())
+//        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."))
+//      );
+//    } else userBuilder.profile(null);
+//    return userRepository.save(userBuilder.build());
+//  }
 
-    User existingUser = getloggedInUser();
-
-    User.UserBuilder userBuilder = existingUser.toBuilder();
-
-    if (requestDto.getProfile() != null) {
-      userBuilder.profile(profileRepository.findById(requestDto.getProfile().getId())
-        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."))
-      );
-    }
-    return userRepository.save(userBuilder.build());
-  }
-
-  private User getloggedInUser() {
-    User exisitingUser = null;
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      exisitingUser = userRepository.findByUsername(userDetails.getUsername())
-        .orElseThrow(() -> new RecordNotFoundException("No user found"));
-    }
-    return exisitingUser;
-  }
+//  private User getloggedInUser() {
+//    User exisitingUser = null;
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+//      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//      exisitingUser = userRepository.findByUsername(userDetails.getUsername())
+//        .orElseThrow(() -> new RecordNotFoundException("No user found"));
+//    }
+//    return exisitingUser;
+//  }
 
   public String verify(User user) {
     Authentication authentication = authenticationManager.authenticate(

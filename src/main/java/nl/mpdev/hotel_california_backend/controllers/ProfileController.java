@@ -15,7 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {
 

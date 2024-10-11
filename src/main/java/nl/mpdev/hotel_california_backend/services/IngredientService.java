@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
@@ -18,10 +19,19 @@ public class IngredientService {
     ingredientRepository.deleteById(id);
   }
 
-  public Ingredient addIngredients(Ingredient entity) {
+  public Ingredient addIngredient(Ingredient entity) {
     Ingredient.IngredientBuilder builder = Ingredient.builder();
     if(entity.getName() != null) {
       builder.name(entity.getName());
+    }
+    return ingredientRepository.save(builder.build());
+  }
+
+  public Ingredient updateIngredient(Integer id, IngredientLimitedRequestDto requestDto) {
+    Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Ingredient not found"));
+    Ingredient.IngredientBuilder builder = ingredient.toBuilder();
+    if(requestDto.getName() != null) {
+      builder.name(requestDto.getName());
     }
     return ingredientRepository.save(builder.build());
   }

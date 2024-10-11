@@ -1,6 +1,6 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
-import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
+import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.response.IngredientCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.ingredients.IngredientCompleteMapper;
@@ -31,17 +31,23 @@ public class IngredientController {
   }
 
   // POST
-
   @PostMapping("")
   public ResponseEntity<IngredientCompleteResponseDto> addIngredient(@RequestBody IngredientLimitedRequestDto requestDto) {
-    Ingredient ingredient = ingredientService.addIngredients(ingredientCompleteMapper.toEntity(requestDto));
+    Ingredient ingredient = ingredientService.addIngredient(ingredientCompleteMapper.toEntity(requestDto));
     IngredientCompleteResponseDto responseDto = ingredientCompleteMapper.toDto(ingredient);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
     return ResponseEntity.created(uri).body(responseDto);
   }
 
-  // DELETE
+  // PUT
+  @PutMapping("/{id}")
+  public ResponseEntity<IngredientCompleteResponseDto> updateIngredient(@PathVariable Integer id,
+                                                                        @Valid @RequestBody IngredientLimitedRequestDto requestDto) {
+    Ingredient ingredient = ingredientService.updateIngredient(id, requestDto);
+    return ResponseEntity.ok(ingredientCompleteMapper.toDto(ingredient));
+  }
 
+  // DELETE
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteIngredient(@PathVariable Integer id) {

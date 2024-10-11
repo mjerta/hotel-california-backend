@@ -42,9 +42,9 @@ public class ProfileService {
     return profileRepository.findAll();
   }
 
-  public Profile addProfile(Profile entity) {
-    return profileRepository.save(entity);
-  }
+//  public Profile addProfile(Profile entity) {
+//    return profileRepository.save(entity);
+//  }
 
   public Profile updateProfile(Integer id, ProfileCompleteRequestDto requestDto) {
     Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());

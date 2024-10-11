@@ -43,14 +43,14 @@ public class ProfileController {
   }
 
   // POST
-
-  @PostMapping("")
-  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
-    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
-    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
-    return ResponseEntity.created(uri).body(responseDto);
-  }
+//
+//  @PostMapping("")
+//  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+//    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
+//    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
+//    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+//    return ResponseEntity.created(uri).body(responseDto);
+//  }
 
   // PUT
 

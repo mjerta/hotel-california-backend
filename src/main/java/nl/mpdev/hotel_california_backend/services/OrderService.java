@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.Destination;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,9 +69,11 @@ public class OrderService {
       );
     }
     if (entity.getDestination() != null) {
-      orderBuilder.destination(locationRepository.findById(entity.getDestination().getId())
-        .orElseThrow(() -> new RecordNotFoundException("Destination not found"))
-      );
+       Location destination =  locationRepository.findById(entity.getDestination().getId())
+        .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
+       Location test = destination.toBuilder()
+         .isOccupied(true).build();
+       orderBuilder.destination(locationRepository.save(test));
     }
 
     if (entity.getUser() != null) {
@@ -83,7 +86,6 @@ public class OrderService {
     }
     orderBuilder.orderDate(LocalDateTime.now());
     orderBuilder.orderReference(serviceHelper.generateOrderReference());
-
     entity = orderBuilder.build();
 
     return orderRepository.save(entity);
@@ -114,14 +116,12 @@ public class OrderService {
     return prepareOrderUpdateFields(requestDto, existingOrder);
   }
 
-
-
   public void deleteOrder(Integer id) {
     orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     orderRepository.deleteById(id);
   }
 
-  // Helper functions
+  // Helper functions belongs to the orderservice
   private void verifyUser(Order existingOrder) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {

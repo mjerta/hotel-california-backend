@@ -10,7 +10,6 @@ import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMappe
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.users.UserCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
-import nl.mpdev.hotel_california_backend.models.enums.Status;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

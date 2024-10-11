@@ -43,7 +43,6 @@ public class ProfileService {
   }
 
   public Profile updateProfile(ProfileCompleteRequestDto requestDto) {
-
     Profile existingProfile = getProfileByUser();
     Profile.ProfileBuilder profileBuilder = existingProfile.toBuilder();
     if(requestDto.getFirstName() != null) {
@@ -71,7 +70,7 @@ public class ProfileService {
   }
 
   public void deleteProfile(Integer id) {
-    profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(""));
+    profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No profile found"));
     profileRepository.deleteById(id);
   }
 

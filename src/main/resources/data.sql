@@ -1,11 +1,11 @@
 -- Profiles
 INSERT INTO profiles (points, address, first_name, last_name, phone_number)
-VALUES
-    (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
-    (200, 'Laan van Meerdervoort 456, Den Haag', 'Piet', 'de Vries', '06-23456789'),
-    (300, 'Hoofdstraat 789, Rotterdam', 'Sophie', 'Bakker', '06-34567890'),
-    (100, 'Wilhelminastraat 101, Utrecht', 'Emma', 'Smit', '06-45678901'),
-    (250, 'Zeeweg 202, Haarlem', 'Luca', 'Vermeulen', '06-56789012');
+VALUES (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
+       (200, 'Laan van Meerdervoort 456, Den Haag', 'Piet', 'de Vries',
+        '06-23456789'),
+       (300, 'Hoofdstraat 789, Rotterdam', 'Sophie', 'Bakker', '06-34567890'),
+       (100, 'Wilhelminastraat 101, Utrecht', 'Emma', 'Smit', '06-45678901'),
+       (250, 'Zeeweg 202, Haarlem', 'Luca', 'Vermeulen', '06-56789012');
 
 
 
@@ -34,17 +34,9 @@ VALUES (301, false, 'SUN_LOUNGER'),
        (304, false, 'SUN_LOUNGER'),
        (305, false, 'SUN_LOUNGER');
 
--- Authorities
-INSERT INTO Authorities (username, authority)
-VALUES ('admin', 'ROLE_ADMIN');
-
--- Users
-INSERT INTO Users (username, password)
-VALUES ('admin', 'password');
-
 -- Orders
-INSERT INTO Orders (order_date, status, destination_id, user_id)
-VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1, 1);
+INSERT INTO Orders (order_date, status, destination_id, order_reference)
+VALUES ('2024-10-05 12:30:00', 'PREPARING_ORDER', 1, '1728595232306-7497');
 
 -- Drinks
 INSERT INTO Drinks (name, description, price, is_alcoholic, size, measurement)

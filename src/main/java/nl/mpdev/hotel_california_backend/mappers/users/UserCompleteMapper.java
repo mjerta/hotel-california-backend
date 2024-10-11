@@ -1,11 +1,8 @@
 package nl.mpdev.hotel_california_backend.mappers.users;
 
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserCompleteRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.users.request.*;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserIdRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserLimitedResponseDto;
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserRegisterLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.users.response.UserProfileResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.authorities.AuthoritiesCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.profiles.ProfileCompleteMapper;
@@ -23,19 +20,27 @@ public class UserCompleteMapper {
     this.profileCompleteMapper = profileCompleteMapper;
   }
 
-  public User toEntity(UserIdRequestDto requestDto) {
+  public User toEntity(UserNameRequestDto requestDto) {
     if (requestDto == null) return null;
     return User.builder()
-      .id(requestDto.getId())
+      .username(requestDto.getUsername())
       .build();
   }
 
   public User toEntity(UserRegisterLimitedRequestDto requestDto) {
     if (requestDto == null) return null;
-    return User.builder()
-      .username(requestDto.getUsername())
-      .password(requestDto.getPassword())
-      .build();
+    User.UserBuilder builder = User.builder();
+    if (requestDto.getUsername() != null) {
+      builder.username(requestDto.getUsername());
+    }
+    if (requestDto.getPassword() != null) {
+      builder.password(requestDto.getPassword());
+    }
+    if (requestDto.getProfile() != null) {
+      builder.profile(profileCompleteMapper.toEntity(requestDto.getProfile()));
+    }
+
+    return builder.build();
   }
 
   public User toEntity(UserCompleteRequestDto requestDto) {
@@ -54,10 +59,17 @@ public class UserCompleteMapper {
       .build();
   }
 
+  public User toEntity(UserLoginRequestDto requestDto) {
+    if (requestDto == null) return null;
+    return User.builder()
+      .username(requestDto.getUsername())
+      .password(requestDto.getPassword())
+      .build();
+  }
+
   public UserLimitedResponseDto toUserLimitedResponse(User entity) {
     if (entity == null) return null;
     UserLimitedResponseDto.UserLimitedResponseDtoBuilder userLimitedResponseDtoBuilder = UserLimitedResponseDto.builder();
-    userLimitedResponseDtoBuilder.id(entity.getId());
     userLimitedResponseDtoBuilder.username(entity.getUsername());
     return userLimitedResponseDtoBuilder.build();
   }
@@ -65,7 +77,6 @@ public class UserCompleteMapper {
   public UserProfileResponseDto toUserProfileResponse(User entity) {
     if (entity == null) return null;
     UserProfileResponseDto.UserProfileResponseDtoBuilder userProfileResponseDtoBuilder = UserProfileResponseDto.builder();
-    userProfileResponseDtoBuilder.id(entity.getId());
     userProfileResponseDtoBuilder.username(entity.getUsername());
     if (entity.getProfile() != null) {
       userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
@@ -76,9 +87,15 @@ public class UserCompleteMapper {
   public UserCompleteResponseDto toDto(User entity) {
     if (entity == null) return null;
     UserCompleteResponseDto.UserCompleteResponseDtoBuilder userCompleteResponseDtoBuilder = UserCompleteResponseDto.builder();
-    userCompleteResponseDtoBuilder.id(entity.getId());
-    userCompleteResponseDtoBuilder.username(entity.getUsername());
-    userCompleteResponseDtoBuilder.authority(authoritiesCompleteMapper.toDto(entity.getAuthorities()));
+    if (entity.getUsername() != null) {
+      userCompleteResponseDtoBuilder.username(entity.getUsername());
+    }
+    if (entity.getAuthorities() != null) {
+      userCompleteResponseDtoBuilder.authority(authoritiesCompleteMapper.toDto(entity.getAuthorities()));
+    }
+    if (entity.getProfile() != null) {
+      userCompleteResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
+    }
     return userCompleteResponseDtoBuilder.build();
   }
 

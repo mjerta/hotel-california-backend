@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,11 +16,13 @@ import java.util.Set;
 @Table(name = "Users")
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  @Column(nullable = false, unique = true)
   private String username;
+  @Column(nullable = false)
   private String password;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @Column(nullable = false)
+  private boolean enabled = true;
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = false)
   @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(
@@ -27,9 +30,10 @@ public class User {
     mappedBy = "username",
     cascade = CascadeType.ALL,
     orphanRemoval = true,
-    fetch = FetchType.LAZY
+    fetch = FetchType.EAGER
   )
   private Set<Authority> authorities = new HashSet<>();
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+  @JsonManagedReference
   private List<Order> orders;
 }

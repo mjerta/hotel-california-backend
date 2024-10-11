@@ -28,42 +28,43 @@ public class ProfileController {
   }
 
   //  GET
-
-  @GetMapping("{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> getProfileById(@PathVariable Integer id) {
-    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileById(id));
+  // controller methode - not REST
+  @GetMapping("/loggeduser")
+  public ResponseEntity<ProfileCompleteResponseDto> getProfileByUserLoggedIn() {
+    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileByUserLoggedIn());
     return ResponseEntity.ok().body(responseDto);
   }
 
   @GetMapping("")
+
   public ResponseEntity<List<ProfileCompleteResponseDto>> getProfiles() {
     List<ProfileCompleteResponseDto> profiles = profileService.getProfiles().stream().map(profileCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(profiles);
   }
 
   // POST
-
-  @PostMapping("")
-  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
-    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
-    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
-    return ResponseEntity.created(uri).body(responseDto);
-  }
+//
+//  @PostMapping("")
+//  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+//    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
+//    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
+//    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+//    return ResponseEntity.created(uri).body(responseDto);
+//  }
 
   // PUT
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.updateProfile(id, requestDto);
+  @PutMapping("")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfile(requestDto);
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 
   // PATCH
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.updateProfileFields(id, requestDto);
+  @PatchMapping("")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfileFields(requestDto);
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 

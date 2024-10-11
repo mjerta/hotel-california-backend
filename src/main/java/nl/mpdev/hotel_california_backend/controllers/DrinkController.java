@@ -72,6 +72,6 @@ public class DrinkController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteDrink(@PathVariable Integer id) {
-    drinkService.deleteMeal(id);
+    drinkService.deleteDrink(id);
   }
 }

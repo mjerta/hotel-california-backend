@@ -21,4 +21,5 @@ public class OrderCompleteResponseDto {
   private List<DrinkCompleteResponseDto> drinks;
   private Status status;
   private LocationCompleteResponseDto destination;
+  private String orderReference;
 }

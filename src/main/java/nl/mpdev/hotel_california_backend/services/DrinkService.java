@@ -52,7 +52,7 @@ public class DrinkService {
     return drinkRepository.save(existingDrink);
   }
 
-  public void deleteMeal(Integer id) {
+  public void deleteDrink(Integer id) {
     drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
     drinkRepository.deleteById(id);
   }

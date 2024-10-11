@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.drinks.response.DrinkCompleteResponseDto;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@@RestController
+@RestController
 @RequestMapping("/api/v1/drinks")
 public class DrinkController {
 
@@ -29,6 +30,7 @@ public class DrinkController {
 
   // GET
 
+  @Operation(summary = "First method", tags = {"Order 1"})
   @GetMapping("/{id}")
   public ResponseEntity<DrinkCompleteResponseDto> getDrinkById(@PathVariable Integer id) {
     DrinkCompleteResponseDto responseDto = drinkCompleteMapper.toDto(drinkService.getDrinkById(id));

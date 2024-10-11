@@ -2,6 +2,8 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
@@ -61,30 +63,36 @@ public class OrderController {
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderByUserLoggedIn(@PathVariable Integer id,
-                                                                            @Valid @RequestBody OrderCompleteRequestDto requestDto) {
+                                                                            @Valid @RequestBody OrderLimitedRequestDto requestDto) {
     Order order = orderService.updateOrderByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   @PutMapping("/orderreference")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderCompleteRequestDto requestDto,
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderLimitedRequestDto requestDto,
                                                                               @RequestParam String orderReference) {
     Order order = orderService.updateOrderByOrderReference(orderReference, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
+  @PutMapping("/updateorderbystaff/{id}")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByStaff(@PathVariable Integer id,
+                                                                            @Valid @RequestBody OrderCompleteStaffRequestDto requestDto) {
+    Order order = orderService.updateOrderByStaff(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
   // PATCH
 
   @PatchMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByUserLoggedIn(@PathVariable Integer id,
-                                                                    @Valid @RequestBody OrderCompleteRequestDto requestDto) {
+                                                                                  @Valid @RequestBody OrderLimitedRequestDto requestDto) {
     Order order = orderService.updateOrderFieldsByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   @PatchMapping("/orderreference")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByOrderReference(
-    @Valid @RequestBody OrderCompleteRequestDto requestDto,
+    @Valid @RequestBody OrderLimitedRequestDto requestDto,
     @RequestParam String orderReference
   ) {
     Order order = orderService.updateOrderFieldsByOrderReference(orderReference, requestDto);

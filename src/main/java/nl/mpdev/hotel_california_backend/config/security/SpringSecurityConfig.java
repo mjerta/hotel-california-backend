@@ -71,7 +71,7 @@ public class SpringSecurityConfig {
         // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
-        //has rol and hasauthority they do effectively the same
+        //has rol and hasAuthority they do effectively the same
         .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
@@ -99,7 +99,8 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/orderreference").permitAll()
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").hasAuthority("ROLE_USER")
-        // Only a staff member cna close the order. After being payed off course.
+        // Only a staff member can close the order. After being payed off course.
+        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
 
         // Users

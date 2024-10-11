@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
@@ -11,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.Destination;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +25,8 @@ public class OrderService {
   private final ServiceHelper serviceHelper;
 
   public OrderService(OrderRepository orderRepository, MealRepository mealRepository, DrinkRepository drinkRepository,
-                      LocationRepository locationRepository, UserRepository userRepository, ServiceHelper serviceHelper) {
+                      LocationRepository locationRepository, UserRepository userRepository, ServiceHelper serviceHelper
+  ) {
     this.orderRepository = orderRepository;
     this.mealRepository = mealRepository;
     this.drinkRepository = drinkRepository;
@@ -69,11 +70,11 @@ public class OrderService {
       );
     }
     if (entity.getDestination() != null) {
-       Location destination =  locationRepository.findById(entity.getDestination().getId())
+      Location destination = locationRepository.findById(entity.getDestination().getId())
         .orElseThrow(() -> new RecordNotFoundException("Destination not found"));
-       Location test = destination.toBuilder()
-         .isOccupied(true).build();
-       orderBuilder.destination(locationRepository.save(test));
+      Location test = destination.toBuilder()
+        .isOccupied(true).build();
+      orderBuilder.destination(locationRepository.save(test));
     }
 
     if (entity.getUser() != null) {
@@ -91,29 +92,34 @@ public class OrderService {
     return orderRepository.save(entity);
   }
 
-  public Order updateOrderByUserLoggedIn(Integer id, OrderCompleteRequestDto requestDto) {
+  public Order updateOrderByUserLoggedIn(Integer id, OrderLimitedRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
     return prepareOrderForUpdate(requestDto, existingOrder);
   }
 
-  public Order updateOrderByOrderReference(String orderReference, OrderCompleteRequestDto requestDto) {
+  public Order updateOrderByOrderReference(String orderReference, OrderLimitedRequestDto requestDto) {
     Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
       .orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderForUpdate(requestDto, existingOrder);
 
   }
 
-  public Order updateOrderFieldsByUserLoggedIn(Integer id, OrderCompleteRequestDto requestDto) {
+  public Order updateOrderFieldsByUserLoggedIn(Integer id, OrderLimitedRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
     return prepareOrderUpdateFields(requestDto, existingOrder);
   }
 
-  public Order updateOrderFieldsByOrderReference(String orderReference, OrderCompleteRequestDto requestDto) {
+  public Order updateOrderFieldsByOrderReference(String orderReference, OrderLimitedRequestDto requestDto) {
     Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
       .orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderUpdateFields(requestDto, existingOrder);
+  }
+
+  public Order updateOrderByStaff(Integer id, OrderCompleteStaffRequestDto requestDto) {
+    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    return prepareOrderForUpdateByStaff(requestDto, existingOrder);
   }
 
   public void deleteOrder(Integer id) {
@@ -161,7 +167,7 @@ public class OrderService {
     }
   }
 
-  private Order prepareOrderForUpdate(OrderCompleteRequestDto requestDto, Order existingOrder) {
+  private Order prepareOrderForUpdate(OrderLimitedRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
     if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
@@ -183,12 +189,6 @@ public class OrderService {
     }
     else orderBuilder.drinks(null);
 
-    if (requestDto.getDestination() != null) {
-      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
-        .orElseThrow(() -> new RecordNotFoundException("Destination not found")));
-    }
-    else orderBuilder.destination(null);
-
     if (requestDto.getStatus() != null) {
       orderBuilder.status(requestDto.getStatus());
     }
@@ -197,7 +197,47 @@ public class OrderService {
     return orderRepository.save(orderBuilder.build());
   }
 
-  private Order prepareOrderUpdateFields(OrderCompleteRequestDto requestDto, Order existingOrder) {
+  private Order prepareOrderForUpdateByStaff(OrderCompleteStaffRequestDto requestDto, Order existingOrder) {
+    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
+
+    if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
+      throw new GeneralException("At least a drink or meal needs to be filled");
+    }
+    if (requestDto.getMeals() != null) {
+      orderBuilder.meals(requestDto.getMeals().stream()
+        .map(meal -> mealRepository.findById(meal.getId())
+          .orElseThrow(() -> new RecordNotFoundException("Meal not found")))
+        .toList());
+    }
+    else orderBuilder.meals(null);
+
+    if (requestDto.getDrinks() != null) {
+      orderBuilder.drinks(requestDto.getDrinks().stream()
+        .map(drink -> drinkRepository.findById(drink.getId())
+          .orElseThrow(() -> new RecordNotFoundException("Drink not found")))
+        .toList());
+    }
+    else orderBuilder.drinks(null);
+
+    if (requestDto.getStatus() != null) {
+      orderBuilder.status(requestDto.getStatus());
+    }
+    // Staff could change the location only after order is placed
+    if (requestDto.getDestination() != null) {
+
+      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
+        .orElseThrow(() -> new RecordNotFoundException("No location found")));
+    }
+    else {
+      locationRepository.save(existingOrder.getDestination().toBuilder().isOccupied(false).build());
+      orderBuilder.destination(null);
+    }
+    orderBuilder.orderDate(LocalDateTime.now());
+
+    return orderRepository.save(orderBuilder.build());
+  }
+
+  private Order prepareOrderUpdateFields(OrderLimitedRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
     if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
       orderBuilder.meals(requestDto.getMeals().stream()
@@ -212,10 +252,6 @@ public class OrderService {
     }
     if (requestDto.getStatus() != null) {
       orderBuilder.status(requestDto.getStatus());
-    }
-    if (requestDto.getDestination() != null) {
-      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
-        .orElseThrow(RecordNotFoundException::new));
     }
     return orderRepository.save(orderBuilder.build());
   }

@@ -1,6 +1,8 @@
 package nl.mpdev.hotel_california_backend.mappers.orders;
 
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMapper;
@@ -45,7 +47,41 @@ public class OrderCompleteMapper {
     orderBuilder.status(dto.getStatus());
 
     return orderBuilder.build();
+  }
 
+  public Order toEntity(OrderCompleteStaffRequestDto dto) {
+    if (dto == null) {
+      return null;
+    }
+    Order.OrderBuilder orderBuilder = Order.builder();
+    if (dto.getMeals() != null) {
+      orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    if (dto.getDrinks() != null) {
+      orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    if (dto.getDestination() != null) {
+      orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
+    }
+    orderBuilder.status(dto.getStatus());
+
+    return orderBuilder.build();
+  }
+
+  public Order toEntity(OrderLimitedRequestDto dto) {
+    if (dto == null) {
+      return null;
+    }
+    Order.OrderBuilder orderBuilder = Order.builder();
+    if (dto.getMeals() != null) {
+      orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    if (dto.getDrinks() != null) {
+      orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    orderBuilder.status(dto.getStatus());
+
+    return orderBuilder.build();
   }
 
   public OrderCompleteResponseDto toDto(Order entity) {

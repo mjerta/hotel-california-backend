@@ -33,10 +33,15 @@ public class OrderController {
   // GET
 
   @GetMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> getOrderById(
-    @PathVariable Integer id,
-    @RequestParam(required = false) String orderReference) {
-    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderById(id, orderReference));
+  public ResponseEntity<OrderCompleteResponseDto> getOrderByIdByUserLoggedIn(
+    @PathVariable Integer id) {
+    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByIdByUserLoggedIn(id));
+    return ResponseEntity.ok().body(responseDto);
+  }
+
+  @GetMapping("/orderrefence")
+  public ResponseEntity<OrderCompleteResponseDto> getOrderByOrderReference(@RequestParam String orderReference) {
+    OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByOrderReference(orderReference));
     return ResponseEntity.ok().body(responseDto);
   }
 

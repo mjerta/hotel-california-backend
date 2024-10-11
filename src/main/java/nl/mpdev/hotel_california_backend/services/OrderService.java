@@ -5,7 +5,6 @@ import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
-import nl.mpdev.hotel_california_backend.models.enums.Status;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
@@ -36,11 +35,14 @@ public class OrderService {
     this.serviceHelper = serviceHelper;
   }
 
-  public Order getOrderById(Integer id, String orderReference) {
+  public Order getOrderByIdByUserLoggedIn(Integer id) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
-    Order validatedOrder = getOrderByUserOrOrderReference(orderReference, existingOrder);
-    if (validatedOrder != null) return validatedOrder;
-    throw new GeneralException("No order found with this user or reference: ");
+    validateIncomingOrder(existingOrder);
+    return existingOrder;
+  }
+
+  public Order getOrderByOrderReference(String orderReference) {
+    return orderRepository.findOrderByOrderReference(orderReference).orElseThrow(() -> new RecordNotFoundException("Order not found"));
   }
 
   public List<Order> getOrders() {
@@ -119,7 +121,7 @@ public class OrderService {
     }
     else orderBuilder.destination(null);
 
-    if(requestDto.getStatus() != null) {
+    if (requestDto.getStatus() != null) {
       orderBuilder.status(requestDto.getStatus());
     }
     orderBuilder.orderDate(LocalDateTime.now());
@@ -193,22 +195,21 @@ public class OrderService {
     }
   }
 
-  private Order getOrderByUserOrOrderReference(String orderReference, Order existingOrder) {
+  private void validateIncomingOrder(Order incomingOrder) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
-      if (existingOrder.getUser() == null) {
+      if(incomingOrder == null) {
+        throw new GeneralException("The order is not filled");
+      }
+      if (incomingOrder.getUser() == null) {
         throw new GeneralException("The order belongs to  a anomynous user");
       }
-      if (existingOrder.getUser().getUsername().equals(userToCheck.getUsername())) {
-        return existingOrder;
+      if (!incomingOrder.getUser().getUsername().equals(userToCheck.getUsername())) {
+        throw new GeneralException("This order dont belong to requested user");
       }
     }
-    if (orderReference.equals(existingOrder.getOrderReference())) {
-      return existingOrder;
-    }
-    return null;
   }
 
 }

@@ -80,8 +80,8 @@ public class SpringSecurityConfig {
         // Ingredients
 
         .requestMatchers(HttpMethod.DELETE, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
-        // Drinks
 
+        // Drinks
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/drinks").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/drinks").hasAuthority("ROLE_MANAGER")
@@ -89,9 +89,10 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
-        // Orders
 
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").permitAll()
+        // Orders
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").permitAll()
@@ -100,7 +101,6 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
 
         // Users
-
         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/customregister").hasAuthority("ROLE_MANAGER")

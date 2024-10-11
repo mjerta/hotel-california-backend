@@ -95,10 +95,10 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
-
-        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").permitAll()
-
-        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").permitAll()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/orderreference").permitAll()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/orderreference").permitAll()
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         // Only a staff member cna close the order. After being payed off course.
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
 
@@ -109,9 +109,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/loggeduser").hasAuthority("ROLE_USER")
 
-        // also make sure here that only the user is logged in can be changed make this decision trough userdetails
-        // and that the id should be retrieved based   on the jwt token is coming back
-
+        // Profiles
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/profiles").hasAuthority("ROLE_USER")

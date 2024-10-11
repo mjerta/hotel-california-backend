@@ -30,8 +30,7 @@ public class OrderController {
   // GET
 
   @GetMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> getOrderByIdByUserLoggedIn(
-    @PathVariable Integer id) {
+  public ResponseEntity<OrderCompleteResponseDto> getOrderByIdByUserLoggedIn(@PathVariable Integer id) {
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByIdByUserLoggedIn(id));
     return ResponseEntity.ok().body(responseDto);
   }
@@ -62,26 +61,33 @@ public class OrderController {
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderByUserLoggedIn(@PathVariable Integer id,
-                                                              @Valid @RequestBody OrderCompleteRequestDto requestDto) {
+                                                                            @Valid @RequestBody OrderCompleteRequestDto requestDto) {
     Order order = orderService.updateOrderByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   @PutMapping("/orderreference")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(
-    @Valid @RequestBody OrderCompleteRequestDto requestDto,
-    @RequestParam String orderReference
-  ) {
-    Order order = orderService.updateOrderByOrderReference(orderReference ,requestDto);
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderCompleteRequestDto requestDto,
+                                                                              @RequestParam String orderReference) {
+    Order order = orderService.updateOrderByOrderReference(orderReference, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   // PATCH
 
   @PatchMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrderFields(@PathVariable Integer id,
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByUserLoggedIn(@PathVariable Integer id,
                                                                     @Valid @RequestBody OrderCompleteRequestDto requestDto) {
-    Order order = orderService.updateOrderFields(id, requestDto);
+    Order order = orderService.updateOrderFieldsByUserLoggedIn(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
+
+  @PatchMapping("/orderreference")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByOrderReference(
+    @Valid @RequestBody OrderCompleteRequestDto requestDto,
+    @RequestParam String orderReference
+  ) {
+    Order order = orderService.updateOrderFieldsByOrderReference(orderReference, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 

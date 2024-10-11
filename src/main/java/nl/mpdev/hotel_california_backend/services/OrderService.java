@@ -6,7 +6,6 @@ import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
 import nl.mpdev.hotel_california_backend.repositories.*;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -94,53 +92,29 @@ public class OrderService {
   public Order updateOrderByUserLoggedIn(Integer id, OrderCompleteRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
-    return prepareOrder(requestDto, existingOrder);
+    return prepareOrderForUpdate(requestDto, existingOrder);
   }
-
 
   public Order updateOrderByOrderReference(String orderReference, OrderCompleteRequestDto requestDto) {
-    Order existingOrder = orderRepository.findOrderByOrderReference(orderReference).orElseThrow(() -> new RecordNotFoundException("Order not found"));
-    return prepareOrder(requestDto, existingOrder);
+    Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
+      .orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    return prepareOrderForUpdate(requestDto, existingOrder);
 
   }
 
-  public Order updateOrderFields(Integer id, OrderCompleteRequestDto requestDto) {
+  public Order updateOrderFieldsByUserLoggedIn(Integer id, OrderCompleteRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
-    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
-    if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
-      orderBuilder.meals(requestDto.getMeals().stream()
-        .map(meal -> mealRepository.findById(meal.getId()).orElseThrow(RecordNotFoundException::new))
-        .toList());
-    }
-    if (requestDto.getDrinks() != null) {
-      orderBuilder.drinks(requestDto.getDrinks().stream()
-        .map(drink -> drinkRepository.findById(drink.getId())
-          .orElseThrow(RecordNotFoundException::new))
-        .toList());
-    }
-    if (requestDto.getStatus() != null) {
-      orderBuilder.status(requestDto.getStatus());
-    }
-    if (requestDto.getDestination() != null) {
-      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
-        .orElseThrow(RecordNotFoundException::new));
-    }
-    return orderRepository.save(orderBuilder.build());
+    return prepareOrderUpdateFields(requestDto, existingOrder);
   }
 
-  // Perhaps I could be using something like this later as a helper method
-  private <T, R> List<R> updateListOrKeepExisting(List<T> dtoList, List<R> existingList, Integer findId,
-                                                  JpaRepository<R, Integer> repository) {
-    if (dtoList != null) {
-      return dtoList.stream()
-        .map(dto -> repository.findById(findId).orElseThrow(RecordNotFoundException::new))
-        .collect(Collectors.toList());
-    }
-    else {
-      return existingList;
-    }
+  public Order updateOrderFieldsByOrderReference(String orderReference, OrderCompleteRequestDto requestDto) {
+    Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
+      .orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    return prepareOrderUpdateFields(requestDto, existingOrder);
   }
+
+
 
   public void deleteOrder(Integer id) {
     orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
@@ -175,7 +149,7 @@ public class OrderService {
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
-      if(incomingOrder == null) {
+      if (incomingOrder == null) {
         throw new GeneralException("The order is not filled");
       }
       if (incomingOrder.getUser() == null) {
@@ -187,7 +161,7 @@ public class OrderService {
     }
   }
 
-  private Order prepareOrder(OrderCompleteRequestDto requestDto, Order existingOrder) {
+  private Order prepareOrderForUpdate(OrderCompleteRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
     if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
@@ -220,6 +194,29 @@ public class OrderService {
     }
     orderBuilder.orderDate(LocalDateTime.now());
 
+    return orderRepository.save(orderBuilder.build());
+  }
+
+  private Order prepareOrderUpdateFields(OrderCompleteRequestDto requestDto, Order existingOrder) {
+    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
+    if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
+      orderBuilder.meals(requestDto.getMeals().stream()
+        .map(meal -> mealRepository.findById(meal.getId()).orElseThrow(RecordNotFoundException::new))
+        .toList());
+    }
+    if (requestDto.getDrinks() != null) {
+      orderBuilder.drinks(requestDto.getDrinks().stream()
+        .map(drink -> drinkRepository.findById(drink.getId())
+          .orElseThrow(RecordNotFoundException::new))
+        .toList());
+    }
+    if (requestDto.getStatus() != null) {
+      orderBuilder.status(requestDto.getStatus());
+    }
+    if (requestDto.getDestination() != null) {
+      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
+        .orElseThrow(RecordNotFoundException::new));
+    }
     return orderRepository.save(orderBuilder.build());
   }
 }

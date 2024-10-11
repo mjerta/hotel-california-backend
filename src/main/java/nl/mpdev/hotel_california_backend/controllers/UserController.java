@@ -69,4 +69,15 @@ public class UserController {
 //    return ResponseEntity.ok().body(userCompleteMapper.toUserProfileResponse(order));
 //  }
 
+
+  // DELETE
+  @DeleteMapping("/users/loggeduser")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteUserByUserLoggedIn() {
+    userService.deleteUserByUserLoggedIn();
+  }
+
+
+
+
 }

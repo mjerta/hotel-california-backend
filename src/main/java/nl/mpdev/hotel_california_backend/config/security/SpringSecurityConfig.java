@@ -105,7 +105,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/customregister").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
-        .requestMatchers(HttpMethod.PATCH, "/api/v1/userprofiles").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/loggeduser").hasAuthority("ROLE_USER")
 
         // also make sure here that only the user is logged in can be changed make this decision trough userdetails
         // and that the id should be retrieved based   on the jwt token is coming back

@@ -93,6 +93,11 @@ public class UserService {
     return userRepository.save(entity);
   }
 
+  public void deleteUserByUserLoggedIn() {
+    User existingUser = getloggedInUser();
+    userRepository.delete(existingUser);
+  }
+
 //  public User updateProfileFields(UserProfileRequestDto requestDto) {
 //
 //    User existingUser = getloggedInUser();
@@ -107,16 +112,16 @@ public class UserService {
 //    return userRepository.save(userBuilder.build());
 //  }
 
-//  private User getloggedInUser() {
-//    User exisitingUser = null;
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//      exisitingUser = userRepository.findByUsername(userDetails.getUsername())
-//        .orElseThrow(() -> new RecordNotFoundException("No user found"));
-//    }
-//    return exisitingUser;
-//  }
+  private User getloggedInUser() {
+    User exisitingUser = null;
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      exisitingUser = userRepository.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new RecordNotFoundException("No user found"));
+    }
+    return exisitingUser;
+  }
 
   public String verify(User user) {
     Authentication authentication = authenticationManager.authenticate(
@@ -135,5 +140,6 @@ public class UserService {
       throw new GeneralException("User with username " + entity.getUsername() + " already exists");
     }
   }
+
 
 }

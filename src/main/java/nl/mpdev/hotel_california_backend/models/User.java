@@ -22,7 +22,7 @@ public class User {
   private String password;
   @Column(nullable = false)
   private boolean enabled = true;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
   @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(
@@ -33,7 +33,7 @@ public class User {
     fetch = FetchType.EAGER
   )
   private Set<Authority> authorities = new HashSet<>();
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
   @JsonManagedReference
   private List<Order> orders;
 }

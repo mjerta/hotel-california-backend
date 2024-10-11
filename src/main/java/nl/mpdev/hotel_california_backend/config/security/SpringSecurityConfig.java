@@ -79,6 +79,8 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
         // Ingredients
 
+        .requestMatchers(HttpMethod.POST, "/api/v1/ingredients").hasAuthority("ROLE_MANAGER")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/ingredients/*").hasAuthority("ROLE_MANAGER")
 
         // Drinks

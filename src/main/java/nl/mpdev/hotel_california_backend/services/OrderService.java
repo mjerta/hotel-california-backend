@@ -1,11 +1,12 @@
 package nl.mpdev.hotel_california_backend.services;
 
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderUpdateRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.*;
+import nl.mpdev.hotel_california_backend.models.enums.Status;
 import nl.mpdev.hotel_california_backend.repositories.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -82,9 +83,7 @@ public class OrderService {
         .orElseThrow(() -> new RecordNotFoundException("User not found"))
       );
     }
-    if (entity.getStatus() != null) {
-      orderBuilder.status(entity.getStatus());
-    }
+    orderBuilder.status(Status.IN_QUEUE);
     orderBuilder.orderDate(LocalDateTime.now());
     orderBuilder.orderReference(serviceHelper.generateOrderReference());
     entity = orderBuilder.build();
@@ -92,26 +91,26 @@ public class OrderService {
     return orderRepository.save(entity);
   }
 
-  public Order updateOrderByUserLoggedIn(Integer id, OrderLimitedRequestDto requestDto) {
+  public Order updateOrderByUserLoggedIn(Integer id, OrderUpdateRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
     return prepareOrderForUpdate(requestDto, existingOrder);
   }
 
-  public Order updateOrderByOrderReference(String orderReference, OrderLimitedRequestDto requestDto) {
+  public Order updateOrderByOrderReference(String orderReference, OrderUpdateRequestDto requestDto) {
     Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
       .orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderForUpdate(requestDto, existingOrder);
 
   }
 
-  public Order updateOrderFieldsByUserLoggedIn(Integer id, OrderLimitedRequestDto requestDto) {
+  public Order updateOrderFieldsByUserLoggedIn(Integer id, OrderUpdateRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     verifyUser(existingOrder);
     return prepareOrderUpdateFields(requestDto, existingOrder);
   }
 
-  public Order updateOrderFieldsByOrderReference(String orderReference, OrderLimitedRequestDto requestDto) {
+  public Order updateOrderFieldsByOrderReference(String orderReference, OrderUpdateRequestDto requestDto) {
     Order existingOrder = orderRepository.findOrderByOrderReference(orderReference)
       .orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderUpdateFields(requestDto, existingOrder);
@@ -167,7 +166,7 @@ public class OrderService {
     }
   }
 
-  private Order prepareOrderForUpdate(OrderLimitedRequestDto requestDto, Order existingOrder) {
+  private Order prepareOrderForUpdate(OrderUpdateRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
     if (requestDto.getMeals() == null && requestDto.getDrinks() == null) {
@@ -237,7 +236,7 @@ public class OrderService {
     return orderRepository.save(orderBuilder.build());
   }
 
-  private Order prepareOrderUpdateFields(OrderLimitedRequestDto requestDto, Order existingOrder) {
+  private Order prepareOrderUpdateFields(OrderUpdateRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
     if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
       orderBuilder.meals(requestDto.getMeals().stream()

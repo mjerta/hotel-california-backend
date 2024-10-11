@@ -2,14 +2,15 @@ package nl.mpdev.hotel_california_backend.mappers.orders;
 
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderUpdateRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderNewRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.drinks.DrinkCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.locations.LocationCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.mappers.users.UserCompleteMapper;
-import nl.mpdev.hotel_california_backend.models.Location;
 import nl.mpdev.hotel_california_backend.models.Order;
+import nl.mpdev.hotel_california_backend.models.enums.Status;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -44,7 +45,9 @@ public class OrderCompleteMapper {
     if (dto.getDestination() != null) {
       orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
     }
-    orderBuilder.status(dto.getStatus());
+    if (dto.getStatus() != null) {
+      orderBuilder.status(dto.getStatus());
+    }
 
     return orderBuilder.build();
   }
@@ -63,12 +66,14 @@ public class OrderCompleteMapper {
     if (dto.getDestination() != null) {
       orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
     }
-    orderBuilder.status(dto.getStatus());
+    if (dto.getStatus() != null) {
+      orderBuilder.status(dto.getStatus());
+    }
 
     return orderBuilder.build();
   }
 
-  public Order toEntity(OrderLimitedRequestDto dto) {
+  public Order toEntity(OrderUpdateRequestDto dto) {
     if (dto == null) {
       return null;
     }
@@ -79,8 +84,26 @@ public class OrderCompleteMapper {
     if (dto.getDrinks() != null) {
       orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
     }
-    orderBuilder.status(dto.getStatus());
+    if (dto.getStatus() != null) {
+      orderBuilder.status(dto.getStatus());
+    }
+    return orderBuilder.build();
+  }
 
+  public Order toEntity(OrderNewRequestDto dto) {
+    if (dto == null) {
+      return null;
+    }
+    Order.OrderBuilder orderBuilder = Order.builder();
+    if (dto.getMeals() != null) {
+      orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    if (dto.getDrinks() != null) {
+      orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
+    }
+    if(dto.getDestination() != null) {
+      orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
+    }
     return orderBuilder.build();
   }
 
@@ -100,9 +123,10 @@ public class OrderCompleteMapper {
     if (entity.getDrinks() != null) {
       builder.drinks(entity.getDrinks().stream().map(drinkCompleteMapper::toDto).collect(Collectors.toList()));
     }
-    builder.status(entity.getStatus());
+    if (entity.getStatus() != null) {
+      builder.status(entity.getStatus());
+    }
     if (entity.getDestination() != null) {
-      Location location = entity.getDestination().toBuilder().build();
       builder.destination(locationCompleteMapper.toDto(entity.getDestination()));
     }
     if (entity.getOrderReference() != null) {

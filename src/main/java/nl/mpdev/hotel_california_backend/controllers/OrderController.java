@@ -1,9 +1,9 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import jakarta.validation.Valid;
-import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderLimitedRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderUpdateRequestDto;
+import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderNewRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
@@ -52,7 +52,7 @@ public class OrderController {
   // POST
 
   @PostMapping("")
-  public ResponseEntity<OrderCompleteResponseDto> addOrder(@Valid @RequestBody OrderCompleteRequestDto requestDto) {
+  public ResponseEntity<OrderCompleteResponseDto> addOrder(@Valid @RequestBody OrderNewRequestDto requestDto) {
     Order order = orderService.addOrder(orderCompleteMapper.toEntity(requestDto));
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(order);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
@@ -63,13 +63,13 @@ public class OrderController {
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderByUserLoggedIn(@PathVariable Integer id,
-                                                                            @Valid @RequestBody OrderLimitedRequestDto requestDto) {
+                                                                            @Valid @RequestBody OrderUpdateRequestDto requestDto) {
     Order order = orderService.updateOrderByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   @PutMapping("/orderreference")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderLimitedRequestDto requestDto,
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderUpdateRequestDto requestDto,
                                                                               @RequestParam String orderReference) {
     Order order = orderService.updateOrderByOrderReference(orderReference, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
@@ -85,14 +85,14 @@ public class OrderController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByUserLoggedIn(@PathVariable Integer id,
-                                                                                  @Valid @RequestBody OrderLimitedRequestDto requestDto) {
+                                                                                  @Valid @RequestBody OrderUpdateRequestDto requestDto) {
     Order order = orderService.updateOrderFieldsByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
   @PatchMapping("/orderreference")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByOrderReference(
-    @Valid @RequestBody OrderLimitedRequestDto requestDto,
+    @Valid @RequestBody OrderUpdateRequestDto requestDto,
     @RequestParam String orderReference
   ) {
     Order order = orderService.updateOrderFieldsByOrderReference(orderReference, requestDto);

@@ -6,11 +6,8 @@ import nl.mpdev.hotel_california_backend.dtos.orders.response.OrderCompleteRespo
 import nl.mpdev.hotel_california_backend.mappers.orders.OrderCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
-import nl.mpdev.hotel_california_backend.services.security.CustomUserDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -64,9 +61,18 @@ public class OrderController {
   // PUT
 
   @PutMapping("/{id}")
-  public ResponseEntity<OrderCompleteResponseDto> updateOrder(@PathVariable Integer id,
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByUserLoggedIn(@PathVariable Integer id,
                                                               @Valid @RequestBody OrderCompleteRequestDto requestDto) {
-    Order order = orderService.updateOrder(id, requestDto);
+    Order order = orderService.updateOrderByUserLoggedIn(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
+
+  @PutMapping("/orderreference")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(
+    @Valid @RequestBody OrderCompleteRequestDto requestDto,
+    @RequestParam String orderReference
+  ) {
+    Order order = orderService.updateOrderByOrderReference(orderReference ,requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 

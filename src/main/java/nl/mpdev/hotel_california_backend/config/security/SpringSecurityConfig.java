@@ -95,7 +95,9 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
+
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").permitAll()
+
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").permitAll()
         // Only a staff member cna close the order. After being payed off course.
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")

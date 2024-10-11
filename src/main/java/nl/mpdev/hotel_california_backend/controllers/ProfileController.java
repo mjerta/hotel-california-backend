@@ -28,14 +28,15 @@ public class ProfileController {
   }
 
   //  GET
-
-  @GetMapping("{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> getProfileById(@PathVariable Integer id) {
-    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileById(id));
+  // controller methode - not REST
+  @GetMapping("/loggeduser")
+  public ResponseEntity<ProfileCompleteResponseDto> getProfileByUserLoggedIn() {
+    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileByUserLoggedIn());
     return ResponseEntity.ok().body(responseDto);
   }
 
   @GetMapping("")
+
   public ResponseEntity<List<ProfileCompleteResponseDto>> getProfiles() {
     List<ProfileCompleteResponseDto> profiles = profileService.getProfiles().stream().map(profileCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(profiles);

@@ -79,8 +79,15 @@ public class UserCompleteMapper {
   public UserCompleteResponseDto toDto(User entity) {
     if (entity == null) return null;
     UserCompleteResponseDto.UserCompleteResponseDtoBuilder userCompleteResponseDtoBuilder = UserCompleteResponseDto.builder();
-    userCompleteResponseDtoBuilder.username(entity.getUsername());
-    userCompleteResponseDtoBuilder.authority(authoritiesCompleteMapper.toDto(entity.getAuthorities()));
+    if (entity.getUsername() != null) {
+      userCompleteResponseDtoBuilder.username(entity.getUsername());
+    }
+    if (entity.getAuthorities() != null) {
+      userCompleteResponseDtoBuilder.authority(authoritiesCompleteMapper.toDto(entity.getAuthorities()));
+    }
+    if (entity.getProfile() != null) {
+      userCompleteResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
+    }
     return userCompleteResponseDtoBuilder.build();
   }
 

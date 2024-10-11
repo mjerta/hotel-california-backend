@@ -32,9 +32,8 @@ public class ProfileService {
     this.userRepository = userRepository;
   }
 
-  public Profile getProfileById(Integer id) {
-    Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No profile is found"));
-    Profile valdateProfile = getProfileByUser(existingProfile);
+  public Profile getProfileByUserLoggedIn() {
+    Profile valdateProfile = getProfileByUser();
     if (valdateProfile != null) return valdateProfile;
     throw new GeneralException("No profile found with logged in user");
   }
@@ -70,18 +69,16 @@ public class ProfileService {
     profileRepository.deleteById(id);
   }
 
-  private Profile getProfileByUser(Profile existingProfile) {
+  private Profile getProfileByUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new RecordNotFoundException("No user found"));
-      if (existingProfile.getUser() == null) {
+      if (userToCheck.getProfile() == null) {
         throw new GeneralException("There is no profile associated with the user");
       }
-      if (existingProfile.getUser().getUsername().equals(userToCheck.getUsername())) {
-        return existingProfile;
-      }
+      return userToCheck.getProfile();
     }
     return null;
   }

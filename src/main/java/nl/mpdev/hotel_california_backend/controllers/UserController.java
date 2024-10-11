@@ -35,8 +35,6 @@ public class UserController {
 
   @GetMapping("/users")
   public ResponseEntity<List<UserCompleteResponseDto>> getUsers() {
-
-    var test = userService.getUsers();
     return ResponseEntity.ok().body(userService.getUsers().stream().map(userCompleteMapper::toDto).toList());
   }
 
@@ -48,6 +46,7 @@ public class UserController {
     UserCompleteResponseDto responseDto = userCompleteMapper.toDto(user);
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
   }
+
   @PostMapping("/customregister")
   public ResponseEntity<UserCompleteResponseDto> registerNewCustomUser(@Valid @RequestBody UserCompleteRequestDto requestDto) {
     User user = userService.registerNewCustomUser(userCompleteMapper.toEntity(requestDto));

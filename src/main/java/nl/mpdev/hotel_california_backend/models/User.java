@@ -22,7 +22,7 @@ public class User {
   private String password;
   @Column(nullable = false)
   private boolean enabled = true;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = false)
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = false)
   @JoinColumn(name = "profile_id", referencedColumnName = "id")
   private Profile profile;
   @OneToMany(

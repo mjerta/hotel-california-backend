@@ -112,9 +112,8 @@ public class SpringSecurityConfig {
 
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_MANAGER")
-//        .requestMatchers(HttpMethod.POST, "/api/v1/profiles").hasAuthority("ROLE_USER")
-        .requestMatchers(HttpMethod.PUT, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
-        .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/profiles").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/profiles/*").hasAuthority("ROLE_MANAGER")
         .anyRequest().denyAll())
       .sessionManagement(session -> session

@@ -54,17 +54,17 @@ public class ProfileController {
 
   // PUT
 
-  @PutMapping("/{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.updateProfile(id, requestDto);
+  @PutMapping("")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfile(requestDto);
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 
   // PATCH
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@PathVariable Integer id, @Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-    Profile profile = profileService.updateProfileFields(id, requestDto);
+  @PatchMapping("")
+  public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
+    Profile profile = profileService.updateProfileFields(requestDto);
     return ResponseEntity.ok().body(profileCompleteMapper.toDto(profile));
   }
 

@@ -42,24 +42,30 @@ public class ProfileService {
     return profileRepository.findAll();
   }
 
-//  public Profile addProfile(Profile entity) {
-//    return profileRepository.save(entity);
-//  }
+  public Profile updateProfile(ProfileCompleteRequestDto requestDto) {
 
-  public Profile updateProfile(Integer id, ProfileCompleteRequestDto requestDto) {
-    Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
-    existingProfile = existingProfile.toBuilder()
-      .firstName(requestDto.getFirstName())
-      .lastName(requestDto.getLastName())
-      .phoneNumber(requestDto.getPhoneNumber())
-      .address(requestDto.getAddress())
-      .points((requestDto.getPoints()))
-      .build();
-    return profileRepository.save(existingProfile);
+    Profile existingProfile = getProfileByUser();
+    Profile.ProfileBuilder profileBuilder = existingProfile.toBuilder();
+    if(requestDto.getFirstName() != null) {
+      profileBuilder.firstName(requestDto.getFirstName());
+    }
+    if(requestDto.getLastName() != null) {
+      profileBuilder.lastName(requestDto.getLastName());
+    }
+    if(requestDto.getPhoneNumber() != null) {
+      profileBuilder.phoneNumber(requestDto.getPhoneNumber());
+    }
+    if(requestDto.getAddress() != null) {
+      profileBuilder.address(requestDto.getAddress());
+    }
+    if(requestDto.getPoints() != null) {
+      profileBuilder.points(requestDto.getPoints());
+    }
+    return profileRepository.save(profileBuilder.build());
   }
 
-  public Profile updateProfileFields(Integer id, ProfileCompleteRequestDto requestDto) {
-    Profile existingProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+  public Profile updateProfileFields(ProfileCompleteRequestDto requestDto) {
+    Profile existingProfile = getProfileByUser();
     serviceHelper.setFieldsIfNotNUll(existingProfile, requestDto);
     return profileRepository.save(existingProfile);
   }

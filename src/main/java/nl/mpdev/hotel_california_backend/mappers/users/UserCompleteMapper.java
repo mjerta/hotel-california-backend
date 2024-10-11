@@ -29,10 +29,18 @@ public class UserCompleteMapper {
 
   public User toEntity(UserRegisterLimitedRequestDto requestDto) {
     if (requestDto == null) return null;
-    return User.builder()
-      .username(requestDto.getUsername())
-      .password(requestDto.getPassword())
-      .build();
+    User.UserBuilder builder = User.builder();
+    if (requestDto.getUsername() != null) {
+      builder.username(requestDto.getUsername());
+    }
+    if (requestDto.getPassword() != null) {
+      builder.password(requestDto.getPassword());
+    }
+    if (requestDto.getProfile() != null) {
+      builder.profile(profileCompleteMapper.toEntity(requestDto.getProfile()));
+    }
+
+    return builder.build();
   }
 
   public User toEntity(UserCompleteRequestDto requestDto) {

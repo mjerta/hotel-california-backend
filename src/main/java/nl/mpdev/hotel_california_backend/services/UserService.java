@@ -44,12 +44,16 @@ public class UserService {
 
   public User registerNewUser(User entity) {
     checkIfUserExist(entity);
-    Set<Authority> authorities = new HashSet<>();
     Authority.AuthorityBuilder authorityBuilder = Authority.builder();
-    authorityBuilder.username(entity.getUsername());
-    authorityBuilder.authority("ROLE_USER");
-    authorities.add(authorityBuilder.build());
+    if (entity.getUsername() != null) {
+      authorityBuilder.username(entity.getUsername());
+    }
+    // DEFAULT USER
+    Set<Authority> authorities = new HashSet<>();
+    authorities.add(authorityBuilder.authority("ROLE_USER").build());
+
     entity = entity.toBuilder()
+      .enabled(true)
       .authorities(authorities)
       .password(passwordEncoder.encode(entity.getPassword()))
       .build();

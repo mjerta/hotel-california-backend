@@ -68,15 +68,21 @@ public class SpringSecurityConfig {
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(auth -> auth
 
+        // Swagger - API documentation
+        .requestMatchers("/swagger-ui/**").permitAll()
+        .requestMatchers("/swagger-ui/").permitAll()
+        .requestMatchers("/hotel-california-docs/**").permitAll()
+        .requestMatchers("/swagger-resources/**").permitAll()
+        .requestMatchers("/swagger-resources").permitAll()
+
         // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
-        //has rol and hasAuthority they do effectively the same
         .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
-        .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
+
         // Ingredients
 
         .requestMatchers(HttpMethod.POST, "/api/v1/ingredients").hasAuthority("ROLE_MANAGER")
@@ -93,8 +99,8 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
 
         // Orders
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll() // 1
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER") // 2
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/orderreference").permitAll()
@@ -113,7 +119,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/loggeduser").hasAuthority("ROLE_USER")
 
         // Profiles
-        .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/profiles/loggeduser").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/profiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles").hasAuthority("ROLE_USER")

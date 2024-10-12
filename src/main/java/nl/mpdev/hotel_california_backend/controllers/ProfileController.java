@@ -1,5 +1,7 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.profiles.request.ProfileCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.profiles.response.ProfileCompleteResponseDto;
@@ -8,11 +10,8 @@ import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,13 +27,17 @@ public class ProfileController {
   }
 
   //  GET
-  // controller methode - not REST
+
+  @Operation(summary = "ROLE_USER", description = "Send an get request, data will be retrieved based on user jwt token verified on the backend")
+  @ApiResponse(responseCode = "200", description = "Returns a profile with a complete view of the entity")
   @GetMapping("/loggeduser")
   public ResponseEntity<ProfileCompleteResponseDto> getProfileByUserLoggedIn() {
     ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profileService.getProfileByUserLoggedIn());
     return ResponseEntity.ok().body(responseDto);
   }
 
+  @Operation(summary = "ROLE_MANAGER", description = "Send a get request")
+  @ApiResponse(responseCode = "200", description = "Returns a profile with a complete view of the entity")
   @GetMapping("")
 
   public ResponseEntity<List<ProfileCompleteResponseDto>> getProfiles() {
@@ -42,18 +45,10 @@ public class ProfileController {
     return ResponseEntity.ok().body(profiles);
   }
 
-  // POST
-//
-//  @PostMapping("")
-//  public ResponseEntity<ProfileCompleteResponseDto> addProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
-//    Profile profile = profileService.addProfile(profileCompleteMapper.toEntity(requestDto));
-//    ProfileCompleteResponseDto responseDto = profileCompleteMapper.toDto(profile);
-//    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
-//    return ResponseEntity.created(uri).body(responseDto);
-//  }
-
   // PUT
 
+  @Operation(summary = "ROLE_USER" , description = "Send a put request with a json object with a complete view of a order, empty properties will be set null, profile will be selected based on the jwt token verified on the backend")
+  @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PutMapping("")
   public ResponseEntity<ProfileCompleteResponseDto> updateProfile(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
     Profile profile = profileService.updateProfile(requestDto);
@@ -62,6 +57,8 @@ public class ProfileController {
 
   // PATCH
 
+  @Operation(summary = "ROLE_USER" , description = "Send a patch request with a json object with a complete view of a order, empty properties will be will beholds its original value, profile will be selected based on the jwt token verified on the backend")
+  @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PatchMapping("")
   public ResponseEntity<ProfileCompleteResponseDto> updateProfileFields(@Valid @RequestBody ProfileCompleteRequestDto requestDto) {
     Profile profile = profileService.updateProfileFields(requestDto);
@@ -70,6 +67,8 @@ public class ProfileController {
 
   // DELETE
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a delete request with an id")
+  @ApiResponse(responseCode = "204", description = "Returns the value void")
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteProfile(@PathVariable Integer id) {

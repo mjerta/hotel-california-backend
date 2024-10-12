@@ -118,7 +118,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/loggeduser").hasAuthority("ROLE_USER")
 
         // Profiles
-        .requestMatchers(HttpMethod.GET, "/api/v1/profiles/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/profiles/loggeduser").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.GET, "/api/v1/profiles").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/profiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles").hasAuthority("ROLE_USER")

@@ -12,10 +12,13 @@ import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.Authenticator;
 import java.net.URI;
 import java.util.List;
 
@@ -60,19 +63,25 @@ public class OrderController {
 
   // POST
 
-  @Operation(summary = "public" , description = "Send a post request with a json object with a 'new order' view of a order")
+  @Operation(summary = "public" , description = "Send a post request with a json object with a 'new order' view of a order. If a user is not logged in the client should keep a cookie of the orderrefence to send it with any other request. If a user is logged in , the jtw token is verified and data is being inserted including the user.")
   @ApiResponse(responseCode = "201", description = "Returns a single object of the order that's being added with a complete view")
   @PostMapping("")
-  public ResponseEntity<OrderCompleteResponseDto> addOrder(@Valid @RequestBody OrderNewRequestDto requestDto) {
+  public ResponseEntity<OrderCompleteResponseDto> addOrder(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody OrderNewRequestDto requestDto) {
     Order order = orderService.addOrder(orderCompleteMapper.toEntity(requestDto));
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(order);
-    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
+
+    URI uri;
+    if(userDetails == null) {
+      uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/orderrefence").toUriString());
+    } else {
+      uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/").toUriString());
+    }
     return ResponseEntity.created(uri).body(responseDto);
   }
 
   // PUT
 
-  @Operation(summary = "ROLE_USER" , description = "Send a put request with an id and a json object with a update view of a order, empty properties will be set null")
+  @Operation(summary = "ROLE_USER" , description = "Send a put request with an id and a json object with a update view of a order, empty properties will be set null. The user will be verified to belong with this order based on the jwt token")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PutMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderByUserLoggedIn(@PathVariable Integer id,
@@ -80,7 +89,7 @@ public class OrderController {
     Order order = orderService.updateOrderByUserLoggedIn(id, requestDto);
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
-  @Operation(summary = "public" , description = "Send a put request with an order-reference and a json object with a update view of a order, empty properties will be set null")
+  @Operation(summary = "public" , description = "Send a put request with an order-reference and a json object with a update view of a order, empty properties will be set null. The order will be retrieved based on the orderreference thats given.")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PutMapping("/orderreference")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderByOrderReference(@Valid @RequestBody OrderUpdateRequestDto requestDto,
@@ -98,7 +107,7 @@ public class OrderController {
   }
   // PATCH
 
-  @Operation(summary = "ROLE_USER" , description = "Send a patch request with and id and a json object with a update view of a order, empty properties will beholds its original value")
+  @Operation(summary = "ROLE_USER" , description = "Send a patch request with and id and a json object with a update view of a order, empty properties will beholds its original value. The user will be verified to belong with this order based on the jwt token")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PatchMapping("/{id}")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByUserLoggedIn(@PathVariable Integer id,
@@ -107,7 +116,7 @@ public class OrderController {
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
-  @Operation(summary = "public" , description = "Send a patch request with and order-reference and a json object with a update view of a order, empty properties will beholds its original value")
+  @Operation(summary = "public" , description = "Send a patch request with and order-reference and a json object with a update view of a order, empty properties will beholds its original value. The order will be retrieved based on the orderreference thats given.")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PatchMapping("/orderreference")
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByOrderReference(

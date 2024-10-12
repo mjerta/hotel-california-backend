@@ -61,6 +61,7 @@ public class DrinkController {
   }
 
   // PUT
+
   @Operation(summary = "ROLE_MANAGER" , description = "Send a put request with an id and a json object with a complete view of a drink, empty properties will be set null")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the drink that's has been updated with a complete view")
   @PutMapping("/{id}")

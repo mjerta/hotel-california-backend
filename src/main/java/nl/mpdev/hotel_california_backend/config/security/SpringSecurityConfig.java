@@ -98,8 +98,8 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
 
         // Orders
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER")
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll() // 1
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER") // 2
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/orderreference").permitAll()

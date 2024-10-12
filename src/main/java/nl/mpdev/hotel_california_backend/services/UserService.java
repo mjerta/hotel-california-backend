@@ -123,16 +123,21 @@ public class UserService {
     return exisitingUser;
   }
 
-  public String verify(User user) {
+  public Map<String, String> verify(User user) {
     Authentication authentication = authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+      new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+    );
+    Map<String, String> succesResult = new HashMap<>();
     if (authentication.isAuthenticated()) {
       Map<String, Object> extraClaims = new HashMap<>();
       extraClaims.put("authorities", authentication.getAuthorities());
-      return jwtService.generateToken(extraClaims, user.getUsername());
+      succesResult.put("jwt", jwtService.generateToken(extraClaims, user.getUsername()));
+      return succesResult;
 
     }
-    return "User is not logged in.";
+    Map<String, String> errorResult = new HashMap<>();
+    errorResult.put("message", "Authentication failed");
+    return errorResult;
   }
 
   private void checkIfUserExist(User entity) {
@@ -140,6 +145,5 @@ public class UserService {
       throw new GeneralException("User with username " + entity.getUsername() + " already exists");
     }
   }
-
 
 }

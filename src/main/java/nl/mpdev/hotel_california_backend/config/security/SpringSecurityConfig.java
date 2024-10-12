@@ -70,7 +70,8 @@ public class SpringSecurityConfig {
 
         // Swagger - API documentation
         .requestMatchers("/swagger-ui/**").permitAll()
-        .requestMatchers("/v3/api-docs/**").permitAll()
+        .requestMatchers("/swagger-ui/").permitAll()
+        .requestMatchers("/hotel-california-docs/**").permitAll()
         .requestMatchers("/swagger-resources/**").permitAll()
         .requestMatchers("/swagger-resources").permitAll()
 

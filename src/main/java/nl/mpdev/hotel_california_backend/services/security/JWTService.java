@@ -23,7 +23,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
   // Perhaps I could put this instead in a env file. It seems like this would be generating something else after every build
-  @Value("${app.default.user.super}")
+  @Value("${app.default.jwt.secret.key}")
   private static String SECRET_KEY;
 
   public JWTService() throws NoSuchAlgorithmException {

@@ -1,6 +1,9 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
@@ -32,14 +35,16 @@ public class DrinkController {
 
   // GET
 
-  @Operation(summary = "Get a drink by id", description = "Returns a complete view of the drink entity")
+  @Operation(summary = "public", description = "Send a get request with an id")
+  @ApiResponse(responseCode = "200", description = "Returns a drink with a complete view of the entity")
   @GetMapping("/{id}")
   public ResponseEntity<DrinkCompleteResponseDto> getDrinkById(@PathVariable Integer id) {
     DrinkCompleteResponseDto responseDto = drinkCompleteMapper.toDto(drinkService.getDrinkById(id));
     return ResponseEntity.ok().body(responseDto);
   }
 
-  @Operation(summary = "First method", tags = {"Order 2"})
+  @Operation(summary = "public", description = "Send a get request")
+  @ApiResponse(responseCode = "200", description = "Returns a list of drinks with a complete view of the entity")
   @GetMapping("")
   public ResponseEntity<List<DrinkCompleteResponseDto>> getDrinks() {
     List<DrinkCompleteResponseDto> drinks = drinkService.getDrinks().stream().map(drinkCompleteMapper::toDto).toList();
@@ -48,6 +53,8 @@ public class DrinkController {
 
   // POST
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a post request with json object with a complete view of a drink")
+  @ApiResponse(responseCode = "201", description = "Returns a single object the drink that's being added")
   @PostMapping("")
   public ResponseEntity<DrinkCompleteResponseDto> addDrink(@Valid @RequestBody DrinkCompleteRequestDto requestDto) {
     Drink drink = drinkService.addDrink(drinkCompleteMapper.toEntity(requestDto));
@@ -57,7 +64,8 @@ public class DrinkController {
   }
 
   // PUT
-
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a put request with an id and a json object with a complete view of a drink, empty properties will be set null")
+  @ApiResponse(responseCode = "200", description = "Returns a single object the drink that's has been updated")
   @PutMapping("/{id}")
   public ResponseEntity<DrinkCompleteResponseDto> updateDrink(@PathVariable Integer id, @Valid @RequestBody DrinkCompleteRequestDto requestDto) {
     Drink drink = drinkService.updateDrink(id, requestDto);
@@ -66,6 +74,8 @@ public class DrinkController {
 
   // Patch
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a patch request with and id and a json object with a complete view of a drink, empty properties will beholds its original value")
+  @ApiResponse(responseCode = "200", description = "Returns a single object the drink that's has been updated")
   @PatchMapping("/{id}")
   public ResponseEntity<DrinkCompleteResponseDto> updateDrinkFields(@PathVariable Integer id, @Valid @RequestBody DrinkCompleteRequestDto requestDto) {
     Drink drink = drinkService.updateDrinkFields(id, requestDto);
@@ -74,6 +84,8 @@ public class DrinkController {
 
   // DELETE
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a delete request with an id")
+  @ApiResponse(responseCode = "204", description = "Returns value is void")
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteDrink(@PathVariable Integer id) {

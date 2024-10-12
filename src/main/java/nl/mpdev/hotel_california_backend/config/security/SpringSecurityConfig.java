@@ -77,12 +77,12 @@ public class SpringSecurityConfig {
         // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
-        //has rol and hasAuthority they do effectively the same
         .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PUT, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/*").hasAuthority("ROLE_MANAGER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/meals/").hasAuthority("ROLE_MANAGER")
+
         // Ingredients
 
         .requestMatchers(HttpMethod.POST, "/api/v1/ingredients").hasAuthority("ROLE_MANAGER")

@@ -1,5 +1,7 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto;
@@ -23,22 +25,24 @@ public class MealController {
 
   private final MealCompleteMapper mealCompleteMapper;
   private final MealService mealService;
-  private final MealRepository mealRepository;
 
-  public MealController(MealCompleteMapper mealCompleteMapper, MealService mealService, MealRepository mealRepository) {
+  public MealController(MealCompleteMapper mealCompleteMapper, MealService mealService) {
     this.mealCompleteMapper = mealCompleteMapper;
     this.mealService = mealService;
-    this.mealRepository = mealRepository;
   }
 
   // GET
 
+  @Operation(summary = "public", description = "Send a get request with an id")
+  @ApiResponse(responseCode = "200", description = "Returns a meal with a complete view of the entity")
   @GetMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> getMealById(@PathVariable Integer id) {
     MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(mealService.getMealById(id));
     return ResponseEntity.ok().body(responseDto);
   }
 
+  @Operation(summary = "public", description = "Send a get request")
+  @ApiResponse(responseCode = "200", description = "Returns a list of meals with a complete view of the entity")
   @GetMapping("")
   public ResponseEntity<List<MealCompleteResponseDto>> getMeals() {
     List<MealCompleteResponseDto> meals = mealService.getMeals().stream().map(mealCompleteMapper::toDto).toList();
@@ -47,6 +51,8 @@ public class MealController {
 
   // POST
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a post request with a json object with a limited view of a meal")
+  @ApiResponse(responseCode = "201", description = "Returns a single object of the meal that's being added with a complete view")
   @PostMapping("")
   public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealLimitedRequestDto requestDto) {
     Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
@@ -56,6 +62,8 @@ public class MealController {
   }
   // PUT
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a put request with an id and a json object with a update view of a meal, empty properties will be set null")
+  @ApiResponse(responseCode = "200", description = "Returns a single object of the meal that's has been updated with a complete view")
   @PutMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id,
                                                             @Valid @RequestBody MealUpdateRequestDto requestDto) {
@@ -65,6 +73,8 @@ public class MealController {
 
   // PATCH
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a patch request with and id and a json object with a update view of a drink, empty properties will beholds its original value")
+  @ApiResponse(responseCode = "200", description = "Returns a single object of the meal that's has been updated with a complete view")
   @PatchMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id,
                                                                   @Valid @RequestBody MealUpdateRequestDto requestDto) {
@@ -75,6 +85,8 @@ public class MealController {
 
   // DELETE
 
+  @Operation(summary = "ROLE_MANAGER" , description = "Send a delete request with an id")
+  @ApiResponse(responseCode = "204", description = "Returns the value void")
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteMeal(@PathVariable Integer id) {

@@ -31,6 +31,8 @@ public class SpringSecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   @Autowired
   UserDetailsService userDetailsService;
+  @Autowired
+  CustomCorsConfiguration customCorsConfiguration;
 
   @Autowired
   public SpringSecurityConfig(DataSource dataSource, @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -66,6 +68,7 @@ public class SpringSecurityConfig {
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
       .csrf(csrf -> csrf.disable())
+      .cors(cors -> cors.configurationSource(customCorsConfiguration))
       .authorizeHttpRequests(auth -> auth
 
         // Swagger - API documentation

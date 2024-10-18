@@ -114,6 +114,9 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
 
+        // Locations
+        .requestMatchers(HttpMethod.GET, "/api/v1/locations").permitAll()
+
         // Users
         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.POST, "/api/v1/register").permitAll()

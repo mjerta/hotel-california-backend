@@ -25,7 +25,11 @@ public class LocationCompleteMapper {
     if (entity.getId() != null) {
       builder.id(entity.getId());
     }
-    if (entity.getLocationNumber() != null) {
+
+    if(entity.getLocationNumber() != null) {
+      builder.locationNumber(entity.getLocationNumber());
+    }
+    if (entity.getIsOccupied() != null) {
       builder.isOccupied(entity.getIsOccupied());
     }
     if(entity.getLocationType() != null) {

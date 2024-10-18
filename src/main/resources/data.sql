@@ -20,7 +20,7 @@ VALUES (101, false, 'HOTEL_ROOM'),
 
 -- Insert 5 Tables
 INSERT INTO Locations (location_number, is_occupied, location_type)
-VALUES (201, false, 'TABLE'),
+VALUES (201, true, 'TABLE'),
        (202, false, 'TABLE'),
        (203, false, 'TABLE'),
        (204, false, 'TABLE'),

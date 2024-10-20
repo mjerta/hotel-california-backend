@@ -47,7 +47,7 @@ public class OrderController {
 
   @Operation(summary = "public", description = "Send a get request with an orderreference")
   @ApiResponse(responseCode = "200", description = "Returns a order with a complete view of the entity")
-  @GetMapping("/orderrefence")
+  @GetMapping("/orderreference")
   public ResponseEntity<OrderCompleteResponseDto> getOrderByOrderReference(@RequestParam String orderReference) {
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByOrderReference(orderReference));
     return ResponseEntity.ok().body(responseDto);

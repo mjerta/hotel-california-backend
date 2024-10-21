@@ -24,6 +24,11 @@ public class DataInitializer {
   @Value("${app.default.user.manager.password}")
   private String managerUserPassword;
 
+  @Value("${app.default.user.chef}")
+  private String chefUser;
+  @Value("${app.default.user.chef.password}")
+  private String chefUserPassword;
+
   @Value("${app.default.user.staff}")
   private String staffUser;
   @Value("${app.default.user.staff.password}")
@@ -31,6 +36,7 @@ public class DataInitializer {
 
   @Value("${app.default.user.regular}")
   private String regularUser;
+
   @Value("${app.default.user.regular.password}")
   private String regularUserPassword;
 
@@ -45,6 +51,7 @@ public class DataInitializer {
     return args -> {
       createUserWithRoles(superUser, passwordEncoder.encode(superUserPassword), "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_STAFF", "ROLE_USER");
       createUserWithRoles(managerUser, passwordEncoder.encode(managerUserPassword), "ROLE_MANAGER", "ROLE_STAFF", "ROLE_USER");
+      createUserWithRoles(chefUser, passwordEncoder.encode(chefUserPassword), "ROLE_STAFF", "ROLE_CHEF", "ROLE_USER");
       createUserWithRoles(staffUser, passwordEncoder.encode(staffUserPassword), "ROLE_STAFF", "ROLE_USER");
       createUserWithRoles(regularUser, passwordEncoder.encode(regularUserPassword), "ROLE_USER");
     };

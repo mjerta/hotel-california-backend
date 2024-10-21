@@ -112,6 +112,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         // Only a staff member can close the order. After being payed off course.
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
 
         // Locations

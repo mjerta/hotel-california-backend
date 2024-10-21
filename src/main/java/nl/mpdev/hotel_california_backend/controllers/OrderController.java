@@ -127,8 +127,14 @@ public class OrderController {
     return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
   }
 
-  // DELETE
-
+  @Operation(summary = "ROLE_STAFF", description = "Send a patch request with and id and a json object with a complete 'complete-staff' view of a order, empty properties will not be overwritten")
+  @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
+  @PatchMapping("/updateorderbystaff/{id}")
+  public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByStaff(@PathVariable Integer id,
+                                                                           @Valid @RequestBody OrderCompleteStaffRequestDto requestDto) {
+    Order order = orderService.updateOrderFieldsByStaff(id, requestDto);
+    return ResponseEntity.ok().body(orderCompleteMapper.toDto(order));
+  }
   @Operation(summary = "ROLE_STAFF" , description = "Send a delete request with an id")
   @ApiResponse(responseCode = "204", description = "Returns the value void")
   @DeleteMapping("/{id}")

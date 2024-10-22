@@ -12,7 +12,7 @@ VALUES (150, 'Kerkstraat 123, Amsterdam', 'Jan', 'Jansen', '06-12345678'),
 -- Locations
 -- Insert 5 Hotel Rooms
 INSERT INTO Locations (location_number, is_occupied, location_type)
-VALUES (101, false, 'HOTEL_ROOM'),
+VALUES (101, true, 'HOTEL_ROOM'),
        (102, false, 'HOTEL_ROOM'),
        (103, false, 'HOTEL_ROOM'),
        (104, false, 'HOTEL_ROOM'),
@@ -20,7 +20,7 @@ VALUES (101, false, 'HOTEL_ROOM'),
 
 -- Insert 5 Tables
 INSERT INTO Locations (location_number, is_occupied, location_type)
-VALUES (201, true, 'TABLE'),
+VALUES (201, false, 'TABLE'),
        (202, false, 'TABLE'),
        (203, false, 'TABLE'),
        (204, false, 'TABLE'),

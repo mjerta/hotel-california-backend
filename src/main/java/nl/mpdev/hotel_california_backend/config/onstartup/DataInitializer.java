@@ -1,7 +1,10 @@
 package nl.mpdev.hotel_california_backend.config.onstartup;
 
+import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Authority;
+import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.models.User;
+import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -41,9 +44,11 @@ public class DataInitializer {
   private String regularUserPassword;
 
   private final UserRepository userRepository;
+  private final ProfileRepository profileRepository;
 
-  public DataInitializer(UserRepository userRepository) {
+  public DataInitializer(UserRepository userRepository, ProfileRepository profileRepository) {
     this.userRepository = userRepository;
+    this.profileRepository = profileRepository;
   }
 
   @Bean
@@ -53,7 +58,7 @@ public class DataInitializer {
       createUserWithRoles(managerUser, passwordEncoder.encode(managerUserPassword), "ROLE_MANAGER", "ROLE_STAFF", "ROLE_USER");
       createUserWithRoles(chefUser, passwordEncoder.encode(chefUserPassword), "ROLE_STAFF", "ROLE_CHEF", "ROLE_USER");
       createUserWithRoles(staffUser, passwordEncoder.encode(staffUserPassword), "ROLE_STAFF", "ROLE_USER");
-      createUserWithRoles(regularUser, passwordEncoder.encode(regularUserPassword), "ROLE_USER");
+      createUserWithRoles(regularUser, passwordEncoder.encode(regularUserPassword), profileRepository.findById(1).orElseThrow(() -> new RecordNotFoundException("No profile found")), "ROLE_USER");
     };
   }
 
@@ -65,12 +70,32 @@ public class DataInitializer {
     saveUser(user, password, authorities);
   }
 
+  public void createUserWithRoles(String user, String password, Profile profile, String... roles) {
+    Set<Authority> authorities = new HashSet<>();
+    for (String role : roles) {
+      authorities.add(createAuthority(user, role));
+    }
+    saveUser(user, password, authorities, profile);
+  }
+
+
   private void saveUser(String userName, String password, Set<Authority> superUserAuthorities) {
     User adminUser = User.builder()
       .username(userName)
       .password(password)
       .enabled(true)
       .authorities(superUserAuthorities)
+      .build();
+    userRepository.save(adminUser);
+  }
+
+  private void saveUser(String userName, String password, Set<Authority> superUserAuthorities, Profile profile) {
+    User adminUser = User.builder()
+      .username(userName)
+      .password(password)
+      .enabled(true)
+      .authorities(superUserAuthorities)
+      .profile(profile)
       .build();
     userRepository.save(adminUser);
   }

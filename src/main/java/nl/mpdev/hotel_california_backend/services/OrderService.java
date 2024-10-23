@@ -50,6 +50,10 @@ public class OrderService {
     return orderRepository.findAll();
   }
 
+  public List<Order> getOrdersByUserLoggedIn() {
+    return orderRepository.findAllOrdersByUser(getLoggedUser());
+  }
+
   public Order addOrder(Order entity) {
     if (entity.getMeals() == null && entity.getDrinks() == null) {
       throw new GeneralException("At least a drink or meal needs to be filled");
@@ -170,6 +174,16 @@ public class OrderService {
       }
     }
   }
+
+  private User getLoggedUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
+      return userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RecordNotFoundException("No user found"));
+    }
+    return null;
+  }
+
+
 
   private Order prepareOrderForUpdate(OrderUpdateRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();

@@ -12,13 +12,11 @@ import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.Authenticator;
 import java.net.URI;
 import java.util.List;
 
@@ -58,6 +56,13 @@ public class OrderController {
   @GetMapping("")
   public ResponseEntity<List<OrderCompleteResponseDto>> getOrders() {
     List<OrderCompleteResponseDto> orders = orderService.getOrders().stream().map(orderCompleteMapper::toDto).toList();
+    return ResponseEntity.ok().body(orders);
+  }
+  @Operation(summary = "ROLE_USER", description = "Send a get request")
+  @ApiResponse(responseCode = "200", description = "Returns a list of orders with a complete view of the entity that belongs to a certain user")
+  @GetMapping("/loggeduser")
+  public ResponseEntity<List<OrderCompleteResponseDto>> getOrdersByUserLoggedIn() {
+    List<OrderCompleteResponseDto> orders = orderService.getOrdersByUserLoggedIn().stream().map(orderCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(orders);
   }
 

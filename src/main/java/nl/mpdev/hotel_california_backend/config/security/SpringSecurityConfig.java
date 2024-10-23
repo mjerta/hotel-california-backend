@@ -105,6 +105,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderreference").permitAll() // 1
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER") // 2
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/loggeduser").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/orderreference").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").hasAuthority("ROLE_USER")

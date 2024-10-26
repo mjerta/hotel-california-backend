@@ -6,8 +6,11 @@ import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
+import nl.mpdev.hotel_california_backend.models.MealTest;
 import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
+import nl.mpdev.hotel_california_backend.repositories.MealImageRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
+import nl.mpdev.hotel_california_backend.repositories.MealTestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,15 +22,20 @@ public class MealService {
   private final ServiceHelper serviceHelper;
   private final MealRepository mealRepository;
   private final IngredientRepository ingredientRepository;
+  private final MealImageRepository mealImageRepository;
+  private final MealTestRepository mealTestRepository;
 
-  public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository) {
+  public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository,
+                     MealImageRepository mealImageRepository, MealTestRepository mealTestRepository) {
     this.serviceHelper = serviceHelper;
     this.mealRepository = mealRepository;
     this.ingredientRepository = ingredientRepository;
+    this.mealImageRepository = mealImageRepository;
+    this.mealTestRepository = mealTestRepository;
   }
 
   public Meal getMealById(Integer id) {
-    return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
   }
 
   public List<Meal> getMeals() {
@@ -52,6 +60,15 @@ public class MealService {
       .build();
   }
 
+
+  public MealTest addMealTest(MealTest entity) {
+
+    mealImageRepository.save((entity.getImage()));
+    return mealTestRepository.save(entity);
+  }
+
+
+
   public Meal updateMeal(Integer id, MealUpdateRequestDto requestDto) {
     Meal existingMeal = mealRepository.findById(id)
       .orElseThrow(() -> new RecordNotFoundException("Meal not found"));
@@ -66,14 +83,14 @@ public class MealService {
   }
 
   public Meal updateMealFields(Integer id, MealUpdateRequestDto requestDto) {
-    Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
     serviceHelper.setFieldsIfNotNUll(existingMeal, requestDto);
     updateIngredients(existingMeal, requestDto.getIngredients());
     return mealRepository.save(existingMeal);
   }
 
   public void deleteMeal(Integer id) {
-    mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
     mealRepository.deleteById(id);
   }
 

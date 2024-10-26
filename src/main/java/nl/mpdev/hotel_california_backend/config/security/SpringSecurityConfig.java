@@ -74,11 +74,11 @@ public class SpringSecurityConfig {
         // Swagger - API documentation
         .requestMatchers("/swagger-ui/**").permitAll()
         .requestMatchers("/swagger-ui/").permitAll()
-        .requestMatchers("/hotel-california-docs/**").permitAll()
         .requestMatchers("/swagger-resources/**").permitAll()
         .requestMatchers("/swagger-resources").permitAll()
 
         // Meals
+        .requestMatchers(HttpMethod.POST, "/api/v1/meals/testaddmeal").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")

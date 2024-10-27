@@ -2,10 +2,8 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealLimitedRequestDto;
-import nl.mpdev.hotel_california_backend.dtos.meals.request.MealTestRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;

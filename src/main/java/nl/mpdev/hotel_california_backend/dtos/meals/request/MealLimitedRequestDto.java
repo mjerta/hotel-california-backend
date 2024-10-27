@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 public class MealLimitedRequestDto {
   @NotBlank(message = "Name cannot be blank")
+  @Size(min = 4, max = 20, message = "Name must be between 4 and 20 characters")
   private String name;
   @Size(max = 255, message = "Description must not exceed 255 characters")
   private String description;

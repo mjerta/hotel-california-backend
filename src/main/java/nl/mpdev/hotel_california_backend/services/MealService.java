@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.services;
 
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto;
+import nl.mpdev.hotel_california_backend.exceptions.DuplicateRecordFound;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
@@ -35,7 +36,9 @@ public class MealService {
   }
 
   public Meal addMeal(Meal entity) {
-    // Apprantly i dont have to save the image with the imagerepository explicitly perhaps I could also refactor this for all other cases
+    if(mealRepository.existsMealByName(entity.getName())) {
+      throw new DuplicateRecordFound("Name already exists");
+    }
     Meal savedMeal = mealRepository.save(entity);
     List<Ingredient> savedIngredients = null;
     if (savedMeal.getIngredients() != null) {

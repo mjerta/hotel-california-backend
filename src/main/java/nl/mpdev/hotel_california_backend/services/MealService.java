@@ -7,7 +7,6 @@ import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
-import nl.mpdev.hotel_california_backend.repositories.MealImageRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,7 @@ public class MealService {
   private final MealRepository mealRepository;
   private final IngredientRepository ingredientRepository;
 
-  public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository,
-                     MealImageRepository mealImageRepository) {
+  public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository) {
     this.serviceHelper = serviceHelper;
     this.mealRepository = mealRepository;
     this.ingredientRepository = ingredientRepository;
@@ -37,6 +35,7 @@ public class MealService {
   }
 
   public Meal addMeal(Meal entity) {
+    // Apprantly i dont have to save the image with the imagerepository explicitly perhaps I could also refactor this for all other cases
     Meal savedMeal = mealRepository.save(entity);
     List<Ingredient> savedIngredients = null;
     if (savedMeal.getIngredients() != null) {

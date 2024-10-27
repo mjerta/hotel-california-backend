@@ -22,7 +22,7 @@ public class MealUpdateRequestDto {
 //  kept this commented because I still need to figure out how to handle an image
 //  @NotNull(message = "Image cannot be null")
 //  @Size(min = 1, message = "Image must contain data")
-  private byte[] image;
+//  private byte[] image;
   @Valid
   @NotNull(message = "Ingredient can not be null")
   private List<IngredientCompleteRequestDto> ingredients;

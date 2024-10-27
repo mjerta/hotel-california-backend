@@ -20,7 +20,8 @@ public class Meal {
   private String name;
   private String description;
   private Double price;
-  private byte[] image;
+  @OneToOne(cascade = CascadeType.ALL)
+  private ImageMeal image;
   @ManyToMany(mappedBy = "meals")
   private List<Order> orders = new ArrayList<>();
   @OneToMany(mappedBy = "meal", cascade = CascadeType.REMOVE , orphanRemoval = true)

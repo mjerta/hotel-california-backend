@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealLimitedRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealTestRequestDto;
@@ -9,7 +10,6 @@ import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto
 import nl.mpdev.hotel_california_backend.dtos.meals.response.MealCompleteResponseDto;
 import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
-import nl.mpdev.hotel_california_backend.models.MealTest;
 import nl.mpdev.hotel_california_backend.services.MealService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,34 +54,14 @@ public class MealController {
 
   // POST
 
-  @Operation(summary = "ROLE_MANAGER", description = "Send a post request with a json object with a limited view of a meal")
+  @Operation(summary = "ROLE_MANAGER", description = "Send a post request with  MultiPart objects with a limited view of a meal")
   @ApiResponse(responseCode = "201", description = "Returns a single object of the meal that's being added with a complete view")
-  @PostMapping("")
-  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealLimitedRequestDto requestDto) {
+  @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @ModelAttribute MealLimitedRequestDto requestDto) throws IOException {
     Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
     MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(meal);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
     return ResponseEntity.created(uri).body(responseDto);
-  }
-
-  //  @PostMapping(value = "/testaddmeal", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//  public MultipartFile testAddMeal(@Valid @ModelAttribute MealTestRequestDto requestDto, @RequestPart("image") MultipartFile image) {
-//
-//    //save the request
-//    var dto = requestDto;
-//    // save the image first and save it as well in the Meal class
-//    return  image;
-//  }
-  @PostMapping(value = "/testaddmeal", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ResponseEntity<MealTest> testAddMeal(@Valid @ModelAttribute MealTestRequestDto requestDto) throws IOException {
-
-    //save the request
-    var dto = requestDto;
-    var test2 = mealCompleteMapper.toEntity(requestDto);
-
-    return ResponseEntity.ok().body(mealService.addMealTest(test2));
-
-    // save the image first and save it as well in the Meal class
   }
 
   // PUT

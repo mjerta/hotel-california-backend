@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientLimitedRequestDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,11 +22,8 @@ public class MealLimitedRequestDto {
   private String description;
   @NotNull(message = "Price must be set")
   private Double price;
-  //  kept this commented because I still need to figure out how to handle an image
-//  @NotNull(message = "Image cannot be null")
-//  @Size(min = 1, message = "Image must contain data")
-  @Lob
-  private byte[] image;
+  @NotNull(message = "Image cannot be null")
+  private MultipartFile image;
   @Valid
   @NotNull(message = "Ingredient can not be null")
   private List<IngredientLimitedRequestDto> ingredients;

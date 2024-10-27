@@ -6,11 +6,9 @@ import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
 import nl.mpdev.hotel_california_backend.models.Meal;
-import nl.mpdev.hotel_california_backend.models.MealTest;
 import nl.mpdev.hotel_california_backend.repositories.IngredientRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealImageRepository;
 import nl.mpdev.hotel_california_backend.repositories.MealRepository;
-import nl.mpdev.hotel_california_backend.repositories.MealTestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,16 +20,12 @@ public class MealService {
   private final ServiceHelper serviceHelper;
   private final MealRepository mealRepository;
   private final IngredientRepository ingredientRepository;
-  private final MealImageRepository mealImageRepository;
-  private final MealTestRepository mealTestRepository;
 
   public MealService(ServiceHelper serviceHelper, MealRepository mealRepository, IngredientRepository ingredientRepository,
-                     MealImageRepository mealImageRepository, MealTestRepository mealTestRepository) {
+                     MealImageRepository mealImageRepository) {
     this.serviceHelper = serviceHelper;
     this.mealRepository = mealRepository;
     this.ingredientRepository = ingredientRepository;
-    this.mealImageRepository = mealImageRepository;
-    this.mealTestRepository = mealTestRepository;
   }
 
   public Meal getMealById(Integer id) {
@@ -60,15 +54,6 @@ public class MealService {
       .build();
   }
 
-
-  public MealTest addMealTest(MealTest entity) {
-
-    mealImageRepository.save((entity.getImage()));
-    return mealTestRepository.save(entity);
-  }
-
-
-
   public Meal updateMeal(Integer id, MealUpdateRequestDto requestDto) {
     Meal existingMeal = mealRepository.findById(id)
       .orElseThrow(() -> new RecordNotFoundException("Meal not found"));
@@ -77,7 +62,6 @@ public class MealService {
       .name(requestDto.getName())
       .description(requestDto.getDescription())
       .price(requestDto.getPrice())
-      .image(requestDto.getImage())
       .build();
     return mealRepository.save(existingMeal);
   }

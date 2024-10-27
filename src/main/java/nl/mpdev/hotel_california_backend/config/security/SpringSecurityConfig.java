@@ -77,8 +77,10 @@ public class SpringSecurityConfig {
         .requestMatchers("/swagger-resources/**").permitAll()
         .requestMatchers("/swagger-resources").permitAll()
 
+        // Image-Meals
+        .requestMatchers("/api/v1/image-meals/*").permitAll()
+
         // Meals
-        .requestMatchers(HttpMethod.POST, "/api/v1/meals/testaddmeal").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/meals").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/v1/meals").hasAuthority("ROLE_MANAGER")

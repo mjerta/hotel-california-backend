@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderUpdateRequestDto;
@@ -37,6 +38,7 @@ public class OrderController {
   @Operation(summary = "ROLE_USER", description = "Send a get request with an id")
   @ApiResponse(responseCode = "200", description = "Returns a order with a complete view of the entity")
   @GetMapping("/{id}")
+  @Transactional
   public ResponseEntity<OrderCompleteResponseDto> getOrderByIdByUserLoggedIn(@PathVariable Integer id) {
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByIdByUserLoggedIn(id));
     return ResponseEntity.ok().body(responseDto);
@@ -46,6 +48,7 @@ public class OrderController {
   @Operation(summary = "public", description = "Send a get request with an orderreference")
   @ApiResponse(responseCode = "200", description = "Returns a order with a complete view of the entity")
   @GetMapping("/orderreference")
+  @Transactional
   public ResponseEntity<OrderCompleteResponseDto> getOrderByOrderReference(@RequestParam String orderReference) {
     OrderCompleteResponseDto responseDto = orderCompleteMapper.toDto(orderService.getOrderByOrderReference(orderReference));
     return ResponseEntity.ok().body(responseDto);
@@ -54,6 +57,7 @@ public class OrderController {
   @Operation(summary = "ROLE_STAFF", description = "Send a get request")
   @ApiResponse(responseCode = "200", description = "Returns a list of orders with a complete view of the entity")
   @GetMapping("")
+  @Transactional
   public ResponseEntity<List<OrderCompleteResponseDto>> getOrders() {
     List<OrderCompleteResponseDto> orders = orderService.getOrders().stream().map(orderCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(orders);
@@ -61,6 +65,7 @@ public class OrderController {
   @Operation(summary = "ROLE_USER", description = "Send a get request")
   @ApiResponse(responseCode = "200", description = "Returns a list of orders with a complete view of the entity that belongs to a certain user")
   @GetMapping("/loggeduser")
+  @Transactional
   public ResponseEntity<List<OrderCompleteResponseDto>> getOrdersByUserLoggedIn() {
     List<OrderCompleteResponseDto> orders = orderService.getOrdersByUserLoggedIn().stream().map(orderCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(orders);
@@ -135,6 +140,7 @@ public class OrderController {
   @Operation(summary = "ROLE_STAFF", description = "Send a patch request with and id and a json object with a complete 'complete-staff' view of a order, empty properties will not be overwritten")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the order that's has been updated with a complete view")
   @PatchMapping("/updateorderbystaff/{id}")
+  @Transactional
   public ResponseEntity<OrderCompleteResponseDto> updateOrderFieldsByStaff(@PathVariable Integer id,
                                                                            @Valid @RequestBody OrderCompleteStaffRequestDto requestDto) {
     Order order = orderService.updateOrderFieldsByStaff(id, requestDto);

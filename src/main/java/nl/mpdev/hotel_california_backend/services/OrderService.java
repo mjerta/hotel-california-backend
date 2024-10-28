@@ -37,7 +37,6 @@ public class OrderService {
     this.serviceHelper = serviceHelper;
   }
 
-  @Transactional
   public Order getOrderByIdByUserLoggedIn(Integer id) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No order is found"));
     validateIncomingOrder(existingOrder);
@@ -48,12 +47,10 @@ public class OrderService {
     return orderRepository.findOrderByOrderReference(orderReference).orElseThrow(() -> new RecordNotFoundException("Order not found"));
   }
 
-  @Transactional
   public List<Order> getOrders() {
     return orderRepository.findAll();
   }
 
-  @Transactional
   public List<Order> getOrdersByUserLoggedIn() {
     return orderRepository.findAllOrdersByUser(getLoggedUser());
   }
@@ -124,13 +121,11 @@ public class OrderService {
     return prepareOrderUpdateFields(requestDto, existingOrder);
   }
 
-  @Transactional
   public Order updateOrderByStaff(Integer id, OrderCompleteStaffRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderForUpdateByStaff(requestDto, existingOrder);
   }
 
-  @Transactional
   public Order updateOrderFieldsByStaff(Integer id, OrderCompleteStaffRequestDto requestDto) {
     Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     return prepareOrderByFieldsForUpdateByStaff(requestDto, existingOrder);

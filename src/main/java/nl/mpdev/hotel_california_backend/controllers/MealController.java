@@ -10,10 +10,12 @@ import nl.mpdev.hotel_california_backend.mappers.meals.MealCompleteMapper;
 import nl.mpdev.hotel_california_backend.models.Meal;
 import nl.mpdev.hotel_california_backend.services.MealService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -49,18 +51,20 @@ public class MealController {
 
   // POST
 
-  @Operation(summary = "ROLE_MANAGER" , description = "Send a post request with a json object with a limited view of a meal")
+  @Operation(summary = "ROLE_MANAGER", description = "Send a post request with  MultiPart objects with a limited view of a meal")
   @ApiResponse(responseCode = "201", description = "Returns a single object of the meal that's being added with a complete view")
-  @PostMapping("")
-  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @RequestBody MealLimitedRequestDto requestDto) {
+  @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+  public ResponseEntity<MealCompleteResponseDto> addMeal(@Valid @ModelAttribute MealLimitedRequestDto requestDto) throws IOException {
     Meal meal = mealService.addMeal(mealCompleteMapper.toEntity(requestDto));
     MealCompleteResponseDto responseDto = mealCompleteMapper.toDto(meal);
     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + responseDto.getId()).toUriString());
     return ResponseEntity.created(uri).body(responseDto);
   }
+
   // PUT
 
-  @Operation(summary = "ROLE_MANAGER" , description = "Send a put request with an id and a json object with a update view of a meal, empty properties will be set null")
+  @Operation(summary = "ROLE_MANAGER", description = "Send a put request with an id and a json object with a update view of a meal, empty" +
+    " properties will be set null")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the meal that's has been updated with a complete view")
   @PutMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMeal(@PathVariable Integer id,
@@ -71,7 +75,8 @@ public class MealController {
 
   // PATCH
 
-  @Operation(summary = "ROLE_MANAGER" , description = "Send a patch request with and id and a json object with a update view of a drink, empty properties will beholds its original value")
+  @Operation(summary = "ROLE_MANAGER", description = "Send a patch request with and id and a json object with a update view of a drink, " +
+    "empty properties will beholds its original value")
   @ApiResponse(responseCode = "200", description = "Returns a single object of the meal that's has been updated with a complete view")
   @PatchMapping("/{id}")
   public ResponseEntity<MealCompleteResponseDto> updateMealFields(@PathVariable Integer id,
@@ -83,7 +88,7 @@ public class MealController {
 
   // DELETE
 
-  @Operation(summary = "ROLE_MANAGER" , description = "Send a delete request with an id")
+  @Operation(summary = "ROLE_MANAGER", description = "Send a delete request with an id")
   @ApiResponse(responseCode = "204", description = "Returns the value void")
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

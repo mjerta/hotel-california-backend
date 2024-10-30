@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.dtos.meals.request;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientLimitedRequestDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,15 +17,14 @@ import java.util.List;
 @Getter
 public class MealLimitedRequestDto {
   @NotBlank(message = "Name cannot be blank")
+  @Size(min = 4, max = 20, message = "Name must be between 4 and 20 characters")
   private String name;
   @Size(max = 255, message = "Description must not exceed 255 characters")
   private String description;
   @NotNull(message = "Price must be set")
   private Double price;
-  //  kept this commented because I still need to figure out how to handle an image
-//  @NotNull(message = "Image cannot be null")
-//  @Size(min = 1, message = "Image must contain data")
-  private byte[] image;
+  @NotNull(message = "Image cannot be null")
+  private MultipartFile image;
   @Valid
   @NotNull(message = "Ingredient can not be null")
   private List<IngredientLimitedRequestDto> ingredients;

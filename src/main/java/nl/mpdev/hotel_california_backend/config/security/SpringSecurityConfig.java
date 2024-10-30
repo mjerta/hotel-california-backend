@@ -74,9 +74,11 @@ public class SpringSecurityConfig {
         // Swagger - API documentation
         .requestMatchers("/swagger-ui/**").permitAll()
         .requestMatchers("/swagger-ui/").permitAll()
-        .requestMatchers("/hotel-california-docs/**").permitAll()
         .requestMatchers("/swagger-resources/**").permitAll()
         .requestMatchers("/swagger-resources").permitAll()
+
+        // Image-Meals
+        .requestMatchers("/api/v1/image-meals/*").permitAll()
 
         // Meals
         .requestMatchers(HttpMethod.GET, "/api/v1/meals/*").permitAll()
@@ -102,9 +104,10 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.DELETE, "/api/v1/drinks/*").hasAuthority("ROLE_MANAGER")
 
         // Orders
-        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderrefence").permitAll() // 1
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/orderreference").permitAll() // 1
         .requestMatchers(HttpMethod.GET, "/api/v1/orders/*").hasAuthority("ROLE_USER") // 2
         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAuthority("ROLE_STAFF")
+        .requestMatchers(HttpMethod.GET, "/api/v1/orders/loggeduser").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.POST, "/api/v1/orders").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/orderreference").permitAll()
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/*").hasAuthority("ROLE_USER")
@@ -112,7 +115,11 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/*").hasAuthority("ROLE_USER")
         // Only a staff member can close the order. After being payed off course.
         .requestMatchers(HttpMethod.PUT, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
+        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/updateorderbystaff/*").hasAuthority("ROLE_STAFF")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/*").hasAuthority("ROLE_STAFF")
+
+        // Locations
+        .requestMatchers(HttpMethod.GET, "/api/v1/locations").permitAll()
 
         // Users
         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ROLE_STAFF")

@@ -17,10 +17,12 @@ public class Meal {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  @Column(unique = true)
   private String name;
   private String description;
   private Double price;
-  private byte[] image;
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private ImageMeal image;
   @ManyToMany(mappedBy = "meals")
   private List<Order> orders = new ArrayList<>();
   @OneToMany(mappedBy = "meal", cascade = CascadeType.REMOVE , orphanRemoval = true)

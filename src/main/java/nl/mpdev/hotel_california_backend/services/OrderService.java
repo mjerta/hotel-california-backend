@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend.services;
 
+import jakarta.transaction.Transactional;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderCompleteStaffRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.orders.request.OrderUpdateRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
@@ -48,6 +49,10 @@ public class OrderService {
 
   public List<Order> getOrders() {
     return orderRepository.findAll();
+  }
+
+  public List<Order> getOrdersByUserLoggedIn() {
+    return orderRepository.findAllOrdersByUser(getLoggedUser());
   }
 
   public Order addOrder(Order entity) {
@@ -121,6 +126,11 @@ public class OrderService {
     return prepareOrderForUpdateByStaff(requestDto, existingOrder);
   }
 
+  public Order updateOrderFieldsByStaff(Integer id, OrderCompleteStaffRequestDto requestDto) {
+    Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
+    return prepareOrderByFieldsForUpdateByStaff(requestDto, existingOrder);
+  }
+
   public void deleteOrder(Integer id) {
     orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
     orderRepository.deleteById(id);
@@ -166,6 +176,16 @@ public class OrderService {
     }
   }
 
+  private User getLoggedUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
+      return userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new RecordNotFoundException("No user found"));
+    }
+    return null;
+  }
+
+
+
   private Order prepareOrderForUpdate(OrderUpdateRequestDto requestDto, Order existingOrder) {
     Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
 
@@ -191,7 +211,6 @@ public class OrderService {
     if (requestDto.getStatus() != null) {
       orderBuilder.status(requestDto.getStatus());
     }
-    orderBuilder.orderDate(LocalDateTime.now());
 
     return orderRepository.save(orderBuilder.build());
   }
@@ -231,28 +250,63 @@ public class OrderService {
       locationRepository.save(existingOrder.getDestination().toBuilder().isOccupied(false).build());
       orderBuilder.destination(null);
     }
-    orderBuilder.orderDate(LocalDateTime.now());
+
+    return orderRepository.save(orderBuilder.build());
+  }
+
+  private Order prepareOrderByFieldsForUpdateByStaff(OrderCompleteStaffRequestDto requestDto, Order existingOrder) {
+    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
+
+    if (requestDto.getMeals() != null) {
+      orderBuilder.meals(requestDto.getMeals().stream()
+        .map(meal -> mealRepository.findById(meal.getId())
+          .orElseThrow(() -> new RecordNotFoundException("Meal not found")))
+        .toList());
+    }
+
+    if (requestDto.getDrinks() != null) {
+      orderBuilder.drinks(requestDto.getDrinks().stream()
+        .map(drink -> drinkRepository.findById(drink.getId())
+          .orElseThrow(() -> new RecordNotFoundException("Drink not found")))
+        .toList());
+    }
+
+    if (requestDto.getStatus() != null) {
+      orderBuilder.status(requestDto.getStatus());
+    }
+    // Staff could change the location only after order is placed
+    if (requestDto.getDestination() != null) {
+
+      orderBuilder.destination(locationRepository.findById(requestDto.getDestination().getId())
+        .orElseThrow(() -> new RecordNotFoundException("No location found")));
+    }
+    else {
+      locationRepository.save(existingOrder.getDestination().toBuilder().isOccupied(false).build());
+      orderBuilder.destination(null);
+    }
 
     return orderRepository.save(orderBuilder.build());
   }
 
   private Order prepareOrderUpdateFields(OrderUpdateRequestDto requestDto, Order existingOrder) {
-    Order.OrderBuilder orderBuilder = existingOrder.toBuilder();
+    Order.OrderBuilder existingOrderBuilder = existingOrder.toBuilder();
     if (requestDto.getMeals() != null || requestDto.getMeals().getFirst().getId() != null) {
-      orderBuilder.meals(requestDto.getMeals().stream()
+      existingOrderBuilder.meals(requestDto.getMeals().stream()
         .map(meal -> mealRepository.findById(meal.getId()).orElseThrow(RecordNotFoundException::new))
         .toList());
     }
     if (requestDto.getDrinks() != null) {
-      orderBuilder.drinks(requestDto.getDrinks().stream()
+      existingOrderBuilder.drinks(requestDto.getDrinks().stream()
         .map(drink -> drinkRepository.findById(drink.getId())
           .orElseThrow(RecordNotFoundException::new))
         .toList());
     }
     if (requestDto.getStatus() != null) {
-      orderBuilder.status(requestDto.getStatus());
+      existingOrderBuilder.status(requestDto.getStatus());
     }
-    return orderRepository.save(orderBuilder.build());
+    return orderRepository.save(existingOrderBuilder.build());
   }
+
+
 }
 

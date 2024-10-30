@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.controllers;
 
 import io.jsonwebtoken.security.SignatureException;
+import nl.mpdev.hotel_california_backend.exceptions.DuplicateRecordFound;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -86,6 +87,13 @@ public class ExceptionController {
 
   @ExceptionHandler(GeneralException.class)
   public ResponseEntity<Object> handleException(GeneralException ex) {
+    Map<String, String> error = new LinkedHashMap<>();
+    error.put("error-message", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  @ExceptionHandler(DuplicateRecordFound.class)
+  public ResponseEntity<Object> handleException(DuplicateRecordFound ex) {
     Map<String, String> error = new LinkedHashMap<>();
     error.put("error-message", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);

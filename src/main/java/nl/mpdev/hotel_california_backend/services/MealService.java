@@ -2,6 +2,7 @@ package nl.mpdev.hotel_california_backend.services;
 
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.meals.request.MealUpdateRequestDto;
+import nl.mpdev.hotel_california_backend.exceptions.DuplicateRecordFound;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Ingredient;
@@ -27,7 +28,7 @@ public class MealService {
   }
 
   public Meal getMealById(Integer id) {
-    return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    return mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
   }
 
   public List<Meal> getMeals() {
@@ -35,6 +36,9 @@ public class MealService {
   }
 
   public Meal addMeal(Meal entity) {
+    if(mealRepository.existsMealByName(entity.getName())) {
+      throw new DuplicateRecordFound("Name already exists");
+    }
     Meal savedMeal = mealRepository.save(entity);
     List<Ingredient> savedIngredients = null;
     if (savedMeal.getIngredients() != null) {
@@ -60,20 +64,19 @@ public class MealService {
       .name(requestDto.getName())
       .description(requestDto.getDescription())
       .price(requestDto.getPrice())
-      .image(requestDto.getImage())
       .build();
     return mealRepository.save(existingMeal);
   }
 
   public Meal updateMealFields(Integer id, MealUpdateRequestDto requestDto) {
-    Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Meal existingMeal = mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
     serviceHelper.setFieldsIfNotNUll(existingMeal, requestDto);
     updateIngredients(existingMeal, requestDto.getIngredients());
     return mealRepository.save(existingMeal);
   }
 
   public void deleteMeal(Integer id) {
-    mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    mealRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("No meal found"));
     mealRepository.deleteById(id);
   }
 

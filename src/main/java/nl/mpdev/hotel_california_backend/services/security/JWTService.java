@@ -24,12 +24,12 @@ import java.util.function.Function;
 public class JWTService {
   // Perhaps I could put this instead in a env file. It seems like this would be generating something else after every build
   @Value("${app.default.jwt.secret.key}")
-  private static String SECRET_KEY;
+  private String SECRET_KEY;
 
   public JWTService() throws NoSuchAlgorithmException {
-    KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-    SecretKey secretKey = keyGenerator.generateKey();
-    SECRET_KEY = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+//    KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
+//    SecretKey secretKey = keyGenerator.generateKey();
+//    SECRET_KEY = Base64.getEncoder().encodeToString(secretKey.getEncoded());
   }
 
   public String extractUsername(String token) {

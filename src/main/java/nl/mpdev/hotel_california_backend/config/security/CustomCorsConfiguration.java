@@ -17,7 +17,7 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
     // Allow all origins
     config.addAllowedOriginPattern("*"); // Use addAllowedOriginPattern("*") to allow all origins
     // Allow all methods (GET, POST, PUT, DELETE, etc.)
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     // Allow all headers
     config.setAllowedHeaders(List.of("*"));
     // Allow credentials (e.g., cookies, Authorization headers)

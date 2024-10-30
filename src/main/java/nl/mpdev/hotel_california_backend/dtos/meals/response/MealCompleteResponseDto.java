@@ -3,6 +3,7 @@ package nl.mpdev.hotel_california_backend.dtos.meals.response;
 import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.response.IngredientCompleteResponseDto;
+import nl.mpdev.hotel_california_backend.models.ImageMeal;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ public class MealCompleteResponseDto {
   private String name;
   private String description;
   private Double price;
-  private byte[] image;
+  private String image;
   private List<IngredientCompleteResponseDto> ingredients;
 }

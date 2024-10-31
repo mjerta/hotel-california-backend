@@ -20,7 +20,6 @@ public class Drink {
   private String name;
   private String description;
   private Double price;
-  private byte[] image;
   private Boolean isAlcoholic;
   private Integer size;
   private String measurement;

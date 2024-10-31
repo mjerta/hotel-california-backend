@@ -38,7 +38,6 @@ public class DrinkService {
       .name(responseDto.getName())
       .description(responseDto.getDescription())
       .price(responseDto.getPrice())
-      .image(responseDto.getImage())
       .isAlcoholic(responseDto.getIsAlcoholic())
       .size(responseDto.getSize())
       .measurement(responseDto.getMeasurement())

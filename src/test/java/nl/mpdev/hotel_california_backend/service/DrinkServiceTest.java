@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.service;
 
 import nl.mpdev.hotel_california_backend.models.Drink;
+import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.repositories.DrinkRepository;
 import nl.mpdev.hotel_california_backend.services.DrinkService;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,16 +29,22 @@ public class DrinkServiceTest {
   DrinkService drinkService;
 
   @Test
-  @DisplayName("getDrinkById")
+  @DisplayName("getDrinkById - ")
   void getDrinkById() {
     // Arrange
 
+
+    // Drink
     var name = "Fanta";
     var size = 50;
     var measurement = "cc";
     var price = 19.99;
     var description = "erg lekker";
-    var isAlchoholic = false;
+    var isAlcoholic = false;
+
+    // Order
+
+
     Drink drink = Drink.builder()
       .id(123)
       .name(name)
@@ -44,10 +52,21 @@ public class DrinkServiceTest {
       .measurement(measurement)
       .price(price)
       .description(description)
-      .isAlcoholic(isAlchoholic)
+      .isAlcoholic(isAlcoholic)
       .build();
 
+    List<Drink> drinks = List.of(drink);
 
+    Order order = Order.builder()
+      .id(300)
+        .drinks(drinks)
+          .build();
+    
+    List<Order> orders = List.of(order);
+    
+    drink.toBuilder().orders(orders).build();
+    
+    
     when(drinkRepository.findById(anyInt())).thenReturn(Optional.of(drink));
     // Act
     Drink result = drinkService.getDrinkById(123);
@@ -58,7 +77,7 @@ public class DrinkServiceTest {
     assertEquals(measurement, result.getMeasurement());
     assertEquals(price, result.getPrice());
     assertEquals(description, result.getDescription());
-    assertEquals(isAlchoholic, result.getIsAlcoholic());
+    assertEquals(isAlcoholic, result.getIsAlcoholic());
 
   }
 

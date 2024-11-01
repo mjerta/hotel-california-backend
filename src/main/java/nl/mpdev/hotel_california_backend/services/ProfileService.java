@@ -6,7 +6,6 @@ import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.models.User;
-import nl.mpdev.hotel_california_backend.repositories.DrinkRepository;
 import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -21,14 +20,12 @@ public class ProfileService {
 
   private final ServiceHelper serviceHelper;
   private final ProfileRepository profileRepository;
-  private final DrinkRepository drinkRepository;
   private final UserRepository userRepository;
 
-  public ProfileService(ServiceHelper serviceHelper, ProfileRepository profileRepository, DrinkRepository drinkRepository,
+  public ProfileService(ServiceHelper serviceHelper, ProfileRepository profileRepository,
                         UserRepository userRepository) {
     this.serviceHelper = serviceHelper;
     this.profileRepository = profileRepository;
-    this.drinkRepository = drinkRepository;
     this.userRepository = userRepository;
   }
 
@@ -45,19 +42,19 @@ public class ProfileService {
   public Profile updateProfile(ProfileCompleteRequestDto requestDto) {
     Profile existingProfile = getProfileByUser();
     Profile.ProfileBuilder profileBuilder = existingProfile.toBuilder();
-    if(requestDto.getFirstName() != null) {
+    if (requestDto.getFirstName() != null) {
       profileBuilder.firstName(requestDto.getFirstName());
     }
-    if(requestDto.getLastName() != null) {
+    if (requestDto.getLastName() != null) {
       profileBuilder.lastName(requestDto.getLastName());
     }
-    if(requestDto.getPhoneNumber() != null) {
+    if (requestDto.getPhoneNumber() != null) {
       profileBuilder.phoneNumber(requestDto.getPhoneNumber());
     }
-    if(requestDto.getAddress() != null) {
+    if (requestDto.getAddress() != null) {
       profileBuilder.address(requestDto.getAddress());
     }
-    if(requestDto.getPoints() != null) {
+    if (requestDto.getPoints() != null) {
       profileBuilder.points(requestDto.getPoints());
     }
     return profileRepository.save(profileBuilder.build());

@@ -29,7 +29,7 @@ public class DrinkService {
   }
 
   public Drink addDrink(Drink entity) {
-   return drinkRepository.save(entity);
+    return drinkRepository.save(entity);
   }
 
   public Drink updateDrink(Integer id, DrinkCompleteRequestDto responseDto) {

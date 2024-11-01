@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Builder(toBuilder = true)
 @Getter
@@ -25,4 +26,5 @@ public class Drink {
   private String measurement;
   @ManyToMany(mappedBy = "drinks")
   private List<Order> orders = new ArrayList<>();
+
 }

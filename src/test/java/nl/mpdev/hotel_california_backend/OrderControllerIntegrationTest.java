@@ -1,5 +1,6 @@
 package nl.mpdev.hotel_california_backend;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,37 +14,44 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-public class OrderControllerIntegrationTest {
+class OrderControllerIntegrationTest {
 
   @Autowired
   MockMvc mockMvc;
 
   @Test
+  @DisplayName("addOrder")
   public void addOrder() throws Exception {
     String orderRequestJson = """
-    // Example JSON request for OrderNewRequestDto
-    {
-        "orderDetails": "Sample order details",
-        "quantity": 3
-    }
-    """;
+                              {
+                                  "meals": [
+                                      1
+                                  ],
+                                  "drinks": [
+                                      1,
+                                      2
+                                  ],
+                                  "destination": 6
+                              }
+                              """;
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/orders")
+    this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/orders")
         .contentType(APPLICATION_JSON)
-        .content(orderRequestJson)
-        .characterEncoding("utf-8"))
-      .andExpect(status().isCreated())
-      .andExpect(header().string("Location", "/orders/")) // Confirm the URI format for authenticated users
-      .andExpect(contentType(APPLICATION_JSON)
-      .andExpect(jsonPath("$.propertyInResponseDto").exists()); // Replace with actual property checks
+        .content(orderRequestJson))
+      .andDo(MockMvcResultHandlers.print())
+      .andExpect(MockMvcResultMatchers.status().isCreated());
+  }
+
+  @Test
+  void getOrderByOrderReference() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orders/orderreference")
+        .param("orderReference", "1728595232306-7497")
+        .contentType(APPLICATION_JSON))
+      .andDo(MockMvcResultHandlers.print())
+      .andExpect(MockMvcResultMatchers.status().isOk());
   }
 }

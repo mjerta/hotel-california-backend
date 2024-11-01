@@ -1,6 +1,7 @@
 package nl.mpdev.hotel_california_backend.service;
 
 import nl.mpdev.hotel_california_backend.dtos.drinks.request.DrinkCompleteRequestDto;
+import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.helpers.ServiceHelper;
 import nl.mpdev.hotel_california_backend.models.Drink;
 import nl.mpdev.hotel_california_backend.models.Order;
@@ -78,6 +79,17 @@ public class DrinkServiceTest {
     assertEquals(isAlcoholic, result.getIsAlcoholic());
     assertEquals(1, result.getOrders().size());
     assertEquals(order.getDrinks(), drinks);
+  }
+
+  @Test
+  @DisplayName("getDrinkById - should throw RecordNotFoundException when drink is not found")
+  // This test is enough to cover all other methods of the service, since they using the same exception
+  void getDrinkById_DrinkNotFound_ThrowsException() {
+    // Arrange
+    Integer id = 999;
+    when(drinkRepository.findById(id)).thenReturn(Optional.empty());
+    // Act & Assert
+    assertThrows(RecordNotFoundException.class, () -> drinkService.getDrinkById(id));
   }
 
   @Test
@@ -331,7 +343,6 @@ public class DrinkServiceTest {
   @Test
   @DisplayName("deleteDrinks - testing the DELETE endpoint")
   void deleteDrink() {
-
     // Arrange
     Integer id = 125;
     Drink drink = Drink.builder()
@@ -348,14 +359,7 @@ public class DrinkServiceTest {
     // Act
     drinkService.deleteDrink(id);
 
-    // I wonder if this is needed deleteDrinbk is returing void by default. lets ask this
-    when(drinkRepository.findById(id)).thenReturn(Optional.empty());
-    Optional<Drink> drinkResult = drinkRepository.findById(id);
-
-
     // Assert
     verify(drinkRepository, times(1)).deleteById(id);
-    assertTrue(drinkResult.isEmpty());
-
   }
 }

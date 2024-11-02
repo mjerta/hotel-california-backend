@@ -37,7 +37,7 @@ class OrderControllerIntegrationTest {
   private UserRepository userRepository;
 
   @Test
-  @DisplayName("addOrder - when no user is logged in")
+  @DisplayName("addOrder_whenNotLoggedIn - when no user is logged in")
   public void addOrder_whenNotLoggedIn() throws Exception {
     String orderRequestJson = """
                               {
@@ -60,7 +60,7 @@ class OrderControllerIntegrationTest {
   }
 
   @Test
-  @DisplayName("addOrder - when logged in")
+  @DisplayName("addOrder_loggedin - when logged in")
   @WithMockUser(username = "regular", roles = {"USER"})
   public void addOrder_loggedin() throws Exception {
     String orderRequestJson = """
@@ -94,7 +94,7 @@ class OrderControllerIntegrationTest {
   }
 
   @Test
-  @DisplayName("getOrderByOrderReference")
+  @DisplayName("getOrderByOrderReference - get an order only based on a orderreference passed in the params")
   void getOrderByOrderReference() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orders/orderreference")
         .param("orderReference", "1728595232306-7497")
@@ -104,7 +104,7 @@ class OrderControllerIntegrationTest {
   }
 
   @Test
-  @DisplayName("getOrderByIdByUserLoggedIn")
+  @DisplayName("getOrderByIdByUserLoggedIn - get a order based on the ID and if they are logged in")
   @WithMockUser(username = "pietje", roles = {"USER"})
   void getOrderByIdByUserLoggedIn() throws Exception {
 
@@ -137,7 +137,7 @@ class OrderControllerIntegrationTest {
 
 
   @Test
-  @DisplayName("deleteOrder - delete the user with the role of user")
+  @DisplayName("deleteOrder_notAuthorized - delete the user with the role of user")
   @WithMockUser(username = "regular",roles = {"USER"})
   void deleteOrder_notAuthorized() throws Exception {
 
@@ -161,7 +161,7 @@ class OrderControllerIntegrationTest {
   }
 
   @Test
-  @DisplayName("deleteOrder - delete the user with the role of staff")
+  @DisplayName("deleteOrder_authorized - delete the user with the role of staff")
   @WithMockUser(username = "staff",roles = {"STAFF"})
   void deleteOrder_authorized() throws Exception {
 

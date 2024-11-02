@@ -8,6 +8,7 @@ import nl.mpdev.hotel_california_backend.models.enums.Status;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Builder(toBuilder = true)
 @Getter

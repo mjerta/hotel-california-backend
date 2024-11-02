@@ -16,13 +16,10 @@ public class DrinkCompleteRequestDto {
   private String description;
   @NotNull(message = "Price must be set")
   private Double price;
-//  kept this commented because I still need to figure out how to handle an image
-//  @NotNull(message = "Image cannot be null")
-//  @Size(min = 1, message = "Image must contain data")
-  private byte[] image;
   @NotNull(message = "is_alcholic cannot be null")
   private Boolean isAlcoholic;
-  @Min(value = 1, message = "Size must be a positive integer")
+  @NotNull(message = "Points must not be null")
+  @Min(value = 1, message = "Size must not be nullr")
   private Integer size;
   @NotBlank(message = "Measurement cannot be blank")
   private String measurement;

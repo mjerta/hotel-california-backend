@@ -13,6 +13,9 @@ public class ServiceHelper {
     Field[] fields = incomingObject.getClass().getDeclaredFields();
     for (Field dtoField : fields) {
       dtoField.setAccessible(true);
+
+
+
       try {
         Object newValue = dtoField.get(incomingObject);
         if (newValue != null && !List.class.isAssignableFrom(dtoField.getType())) {

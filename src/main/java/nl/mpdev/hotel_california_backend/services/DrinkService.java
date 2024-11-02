@@ -21,7 +21,7 @@ public class DrinkService {
   }
 
   public Drink getDrinkById(Integer id) {
-    return drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    return drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Drink not Found"));
   }
 
   public List<Drink> getDrinks() {
@@ -29,16 +29,15 @@ public class DrinkService {
   }
 
   public Drink addDrink(Drink entity) {
-   return drinkRepository.save(entity);
+    return drinkRepository.save(entity);
   }
 
   public Drink updateDrink(Integer id, DrinkCompleteRequestDto responseDto) {
-    Drink existingDrink = drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Drink existingDrink = drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Drink not Found"));
     existingDrink = existingDrink.toBuilder()
       .name(responseDto.getName())
       .description(responseDto.getDescription())
       .price(responseDto.getPrice())
-      .image(responseDto.getImage())
       .isAlcoholic(responseDto.getIsAlcoholic())
       .size(responseDto.getSize())
       .measurement(responseDto.getMeasurement())
@@ -47,13 +46,13 @@ public class DrinkService {
   }
 
   public Drink updateDrinkFields(Integer id, DrinkCompleteRequestDto requestDto) {
-    Drink existingDrink = drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    Drink existingDrink = drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Drink not Found"));
     serviceHelper.setFieldsIfNotNUll(existingDrink, requestDto);
     return drinkRepository.save(existingDrink);
   }
 
   public void deleteDrink(Integer id) {
-    drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException());
+    drinkRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Drink not Found"));
     drinkRepository.deleteById(id);
   }
 }

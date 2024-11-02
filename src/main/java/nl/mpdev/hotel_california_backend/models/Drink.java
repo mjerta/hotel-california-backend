@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Builder(toBuilder = true)
 @Getter
@@ -20,10 +21,10 @@ public class Drink {
   private String name;
   private String description;
   private Double price;
-  private byte[] image;
   private Boolean isAlcoholic;
   private Integer size;
   private String measurement;
   @ManyToMany(mappedBy = "drinks")
   private List<Order> orders = new ArrayList<>();
+
 }

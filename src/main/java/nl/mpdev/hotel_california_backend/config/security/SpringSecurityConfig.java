@@ -134,7 +134,7 @@ public class SpringSecurityConfig {
         .requestMatchers(HttpMethod.PUT, "/api/v1/profiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.PATCH, "/api/v1/profiles").hasAuthority("ROLE_USER")
         .requestMatchers(HttpMethod.DELETE, "/api/v1/profiles/*").hasAuthority("ROLE_MANAGER")
-        .anyRequest().denyAll())
+        .anyRequest().permitAll())
       .sessionManagement(session -> session
         .sessionCreationPolicy(
           SessionCreationPolicy.STATELESS)) // This is needed to make the application stateless , so no session is created , this is

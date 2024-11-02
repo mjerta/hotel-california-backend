@@ -1,8 +1,6 @@
 package nl.mpdev.hotel_california_backend;
 
-import nl.mpdev.hotel_california_backend.config.security.SpringSecurityConfig;
 import nl.mpdev.hotel_california_backend.models.Drink;
-import nl.mpdev.hotel_california_backend.models.Location;
 import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.repositories.OrderRepository;
@@ -15,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -27,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = true)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class OrderControllerIntegrationTest {
 
   @Autowired
@@ -140,7 +137,7 @@ class OrderControllerIntegrationTest {
 
 
   @Test
-  @DisplayName("deleteOrder - delete the user with the role of staff")
+  @DisplayName("deleteOrder - delete the user with the role of user")
   @WithMockUser(username = "regular",roles = {"USER"})
   void deleteOrder_notAuthorized() throws Exception {
 

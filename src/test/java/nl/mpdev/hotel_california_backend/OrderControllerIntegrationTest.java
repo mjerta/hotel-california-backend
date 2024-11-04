@@ -47,7 +47,7 @@ class OrderControllerIntegrationTest {
                                   "drinks": [
                                       1,
                                       2
-                                  ],
+                                  ], 
                                   "destination": 5
                               }
                               """;

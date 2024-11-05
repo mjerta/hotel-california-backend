@@ -5,6 +5,7 @@ import nl.mpdev.hotel_california_backend.models.Order;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.repositories.OrderRepository;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +14,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = true)
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 class OrderControllerIntegrationTest {
 
   @Autowired
@@ -35,6 +39,15 @@ class OrderControllerIntegrationTest {
   private OrderRepository orderRepository;
   @Autowired
   private UserRepository userRepository;
+  private Order order;
+
+
+  @AfterEach
+  public void cleanUp() {
+    if(order != null) {
+      orderRepository.delete(order);
+    }
+  }
 
   @Test
   @DisplayName("addOrder_whenNotLoggedIn - when no user is logged in")
@@ -56,7 +69,30 @@ class OrderControllerIntegrationTest {
         .contentType(APPLICATION_JSON)
         .content(orderRequestJson))
       .andDo(MockMvcResultHandlers.print())
-      .andExpect(MockMvcResultMatchers.status().isCreated());
+      .andExpect(MockMvcResultMatchers.status().isCreated())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderDate").isNotEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.user").isEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("IN_QUEUE"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.id").value(5))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.locationNumber").value(105))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.isOccupied").value(true))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.locationType").value("Hotel Room"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].name").value("Caesar Salad"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].price").value(12.99))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].ingredients[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].ingredients[0].name").value("Romaine sla"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].name").value("Fanta"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].price").value(2.5))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].isAlcoholic").value(false))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].size").value(330))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].id").value(2))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].name").value("Heineken"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].price").value(3.75))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].isAlcoholic").value(true))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderReference").isNotEmpty());
   }
 
   @Test
@@ -80,7 +116,30 @@ class OrderControllerIntegrationTest {
         .contentType(APPLICATION_JSON)
         .content(orderRequestJson))
       .andDo(MockMvcResultHandlers.print())
-      .andExpect(MockMvcResultMatchers.status().isCreated());
+      .andExpect(MockMvcResultMatchers.status().isCreated())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNotEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderDate").isNotEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.user.username").value("regular"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("IN_QUEUE"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.id").value(6))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.locationNumber").value(201))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.isOccupied").value(true))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.locationType").value("table"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].name").value("Caesar Salad"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].price").value(12.99))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].ingredients[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals[0].ingredients[0].name").value("Romaine sla"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].name").value("Fanta"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].price").value(2.5))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].isAlcoholic").value(false))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].size").value(330))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].id").value(2))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].name").value("Heineken"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].price").value(3.75))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[1].isAlcoholic").value(true))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderReference").isNotEmpty());
   }
 
   @Test
@@ -90,6 +149,10 @@ class OrderControllerIntegrationTest {
     mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orders")
         .contentType(APPLICATION_JSON))
       .andDo(MockMvcResultHandlers.print())
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderDate").value("2024-10-05T12:30:00"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].status").value("PREPARING_ORDER"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].destination.id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].orderReference").value("1728595232306-7497"))
       .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
@@ -100,6 +163,10 @@ class OrderControllerIntegrationTest {
         .param("orderReference", "1728595232306-7497")
         .contentType(APPLICATION_JSON))
       .andDo(MockMvcResultHandlers.print())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderDate").value("2024-10-05T12:30:00"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("PREPARING_ORDER"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination.id").value(1))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderReference").value("1728595232306-7497"))
       .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
@@ -116,11 +183,11 @@ class OrderControllerIntegrationTest {
 
     Drink drink = Drink.builder()
       .name("Heineken")
-      .price(29.00)
+      .price(28.00)
       .isAlcoholic(false)
       .description("lekker")
       .build();
-    Order order = Order.builder()
+    order = Order.builder()
       .drinks(List.of(drink))
       .user(user)
       .build();
@@ -131,27 +198,33 @@ class OrderControllerIntegrationTest {
         .header("Authorization", BEARER_TOKEN)
         .contentType(APPLICATION_JSON))
       .andDo(MockMvcResultHandlers.print())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.user.username").value("pietje"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderDate").isEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.meals").isEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.orderReference").isEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks").isNotEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.destination").isEmpty())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].name").value("Heineken"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].price").value(28.00))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].isAlcoholic").value(false))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].description").value("lekker"))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.drinks[0].size").isEmpty())
       .andExpect(MockMvcResultMatchers.status().isOk());
   }
-
-
 
   @Test
   @DisplayName("deleteOrder_notAuthorized - delete the user with the role of user")
   @WithMockUser(username = "regular",roles = {"USER"})
   void deleteOrder_notAuthorized() throws Exception {
-
-
     Drink drink = Drink.builder()
       .name("Heineken")
       .price(29.00)
       .isAlcoholic(false)
       .description("lekker")
       .build();
-    Order order = Order.builder()
+    order = Order.builder()
       .drinks(List.of(drink))
       .build();
-
     Order savedOrder = orderRepository.save(order);
     mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/orders/{id}",savedOrder.getId())
         .header("Authorization", BEARER_TOKEN)
@@ -164,15 +237,13 @@ class OrderControllerIntegrationTest {
   @DisplayName("deleteOrder_authorized - delete the user with the role of staff")
   @WithMockUser(username = "staff",roles = {"STAFF"})
   void deleteOrder_authorized() throws Exception {
-
-
     Drink drink = Drink.builder()
       .name("Heineken")
       .price(29.00)
       .isAlcoholic(false)
       .description("lekker")
       .build();
-    Order order = Order.builder()
+    order = Order.builder()
       .drinks(List.of(drink))
       .build();
 
@@ -182,5 +253,8 @@ class OrderControllerIntegrationTest {
         .contentType(APPLICATION_JSON))
       .andDo(MockMvcResultHandlers.print())
       .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+    Optional<Order> deletedOrder = orderRepository.findById(savedOrder.getId());
+    assertFalse(deletedOrder.isPresent());
   }
 }

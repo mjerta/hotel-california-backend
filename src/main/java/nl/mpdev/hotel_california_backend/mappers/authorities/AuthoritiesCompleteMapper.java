@@ -5,7 +5,6 @@ import nl.mpdev.hotel_california_backend.dtos.authorities.response.AuthorityComp
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.models.Authority;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Objects;
 import java.util.Set;

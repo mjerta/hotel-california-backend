@@ -3,7 +3,6 @@ package nl.mpdev.hotel_california_backend.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,35 +20,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity // This annotation is not needed in Spring Boot 2.0 (Spring Security 5.0) and later versions of Spring Boot because
-// Spring Boot automatically enables Spring Security.
+@EnableWebSecurity
 public class SpringSecurityConfig {
-
-  private String test;
-
   private final DataSource dataSource;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  @Autowired
-  UserDetailsService userDetailsService;
-  @Autowired
-  CustomCorsConfiguration customCorsConfiguration;
+  private final UserDetailsService userDetailsService;
+  private final CustomCorsConfiguration customCorsConfiguration;
 
   @Autowired
-  public SpringSecurityConfig(DataSource dataSource, @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
-                              UserDetailsService userDetailsService) {
+  public SpringSecurityConfig(DataSource dataSource, JwtAuthenticationFilter jwtAuthenticationFilter,
+                              UserDetailsService userDetailsService, CustomCorsConfiguration customCorsConfiguration) {
     this.dataSource = dataSource;
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    this.userDetailsService = userDetailsService;
+    this.customCorsConfiguration = customCorsConfiguration;
   }
 
-  // Bean for the password encoder to encode the password
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(10);
   }
 
-  // The userDetailsService is custom and is autowired als a field in this class, i could however use constructor injection
-  // The main benefits:  Custom Authentication Logic, Flexibility, Integration, Reusability, Control
-  // The UserDetailsService is can not be used in combination with this method
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -63,7 +54,6 @@ public class SpringSecurityConfig {
     return configuration.getAuthenticationManager();
   }
 
-  // the filterChain method is used to configure the security filter chain
   @Bean
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     return http
@@ -137,8 +127,7 @@ public class SpringSecurityConfig {
         .anyRequest().permitAll())
       .sessionManagement(session -> session
         .sessionCreationPolicy(
-          SessionCreationPolicy.STATELESS)) // This is needed to make the application stateless , so no session is created , this is
-      // needed for JWT , because JWT is stateless
+          SessionCreationPolicy.STATELESS))
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
   }
 }

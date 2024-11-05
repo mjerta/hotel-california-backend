@@ -16,10 +16,10 @@ public class DrinkCompleteRequestDto {
   private String description;
   @NotNull(message = "Price must be set")
   private Double price;
-  @NotNull(message = "is_alcholic cannot be null")
+  @NotNull(message = "Is alcholic cannot be null")
   private Boolean isAlcoholic;
-  @NotNull(message = "Points must not be null")
-  @Min(value = 1, message = "Size must not be nullr")
+  @NotNull(message = "Size cannot be null")
+  @Min(value = 1, message = "Size must be at least 1 character")
   private Integer size;
   @NotBlank(message = "Measurement cannot be blank")
   private String measurement;

@@ -67,7 +67,7 @@ public class UserController {
 
   // DELETE
 
-  @Operation(summary = "ROLE_MANAGER" , description = "Send a delete request. The user will be verified based on the jwt token and the corresponded user will be selected")
+  @Operation(summary = "ROLE_USER" , description = "Send a delete request. The user will be verified based on the jwt token and the corresponded user will be selected")
   @ApiResponse(responseCode = "204", description = "Returns the value void")
   @DeleteMapping("/users/loggeduser")
   @ResponseStatus(HttpStatus.NO_CONTENT)

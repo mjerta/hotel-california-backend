@@ -6,7 +6,6 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @Getter
 public class LocationCompleteResponseDto {
-
   private Integer id;
   private Integer locationNumber;
   private Boolean isOccupied;

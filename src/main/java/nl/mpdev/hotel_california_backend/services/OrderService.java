@@ -168,7 +168,7 @@ public class OrderService {
         throw new GeneralException("The order is not filled");
       }
       if (incomingOrder.getUser() == null) {
-        throw new GeneralException("The order belongs to  a anomynous user");
+        throw new GeneralException("The order belongs to  a anonymous user");
       }
       if (!incomingOrder.getUser().getUsername().equals(userToCheck.getUsername())) {
         throw new GeneralException("This order dont belong to requested user");

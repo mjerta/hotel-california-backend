@@ -81,20 +81,15 @@ public class MealService {
   }
 
   private void updateIngredients(Meal existingMeal, List<IngredientCompleteRequestDto> incomingIngredients) {
-    // Create a map of existing ingredients by ID for easy lookup
     Map<Integer, Ingredient> existingIngredientsMap = existingMeal.getIngredients().stream()
       .collect(Collectors.toMap(Ingredient::getId, ingredient -> ingredient));
-    // List of updated ingredients from the request
-    // Add or update ingredients from the request
     for (IngredientCompleteRequestDto updatedDto : incomingIngredients) {
       Ingredient existingIngredient = existingIngredientsMap.get(updatedDto.getId());
       if (existingIngredient != null) {
-        // Update existing ingredient
         ingredientRepository.save(existingIngredient.toBuilder()
           .name(updatedDto.getName())
           .build());
       } else {
-        // Handle case if ingredient does not exist in the meal
         throw new RecordNotFoundException("Ingredient not found: " + updatedDto.getId());
       }
     }

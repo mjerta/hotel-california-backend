@@ -21,6 +21,4 @@ public class SwaggerConfig {
           .email("info@mpdev.nl")
           .url("https://mpdev.nl")));
   }
-
-
 }

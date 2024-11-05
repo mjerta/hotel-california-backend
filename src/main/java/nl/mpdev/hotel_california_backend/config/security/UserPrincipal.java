@@ -14,7 +14,6 @@ public class UserPrincipal implements UserDetails {
   }
 
   @Override
-  //Here it goes wrong i think
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return user.getAuthorities();
   }

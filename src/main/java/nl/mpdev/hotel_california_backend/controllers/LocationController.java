@@ -27,12 +27,10 @@ public class LocationController {
   }
 
   @Operation(summary = "public", description = "Send a get request")
-  @ApiResponse(responseCode = "200", description = "Returns a list of locatiosn with a complete vie of the entity")
+  @ApiResponse(responseCode = "200", description = "Returns a list of locations with a complete view of the entity")
   @GetMapping("")
   public ResponseEntity<List<LocationCompleteResponseDto>> getLocations() {
     List<LocationCompleteResponseDto> locations = locationService.getLocations().stream().map(locationCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(locations);
   }
-
-
 }

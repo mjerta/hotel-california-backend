@@ -1,13 +1,11 @@
 package nl.mpdev.hotel_california_backend.dtos.meals.request;
 
-import jakarta.persistence.Lob;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
-import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientCompleteRequestDto;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.request.IngredientLimitedRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 

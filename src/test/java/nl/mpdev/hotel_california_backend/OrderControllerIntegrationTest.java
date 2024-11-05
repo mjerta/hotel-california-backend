@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -24,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = true)
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 class OrderControllerIntegrationTest {
 
   @Autowired
@@ -47,7 +48,7 @@ class OrderControllerIntegrationTest {
                                   "drinks": [
                                       1,
                                       2
-                                  ], 
+                                  ],
                                   "destination": 5
                               }
                               """;

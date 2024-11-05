@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -69,6 +70,15 @@ public class ExceptionController {
 
   @ExceptionHandler(value = SignatureException.class)
   public ResponseEntity<Object> handleException(SignatureException ex) {
+    Map<String, String> error = new LinkedHashMap<>();
+    error.put("error", "Not authorized for this endpoint");
+    // extra details about error
+    error.put("error-message", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
+
+  @ExceptionHandler(value =  UsernameNotFoundException.class)
+  public ResponseEntity<Object> handleException(UsernameNotFoundException ex) {
     Map<String, String> error = new LinkedHashMap<>();
     error.put("error", "Not authorized for this endpoint");
     // extra details about error

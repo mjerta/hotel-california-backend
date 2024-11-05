@@ -1,10 +1,8 @@
 package nl.mpdev.hotel_california_backend.services;
 
-import nl.mpdev.hotel_california_backend.dtos.users.request.UserProfileRequestDto;
 import nl.mpdev.hotel_california_backend.exceptions.GeneralException;
 import nl.mpdev.hotel_california_backend.exceptions.RecordNotFoundException;
 import nl.mpdev.hotel_california_backend.models.Authority;
-import nl.mpdev.hotel_california_backend.models.Profile;
 import nl.mpdev.hotel_california_backend.models.User;
 import nl.mpdev.hotel_california_backend.repositories.ProfileRepository;
 import nl.mpdev.hotel_california_backend.repositories.UserRepository;
@@ -86,7 +84,6 @@ public class UserService {
       throw new GeneralException("User must have at least one valid role: ROLE_ADMIN, ROLE_MANAGER, ROLE_STAFF, or ROLE_USER.");
     }
     entity = entity.toBuilder()
-      // Later i have to decode the password here with a password decoder
       .password(passwordEncoder.encode(entity.getPassword()))
       .authorities(updatedAuthorities)
       .build();
@@ -97,20 +94,6 @@ public class UserService {
     User existingUser = getloggedInUser();
     userRepository.delete(existingUser);
   }
-
-//  public User updateProfileFields(UserProfileRequestDto requestDto) {
-//
-//    User existingUser = getloggedInUser();
-//
-//    User.UserBuilder userBuilder = existingUser.toBuilder();
-//
-//    if (requestDto.getProfile() != null) {
-//      userBuilder.profile(profileRepository.findById(requestDto.getProfile().getId())
-//        .orElseThrow(() -> new RecordNotFoundException("Profile with id " + requestDto.getProfile().getId() + " not found."))
-//      );
-//    } else userBuilder.profile(null);
-//    return userRepository.save(userBuilder.build());
-//  }
 
   private User getloggedInUser() {
     User exisitingUser = null;
@@ -145,5 +128,4 @@ public class UserService {
       throw new GeneralException("User with username " + entity.getUsername() + " already exists");
     }
   }
-
 }

@@ -3,7 +3,6 @@ package nl.mpdev.hotel_california_backend.dtos.meals.response;
 import lombok.Builder;
 import lombok.Getter;
 import nl.mpdev.hotel_california_backend.dtos.ingredients.response.IngredientCompleteResponseDto;
-import nl.mpdev.hotel_california_backend.models.ImageMeal;
 
 import java.util.List;
 

@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Builder(toBuilder = true)
 @Getter
@@ -13,7 +12,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "Drinks")
-//public class Drink extends MenuItem {
 public class Drink {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

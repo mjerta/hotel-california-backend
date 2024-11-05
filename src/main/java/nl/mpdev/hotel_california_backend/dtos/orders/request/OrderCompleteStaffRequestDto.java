@@ -13,7 +13,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Getter
 public class OrderCompleteStaffRequestDto {
-  //The valition of meals and drinks are being set in the service layer
   private List<MealIdRequestDto> meals;
   private List<DrinkIdRequestDto> drinks;
   @NotNull(message = "Status must not be null")

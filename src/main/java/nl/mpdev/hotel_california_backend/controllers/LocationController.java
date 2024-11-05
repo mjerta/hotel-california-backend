@@ -33,6 +33,4 @@ public class LocationController {
     List<LocationCompleteResponseDto> locations = locationService.getLocations().stream().map(locationCompleteMapper::toDto).toList();
     return ResponseEntity.ok().body(locations);
   }
-
-
 }

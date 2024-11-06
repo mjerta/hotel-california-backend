@@ -20,26 +20,14 @@ public class UserCompleteMapper {
     this.profileCompleteMapper = profileCompleteMapper;
   }
 
-  public User toEntity(UserNameRequestDto requestDto) {
-    if (requestDto == null) return null;
-    return User.builder()
-      .username(requestDto.getUsername())
-      .build();
-  }
-
   public User toEntity(UserRegisterLimitedRequestDto requestDto) {
     if (requestDto == null) return null;
     User.UserBuilder builder = User.builder();
-    if (requestDto.getUsername() != null) {
+    builder.password(requestDto.getPassword());
       builder.username(requestDto.getUsername());
-    }
-    if (requestDto.getPassword() != null) {
-      builder.password(requestDto.getPassword());
-    }
     if (requestDto.getProfile() != null) {
       builder.profile(profileCompleteMapper.toEntity(requestDto.getProfile()));
     }
-
     return builder.build();
   }
 
@@ -49,13 +37,6 @@ public class UserCompleteMapper {
       .username(requestDto.getUsername())
       .password(requestDto.getPassword())
       .authorities(authoritiesCompleteMapper.toEntity(requestDto.getAuthority()))
-      .build();
-  }
-
-  public User toEntity(UserProfileRequestDto requestDto) {
-    if (requestDto == null) return null;
-    return User.builder()
-      .profile(profileCompleteMapper.toEntity(requestDto.getProfile()))
       .build();
   }
 
@@ -72,16 +53,6 @@ public class UserCompleteMapper {
     UserLimitedResponseDto.UserLimitedResponseDtoBuilder userLimitedResponseDtoBuilder = UserLimitedResponseDto.builder();
     userLimitedResponseDtoBuilder.username(entity.getUsername());
     return userLimitedResponseDtoBuilder.build();
-  }
-
-  public UserProfileResponseDto toUserProfileResponse(User entity) {
-    if (entity == null) return null;
-    UserProfileResponseDto.UserProfileResponseDtoBuilder userProfileResponseDtoBuilder = UserProfileResponseDto.builder();
-    userProfileResponseDtoBuilder.username(entity.getUsername());
-    if (entity.getProfile() != null) {
-      userProfileResponseDtoBuilder.profile(profileCompleteMapper.toDto(entity.getProfile()));
-    }
-    return userProfileResponseDtoBuilder.build();
   }
 
   public UserCompleteResponseDto toDto(User entity) {

@@ -21,9 +21,7 @@ public class IngredientService {
 
   public Ingredient addIngredient(Ingredient entity) {
     Ingredient.IngredientBuilder builder = Ingredient.builder();
-    if(entity.getName() != null) {
       builder.name(entity.getName());
-    }
     return ingredientRepository.save(builder.build());
   }
 

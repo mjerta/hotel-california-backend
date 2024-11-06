@@ -24,7 +24,7 @@ public class UserCompleteMapper {
     if (requestDto == null) return null;
     User.UserBuilder builder = User.builder();
     builder.password(requestDto.getPassword());
-      builder.username(requestDto.getUsername());
+    builder.username(requestDto.getUsername());
     if (requestDto.getProfile() != null) {
       builder.profile(profileCompleteMapper.toEntity(requestDto.getProfile()));
     }
@@ -58,9 +58,7 @@ public class UserCompleteMapper {
   public UserCompleteResponseDto toDto(User entity) {
     if (entity == null) return null;
     UserCompleteResponseDto.UserCompleteResponseDtoBuilder userCompleteResponseDtoBuilder = UserCompleteResponseDto.builder();
-    if (entity.getUsername() != null) {
-      userCompleteResponseDtoBuilder.username(entity.getUsername());
-    }
+    userCompleteResponseDtoBuilder.username(entity.getUsername());
     if (entity.getAuthorities() != null) {
       userCompleteResponseDtoBuilder.authority(authoritiesCompleteMapper.toDto(entity.getAuthorities()));
     }

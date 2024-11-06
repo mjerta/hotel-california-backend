@@ -22,20 +22,10 @@ public class LocationCompleteMapper {
       return null;
     }
     LocationCompleteResponseDto.LocationCompleteResponseDtoBuilder builder = LocationCompleteResponseDto.builder();
-    if (entity.getId() != null) {
       builder.id(entity.getId());
-    }
-
-    if(entity.getLocationNumber() != null) {
       builder.locationNumber(entity.getLocationNumber());
-    }
-    if (entity.getIsOccupied() != null) {
       builder.isOccupied(entity.getIsOccupied());
-    }
-    if(entity.getLocationType() != null) {
       builder.locationType(entity.getLocationType().getType());
-    }
-
     return builder.build();
   }
 }

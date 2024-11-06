@@ -30,14 +30,14 @@ public class MealCompleteMapper {
     mealBuilder.description(dto.getDescription());
     mealBuilder.price(dto.getPrice());
 
-    ImageMeal imageMealBuilder = ImageMeal.builder()
-      .data(dto.getImage().getBytes())
-      .size(dto.getImage().getSize())
-      .contentType(dto.getImage().getContentType())
-      .name(dto.getImage().getOriginalFilename())
-      .build();
-
-    mealBuilder.image(imageMealBuilder);
+    ImageMeal.ImageMealBuilder imageMealBuilder = ImageMeal.builder();
+    if (dto.getImage() != null) {
+      imageMealBuilder.data(dto.getImage().getBytes());
+      imageMealBuilder.size(dto.getImage().getSize());
+      imageMealBuilder.contentType(dto.getImage().getContentType());
+      imageMealBuilder.name(dto.getImage().getOriginalFilename());
+      mealBuilder.image(imageMealBuilder.build());
+    }
 
     if (dto.getIngredients() != null) {
       mealBuilder.ingredients(dto.getIngredients().stream().map(ingredientCompleteMapper::toEntity).collect(Collectors.toList()));
@@ -54,7 +54,6 @@ public class MealCompleteMapper {
       .build();
   }
 
-
   public MealCompleteResponseDto toDto(Meal entity) {
 
     MealCompleteResponseDto.MealCompleteResponseDtoBuilder builder = MealCompleteResponseDto.builder();
@@ -63,7 +62,7 @@ public class MealCompleteMapper {
     builder.name(entity.getName());
     builder.description(entity.getDescription());
     builder.price(entity.getPrice());
-    if(entity.getImage() != null) {
+    if (entity.getImage() != null) {
       String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/api/v1/image-meals/")
         .path(String.valueOf(entity.getImage().getId()))

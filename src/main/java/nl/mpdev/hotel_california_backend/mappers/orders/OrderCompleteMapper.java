@@ -35,6 +35,7 @@ public class OrderCompleteMapper {
       return null;
     }
     Order.OrderBuilder orderBuilder = Order.builder();
+    orderBuilder.status(dto.getStatus());
     if (dto.getMeals() != null) {
       orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
     }
@@ -44,10 +45,6 @@ public class OrderCompleteMapper {
     if (dto.getDestination() != null) {
       orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
     }
-    if (dto.getStatus() != null) {
-      orderBuilder.status(dto.getStatus());
-    }
-
     return orderBuilder.build();
   }
 
@@ -56,6 +53,7 @@ public class OrderCompleteMapper {
       return null;
     }
     Order.OrderBuilder orderBuilder = Order.builder();
+    orderBuilder.status(dto.getStatus());
     if (dto.getMeals() != null) {
       orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
     }
@@ -65,10 +63,6 @@ public class OrderCompleteMapper {
     if (dto.getDestination() != null) {
       orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
     }
-    if (dto.getStatus() != null) {
-      orderBuilder.status(dto.getStatus());
-    }
-
     return orderBuilder.build();
   }
 
@@ -77,14 +71,12 @@ public class OrderCompleteMapper {
       return null;
     }
     Order.OrderBuilder orderBuilder = Order.builder();
+    orderBuilder.status(dto.getStatus());
     if (dto.getMeals() != null) {
       orderBuilder.meals(dto.getMeals().stream().map(mealCompleteMapper::toEntity).collect(Collectors.toList()));
     }
     if (dto.getDrinks() != null) {
       orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
-    }
-    if (dto.getStatus() != null) {
-      orderBuilder.status(dto.getStatus());
     }
     return orderBuilder.build();
   }
@@ -100,7 +92,7 @@ public class OrderCompleteMapper {
     if (dto.getDrinks() != null) {
       orderBuilder.drinks(dto.getDrinks().stream().map(drinkCompleteMapper::toEntity).collect(Collectors.toList()));
     }
-    if(dto.getDestination() != null) {
+    if (dto.getDestination() != null) {
       orderBuilder.destination(locationCompleteMapper.toEntity(dto.getDestination()));
     }
     return orderBuilder.build();
@@ -113,6 +105,8 @@ public class OrderCompleteMapper {
     OrderCompleteResponseDto.OrderCompleteResponseDtoBuilder builder = OrderCompleteResponseDto.builder();
     builder.id(entity.getId());
     builder.orderDate(entity.getOrderDate());
+    builder.status(entity.getStatus());
+    builder.orderReference(entity.getOrderReference());
     if (entity.getUser() != null) {
       builder.user(userCompleteMapper.toUserLimitedResponse(entity.getUser()));
     }
@@ -122,14 +116,8 @@ public class OrderCompleteMapper {
     if (entity.getDrinks() != null) {
       builder.drinks(entity.getDrinks().stream().map(drinkCompleteMapper::toDto).collect(Collectors.toList()));
     }
-    if (entity.getStatus() != null) {
-      builder.status(entity.getStatus());
-    }
     if (entity.getDestination() != null) {
       builder.destination(locationCompleteMapper.toDto(entity.getDestination()));
-    }
-    if (entity.getOrderReference() != null) {
-      builder.orderReference(entity.getOrderReference());
     }
     return builder.build();
   }

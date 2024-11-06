@@ -164,9 +164,6 @@ public class OrderService {
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
       User userToCheck = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(RecordNotFoundException::new);
-      if (incomingOrder == null) {
-        throw new GeneralException("The order is not filled");
-      }
       if (incomingOrder.getUser() == null) {
         throw new GeneralException("The order belongs to  a anonymous user");
       }
@@ -211,7 +208,6 @@ public class OrderService {
     if (requestDto.getStatus() != null) {
       orderBuilder.status(requestDto.getStatus());
     }
-
     return orderRepository.save(orderBuilder.build());
   }
 
@@ -306,7 +302,5 @@ public class OrderService {
     }
     return orderRepository.save(existingOrderBuilder.build());
   }
-
-
 }
 

@@ -42,21 +42,11 @@ public class ProfileService {
   public Profile updateProfile(ProfileCompleteRequestDto requestDto) {
     Profile existingProfile = getProfileByUser();
     Profile.ProfileBuilder profileBuilder = existingProfile.toBuilder();
-    if (requestDto.getFirstName() != null) {
       profileBuilder.firstName(requestDto.getFirstName());
-    }
-    if (requestDto.getLastName() != null) {
       profileBuilder.lastName(requestDto.getLastName());
-    }
-    if (requestDto.getPhoneNumber() != null) {
       profileBuilder.phoneNumber(requestDto.getPhoneNumber());
-    }
-    if (requestDto.getAddress() != null) {
       profileBuilder.address(requestDto.getAddress());
-    }
-    if (requestDto.getPoints() != null) {
       profileBuilder.points(requestDto.getPoints());
-    }
     return profileRepository.save(profileBuilder.build());
   }
 

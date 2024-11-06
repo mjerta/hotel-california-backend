@@ -21,16 +21,14 @@ public class IngredientService {
 
   public Ingredient addIngredient(Ingredient entity) {
     Ingredient.IngredientBuilder builder = Ingredient.builder();
-      builder.name(entity.getName());
+    builder.name(entity.getName());
     return ingredientRepository.save(builder.build());
   }
 
   public Ingredient updateIngredient(Integer id, IngredientLimitedRequestDto requestDto) {
     Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Ingredient not found"));
     Ingredient.IngredientBuilder builder = ingredient.toBuilder();
-    if(requestDto.getName() != null) {
-      builder.name(requestDto.getName());
-    }
+    builder.name(requestDto.getName());
     return ingredientRepository.save(builder.build());
   }
 }

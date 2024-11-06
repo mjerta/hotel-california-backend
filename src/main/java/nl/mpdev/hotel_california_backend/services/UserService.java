@@ -43,9 +43,7 @@ public class UserService {
   public User registerNewUser(User entity) {
     checkIfUserExist(entity);
     Authority.AuthorityBuilder authorityBuilder = Authority.builder();
-    if (entity.getUsername() != null) {
       authorityBuilder.username(entity.getUsername());
-    }
     // DEFAULT USER
     Set<Authority> authorities = new HashSet<>();
     authorities.add(authorityBuilder.authority("ROLE_USER").build());
@@ -63,8 +61,7 @@ public class UserService {
     if (entity.getAuthorities() == null || entity.getAuthorities().isEmpty()) {
       throw new GeneralException("User must have at least one authority.");
     }
-    Set<Authority> updatedAuthorities = new HashSet<>();
-    if (!entity.getAuthorities().isEmpty()) {
+    Set<Authority> updatedAuthorities;
       User finalEntity = entity;
       updatedAuthorities = entity.getAuthorities().stream()
         .map(existingAuthority -> Authority.builder()
@@ -72,12 +69,11 @@ public class UserService {
           .authority(existingAuthority.getAuthority())
           .build())
         .collect(Collectors.toSet());
-    }
 
     // Check if at least one authority is valid
     List<String> validRoles = List.of("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_STAFF", "ROLE_USER");
     boolean hasValidRole = updatedAuthorities.stream()
-      .map(Authority::getAuthority) // Assuming Authority has a getAuthority method
+      .map(Authority::getAuthority)
       .anyMatch(validRoles::contains);
 
     if (!hasValidRole) {
@@ -116,7 +112,6 @@ public class UserService {
       extraClaims.put("authorities", authentication.getAuthorities());
       succesResult.put("jwt", jwtService.generateToken(extraClaims, user.getUsername()));
       return succesResult;
-
     }
     Map<String, String> errorResult = new HashMap<>();
     errorResult.put("message", "Authentication failed");

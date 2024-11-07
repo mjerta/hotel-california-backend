@@ -1,7 +1,8 @@
 # Hotel California - Restaurant / Catering App
 
 This application is designed to enhance efficiency and user experience in a restaurant or hotel environment. It streamlines the ordering process, involving both service and kitchen staff. The application provides a user-friendly interface for customers and staff, ensuring that orders can be processed quickly and efficiently.
-
+- **Link to backend: https://github.com/mjerta/hotel-california-backend**
+- **Link to frontend: https://github.com/mjerta/hotel-california-frontend**
 <details>
   <summary>Click to view the image</summary>
 

@@ -1,0 +1,35 @@
+name: My Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: # Enables manual triggering
+
+jobs:
+  deploy-to-production:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.PRODUCTION_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.PRODUCTION_RENDER_API_KEY }}
+          wait-for-success: true
+
+  deploy-to-develop:
+    if: github.ref == 'refs/heads/develop' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to develop
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.STAGING_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.STAGING_RENDER_API_KEY }}
+          wait-for-success: true

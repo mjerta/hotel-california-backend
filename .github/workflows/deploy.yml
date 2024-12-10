@@ -9,10 +9,11 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch: # Enables manual triggering
 
 jobs:
   deploy-to-production:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to production
@@ -23,7 +24,7 @@ jobs:
           wait-for-success: true
 
   deploy-to-develop:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to develop
